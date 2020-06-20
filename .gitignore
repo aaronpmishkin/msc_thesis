@@ -21,3 +21,6 @@
 *~
 *.
 main.pdf
+
+# easy-todo files
+*.lod

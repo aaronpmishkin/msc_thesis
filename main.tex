@@ -170,6 +170,17 @@
 \usepackage{url}
 \urlstyle{sf}	% typeset urls in sans-serif
 
+%% New Package Imports 
+
+% math packages 
+\usepackage{mathtools}
+\usepackage{xfrac}
+\usepackage{amsthm}
+\usepackage{centernot}
+\usepackage{bbm}
+
+% writing packages
+\usepackage[chapter]{easy-todo}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -295,7 +306,8 @@
 
 %% And include some of our own useful macros
 \input{macros}
-
+%% Include custom commands
+\input{defs}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
@@ -364,6 +376,10 @@
 %    if applicable, the examining committee
 \makecommitteepage
 
+% ### **TEMPORARY** ###
+\listoftodos
+% ### **TEMPORARY** ###
+
 %    3. Abstract (mandatory - maximum 350 words)
 \include{front_matter/abstract}
 \cleardoublepage
@@ -408,16 +424,15 @@
 
 \acresetall	% reset all acronyms used so far
 
+
+
+
+
 %    1. Introduction
-\include{sections/intro}
+\include{chapters/intro}
 
 %    2. Main body
-% Generally recommended to put each chapter into a separate file
-%\include{relatedwork}
-%\include{model}
-%\include{impl}
-%\include{discussion}
-%\include{conclusions}
+\include{chapters/sgd}
 
 %    3. Notes
 %    4. Footnotes
