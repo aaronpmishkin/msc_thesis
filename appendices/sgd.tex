@@ -1,0 +1,76 @@
+%! TEX root = ../main.tex
+
+\section{SGD: Proofs}~\label{app:sgd}
+
+\wgcConvex*
+
+\begin{proof}
+   \begin{align*}
+       \norm{\wkk - \wopt}^2 &= \norm{(\wkk - \wk) + (\wk - \wopt)}^2\\
+                             &= \norm{\wkk - \wk}^2 + 2 \abr{\wkk - \wk, \wk - \wopt} + \norm{\wk - \wopt}^2\\
+                             &= \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \abr{\grad(\wk, \zk), \wk - \wopt} + \norm{\wk - \wopt}^2\\ 
+                             \intertext{The weak growth condition implies \( \grad(\wopt, \z) = 0 \) for all \( \z \). We may thus use \autoref{lemma:pre-coercivity} at \( \wk \) and \( \wopt \) to obtain}
+                       \norm{\wkk - \wopt}^2 &\leq \eta^2 \norm{\grad(\wk, \zk)}^2 + 2 \eta \rbr{f(\wopt, \zk) - f(\wk, \zk) - \frac{1}{2L} \norm{\grad(\wk, \zk)}^2}  + \norm{\wk - \wopt}^2\\ 
+                         &\leq \rbr{\eta^2 - \frac{\eta}{L}} \norm{\grad(\wk, \zk)}^2 + 2 \eta \rbr{f(\wopt, \zk) - f(\wk, \zk)} + \norm{\wk - \wopt}^2\\
+     \intertext{Taking expectations with respect to \( \zk \):}
+                    \norm{\wkk - \wopt}^2 &\leq \rbr{\eta^2 - \frac{\eta}{L}} \E \sbr{\norm{\grad(\wk, \zk)}^2} + 2 \eta \E\sbr{f(\wopt, \zk) - f(\wk, \zk)} + \norm{\wk - \wopt}^2\\
+                         &\leq \rbr{\eta^2 - \frac{\eta}{L}} \E \sbr{\norm{\grad(\wk, \zk)}^2} + 2 \eta \rbr{f(\wopt) - f(\wk)} + \norm{\wk - \wopt}^2\\
+                         \intertext{\textbf{Case 1}: If \( \eta \leq \frac{1}{L} \) then \( \eta^2 - \frac{\eta}{L} \leq 0 \) and thus }
+                     \norm{\wkk - \wopt}^2 &\leq  2 \eta\rbr{f(\wopt) - f(\wk)} + \norm{\wk - \wopt}^2\\ 
+                         &= -2\eta \rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2
+     \intertext{\textbf{Case 2}: If \( \eta > \frac{1}{L} \) then \( \eta^2 - \frac{\eta}{L} > 0 \) and the weak growth condition implies}
+                     \norm{\wkk - \wopt}^2 &\leq 2 \eta \rho \rbr{\eta L - 1}\rbr{\f(\wk) - f(\wopt)} + 2 \eta\rbr{f(\wopt) - f(\wk)} + \norm{\wk - \wopt}^2\\ 
+                             &= -2 \eta \rbr{1 + \rho (1 - \eta L )}\rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2
+                             \intertext{Let us combine the cases. If \( \eta \in \rbr{L^{-1}, \frac{1 + \rho}{\rho } L^{-1}} \) then \( 1 + \rho (1 - \eta L)\in (0,1) \). If \( \eta \leq L^{-1} \), then \( 1 + \rho (1 - \eta L) > 1\). Denoting \( C = \min \cbr{ 1, 1 + \rho (1 - \eta L)} \), we obtain: }
+                     \norm{\wkk - \wopt}^2 &\leq -2 \eta \, C \rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2
+\end{align*}
+Rearranging the expression to put the optimality gap on the left-hand side gives
+\begin{align*}
+    2\eta \, C \rbr{f(\wk) - f(\wopt)} &\leq \norm{\wk - \wopt}^2 - \E\sbr{\norm{\wkk - \wopt}^2}\\ 
+   \implies f(\wk) - f(\wopt) &\leq \frac{1}{2\eta \, C} \rbr{\norm{\wk - \wopt}^2 - \norm{\wkk - \wopt}^2}\\
+\intertext{Taking expectations and summing over iterations,}
+   \implies \sum_{k=0}^{K -1} \E \sbr{f(\wk) - f(\wopt)} &\leq \sum_{k=0}^{K-1}\frac{1}{2\eta \, C}\rbr{\E\sbr{\norm{\wk - \wopt}^2} - \E\sbr{\norm{\wkk - \wopt}^2}}\\
+                                                         &\leq \frac{1}{2\eta \, C}\rbr{\norm{\w_0 - \wopt}^2 - \E\sbr{\norm{\w_{K} - \wopt}^2}}\\
+                                                         &\leq \frac{1}{2\eta \, C} \norm{\w_0 - \wopt}^2\\
+   \implies \frac{1}{K} \sum_{k=0}^{K-1} \E\sbr{f(\wk)} - f(\wopt) &\leq \frac{1}{2\eta \, C} \norm{\w_0 - \wopt}^2.
+\intertext{Noting \( \frac{1}{K}\sum_{k=0}^{K-1} f(\wk) \geq f(\bar \wk) \) by convexity gives the final result,}
+   \implies \E\sbr{f(\bar w_K)} - f(\wopt) &\leq \frac{1}{2\eta \, C \, K}\norm{\w_0 - \wopt}^2.
+\end{align*}
+\end{proof}
+
+\todo{Can we prove a final iterate version of this using the strategy in Bubeck's ConvexOpt? If not, can we prove that SGD is not guaranteed to make progress at every iteration even when WGC holds?}
+
+%% Old Proof with WGC
+
+\iffalse
+\begin{proof}
+   \begin{align*}
+       \norm{\wkk - \wopt}^2 &= \norm{(\wkk - \wk) + (\wk - \wopt)}^2\\
+                             &= \norm{\wkk - \wk}^2 + 2 \abr{\wkk - \wk, \wk - \wopt} + \norm{\wk - \wopt}^2\\
+                             &= \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \abr{\grad(\wk, \zk), \wk - \wopt} + \norm{\wk - \wopt}^2\\ 
+                             \intertext{The weak growth condition implies \( \grad(\wopt, \z) = 0 \) for all \( \z \). We may thus use co-coercivity of the gradient (\autoref{lemma:co-coercivity}) at \( \wk \) and \( \wopt \) to obtain}
+                             &\leq \eta^2 \norm{\grad(\wk, \zk)}^2 + 2 \eta \rbr{f(\wopt, \zk) - f(\wk, \zk) - \frac{1}{2L} \norm{\grad(\wk, \zk)}^2}  + \norm{\wk - \wopt}^2\\ 
+                             &\leq \rbr{\eta^2 - \frac{\eta}{L}} \norm{\grad(\wk, \zk)}^2 + 2 \eta \rbr{f(\wopt, \zk) - f(\wk, \zk)} + \norm{\wk - \wopt}^2\\
+                             \intertext{Taking expectations with respect to \( \zk \):}
+                             &\leq \rbr{\eta^2 - \frac{\eta}{L}} \E \sbr{\norm{\grad(\wk, \zk)}^2} + 2 \eta \E\sbr{f(\wopt, \zk) - f(\wk, \zk)} + \norm{\wk - \wopt}^2\\
+                             &\leq \rbr{\eta^2 - \frac{\eta}{L}} \E \sbr{\norm{\grad(\wk, \zk)}^2} + 2 \eta \rbr{f(\wopt) - f(\wk)} + \norm{\wk - \wopt}^2\\
+                             \intertext{If \( \eta \leq \frac{1}{L} \) then \( \eta^2 - \frac{\eta}{L} \geq 0 \) and we apply the weak growth condition as follows: }
+                             &\leq 2 \rho \rbr{\eta^2- \frac{\eta}{L}}\rbr{\f(\wk) - f(\wopt)} + 2 \eta\rbr{f(\wopt) - f(\wk)} + \norm{\wk - \wopt}^2\\ 
+                             &= 2\eta \rho \rbr{\eta - \frac{1}{L} - \frac{1}{\rho}}\rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2
+\end{align*}
+Rearranging the expression to put the optimality gap on the left-hand side gives
+\begin{align*}
+    2 \eta \rho \rbr{\frac{1}{L} + \frac{1}{\rho} - \eta}\rbr{f(\wk) - f(\wopt)} &\leq \norm{\wk - \wopt}^2 - \E\sbr{\norm{\wkk - \wopt}^2}\\ 
+\intertext{Noting that \( \frac{1}{L} + \frac{1}{\rho} - \eta \geq 0 \) since \( \eta \leq \frac{1}{L} \), }
+\implies f(\wk) - f(\wopt) &\leq \rbr{\frac{L + \rho - \eta \rho L}{2\eta\rho^2L}} \rbr{\norm{\wk - \wopt}^2 - \norm{\wkk - \wopt}^2}\\
+\intertext{Taking expectations and summing over iterations,}
+\implies \sum_{k=0}^{K -1} \E \sbr{f(\wk) - f(\wopt)} &\leq \sum_{k=0}^{K-1}\rbr{\frac{L + \rho - \eta \rho L}{2\eta\rho^2L}} \rbr{\E\sbr{\norm{\wk - \wopt}^2} - \E\sbr{\norm{\wkk - \wopt}^2}}\\
+                                                      &\leq \rbr{\frac{L + \rho - \eta \rho L}{2\eta\rho^2L}}\rbr{\norm{\w_0 - \wopt}^2 - \E\sbr{\norm{\w_{K} - \wopt}^2}}\\
+                                                      &\leq \rbr{\frac{L + \rho - \eta \rho L}{2\eta\rho^2L}}\norm{\w_0 - \wopt}^2\\
+\implies \frac{1}{K} \sum_{k=0}^{K-1} \E\sbr{f(\wk)} - f(\wopt) &\leq \rbr{\frac{L + \rho - \eta \rho L}{2K\eta\rho^2L}}\norm{\w_0 - \wopt}^2.
+\intertext{Noting \( \frac{1}{K}\sum_{k=0}^{K-1} f(\wk) \geq f(\bar \wk) \) by convexity gives the final result,}
+\implies \E\sbr{f(\bar w_K)} - f(\wopt) &\leq \rbr{\frac{L + \rho -\eta \rho L}{2K\eta \rho^2 L}}\norm{\w_0 - \wopt}^2.
+\end{align*}
+\end{proof}
+\fi
+

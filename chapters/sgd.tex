@@ -3,15 +3,16 @@
 \chapter{Stochastic Gradient Descent}\label{ch:sgd}
 
 \section{Convergence for Convex Functions}
+\todo{Clarify the improvements in this proof}
 
 We establish the convergence rate of SGD for convex functions under the weak growth condition. These results improve on those given by \citet{vaswani2019fast} by constant factors. 
 Moreover, we provide cleaner and simpler proofs.
-\todo{Prove better version of this theorem with coercivity of the gradient.}
-
-\begin{theorem}
+\begin{restatable}{theorem}{wgcConvex}~\label{thm:wgc-convex}
     Let \( f  \) be a convex, \( L  \)-smooth function satisfying the weak growth condition with constant \( \rho  \). 
-    Stochastic gradient descent with step-size \( \eta < \frac{2}{L} \) obtains the following convergence rate:
-    \[ f(\wkk) - f(\wopt) \leq   \]
-\end{theorem}
+    Then stochastic gradient descent with step-size \( \eta < \rbr{\frac{\rho + 1}{\rho}}L^{-1} \) converges as
+    \[ \E\sbr{f(\bar w_K)} - f(\wopt) \leq \frac{1}{2\eta \, C \, K} \norm{\w_0 - \wopt}^2,   \]
+    where \( \bar \w_K = \frac{1}{K} \sum_{k=0}^K \wk \) and \( C = \min\cbr{1,1+\rho \rbr{1 - \eta L}} \). 
+\end{restatable}
+See \autoref{app:sgd} for proof.
 
 \endinput

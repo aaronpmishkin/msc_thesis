@@ -83,17 +83,18 @@
 \def\calZ{\mathcal{Z}}
 
 
+%% Theorem Environments %%
+\usepackage{amsthm}
+\usepackage{thmtools, thm-restate}
+\declaretheorem{theorem}
+\declaretheorem{lemma}
+
+%% Floor and Ceiling %%
+\usepackage{mathtools} % required for \DeclarePairedDelimeter
+
 \DeclarePairedDelimiter{\ceilpair}{\lceil}{\rceil}
 \DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
 \newcommand{\argdot}{{\,\vcenter{\hbox{\tiny$\bullet$}}\,}} %generic argument dot
-
-% Theorem Environments:
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{definition}{Definition}
-\newtheorem{assumption}{Definition}
-\newtheorem{corollary}{Corollary}[theorem]
-\newtheorem{lemma}{Lemma}[theorem]
-\newtheorem*{remark}{Remark}
 
 % easy bracketing:
 \newcommand{\rbr}[1]{\left(#1\right)}
@@ -117,6 +118,7 @@
 
 % General Symbols
 \def\half{\frac 1 2}
+\newcommand{\inv}[1]{\frac{1}{#1}}
 \newcommand{\halved}[1]{\frac{#1}{2}}
 \newcommand{\R}{\mathbb{R}}
 
@@ -130,9 +132,9 @@
 \newcommand{\wkk}{w_{k+1}}
 \newcommand{\wopt}{w^*}
 % noise
-\newcommand{\z}{Z}
-\newcommand{\zk}{Z_k}
-\newcommand{\zkk}{Z_{k+1}}
+\newcommand{\z}{z}
+\newcommand{\zk}{z_k}
+\newcommand{\zkk}{z_{k+1}}
 % step-sizes
 \newcommand{\etak}{\eta_k}
 \newcommand{\etakk}{\eta_{k+1}}

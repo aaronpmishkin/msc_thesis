@@ -24,3 +24,6 @@ main.pdf
 
 # easy-todo files
 *.lod
+
+# vim tags
+tags
