@@ -1,3 +1,124 @@
 %! TEX root = ../main.tex
 
 \chapter{Acceleration}~\label{ch:acceleration}
+
+\section{Estimating Sequences}
+
+Suppose that we are trying to minimize a convex function \( f : \R^n \rightarrow \R \) using a deterministic gradient method of the form
+\[ \wkk = \wk - \etak \grad(\wk). \]
+For L-smooth functions, this approach enforces a descent condition on \( f(\wkk) \) via the quadratic upper bound
+\[ f(w) \leq f(\wk) + \abr{\grad(\wk, w - \wk)} + \frac{L}{2}\norm{w - \wk}^2. \]
+However, gradient methods of this form assume worst-case curvature of \( f \).
+We can instead consider building a sequence of approximations to \( f \) based on local information.
+This idea is formalized by the notion of estimating sequences~\citep{nesterov2004lectures}.\\
+
+\begin{definition}[Estimating Sequences]~\label{def:estimating_sequences}
+    The two sequences \( \cbr{\lambda_k}_{k=0}^\infty \) and \( \cbr{\phi_k}_{k=0}^\infty \) are called estimating sequences of the function \( f \) if
+    \begin{itemize}
+        \item \( \lambda_k \geq 0 \) and for all \( k \) and \( \lim_{k\rightarrow \infty} \lambda_k = 0 \);
+        \item for all \( k \in \bbN \) and \( x \in \R^n \), the functions \( \phi_k: \R^n \rightarrow \R \) satisfy
+        \[ \phi_k(x) \leq (1 - \lambda_k) f(x) + \lambda_k \phi_0(x). \]
+    \end{itemize}
+\end{definition}
+
+\textbf{Comments on Definition 1}:
+\begin{enumerate}
+    \item As \( k \rightarrow \infty \), we are guaranteed that the functions \( \phi_k \) approach a global minorant of \( f \).
+    \item If \( \phi_0 \) is chosen so that for all \( x \in \R^d \)
+    \[ \phi_0(x) \geq f(x), \]
+    then \( {\phi_k}_{k=0}^\infty \) can be (intuitively) thought of as a sequence of improving estimates of \( f \).
+    \item If \( \inf_x \phi_k(x) \geq f(\wk) \), then we obtain
+    \begin{align*}
+        f(\wk) \leq \phi_k(\wopt) &\leq (1 - \lambda_k) f(\wopt) + \phi_0(\wopt)\\
+        \implies f(\wk) - \fopt &\leq \lambda_k \rbr{f(\wopt) + \phi_0(\wopt)},
+    \end{align*}
+    by definition of the estimating sequence. Moreover, the convergence rate of \( \lambda_k \) controls convergence of \( \wk \) to \( \wopt \).\\
+\end{enumerate}
+
+Let's fix a choice of estimating sequences and proceed with an analysis of the resulting algorithm.
+Our choice follows \citet{nesterov2004lectures}.\\
+
+\textbf{Fixing Our Estimating Sequences}:
+
+Let \( \cbr{\alpha_k}_{k=0}^\infty \) be a sequence of real numbers such that \( \alpha_k \in (0,1) \) and \( \sum_{i=1}^\infty \alpha_k = \infty \). Let \( \cbr{\yk}_{k=0}^\infty \) be an arbitrary of sequence of points in \( \R^n \).
+The estimating sequences which we will analyze are given as
+\begin{itemize}
+    \item \( \lambda_0 = 1 \);
+    \item \( \lambda_{k+1} = (1- \alpha_k) \lambda_k \);
+    \item \( \phi_0(x) = \phi_0^* + \norm{x - v_0}^2 \), where \( v_0 \in \R^n \) and \( \phi_0^* \in \R \) are arbitrary;
+    \item \( \phi_{k+1}(x) = (1-\alpha_k) \phi_k(x) + \alpha_k \rbr{ f(\yk) + \abr{\grad(\yk), x - \yk} + \frac{\mu}{2} \norm{x - \yk}^2 } \).
+\end{itemize}
+
+See~\citet[Lemma 2.2.2]{nesterov2004lectures} for proof that these are indeed estimating sequences. Moreover, the sequences given above satisfy the following key Lemma~\cite[Lemma~2.2.3]{nesterov2004lectures}.\\
+
+\begin{lemma}~\label{lemma:cannonical_form}
+    The estimating sequences \( \cbr{\lambda_k}_{k=0}^\infty \), \( \cbr{\phi_k}_{k=0}^\infty \) defined above preserve the canonical form
+    \[ \phi_{k}(x) = \phi_k^* + \frac{\gamma_k}{2}\norm{x - v_k}^2, \]
+    where \( \phi_k^*, \gamma_k, \) and \( v_k \) evolve over time as
+    \begin{itemize}
+        \item \( \gamma_{k+1} = (1-\alpha_k) \gamma_k + \alpha_k \mu \);
+        \item \( v_{k+1} = \frac{1}{\gamma_{k+1}} \rbr{ (1-\alpha_k) \gamma_k v_k + \alpha_k \mu \yk - \alpha_k \grad(\yk) + } \);
+        \item \( \phi_{k+1}^* = (1- \alpha_k) \phi_k^* + \alpha_k f(\yk) - \frac{\alpha_k^2}{2\gamma_{k+1}}\norm{\grad(\yk)}^2 + \frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}} \).
+    \end{itemize}
+\end{lemma}
+
+Our goal is now to pick sequences \( \cbr{\wk}_{k=0}^\infty \) and \( \cbr{\yk}_{k=0}^\infty \) so that \( \phi_k(x) \geq f(\wk) \) for all \( x \in \R^d \).
+
+\section{Stochastic Acceleration}~\label{sec:stochastic-acceleration}
+
+Let's further assume that \( f \) satisfies the strong growth condition (SGC)~\citep{solodov1998incremental, tseng1998incremental, schmidt2013fast, vaswani2019fast} with parameter \( \rho \),
+\[ \E \norm{\grad(x, \z)}^2 \leq \rho \norm{\grad(x)}^2, \]
+where \( \grad(x,\z) \) denotes a stochastic gradient.
+We will use this to establish a version of Lemma~\ref{lemma:characterization_of_estimating_sequences} that holds when \( \wk \) is obtained by stochastic gradient descent.
+However, we first establish that stochastic gradient descent satisfies a decrease condition similar to the Descent Lemma when the SGC is satisfied.\\
+
+\begin{restatable}{lemma}{sgcDecreaseCondition}~\label{lemma:SGC-decrease-condition}
+    Let \( f \) satisfy the SGC with parameter \( \rho \) and consider stochastic gradient updates of the form
+    \[ \wkk = \wk - \frac{1}{\rho L} \grad(\wk, \zk). \]
+    Then the following expected decrease condition holds:
+    \[ \E \sbr{f(\wkk)} \leq \E \sbr{f(\wk) - \frac{1}{2 \rho L}\norm{\grad(\wk)}^2},  \]
+    where the expectation is taken with respect to all stochastic vectors \( \zk, \ldots, \z_0 \).
+\end{restatable}
+
+
+Let us now prove that \( \E[\inf_x \phi_k(x)] \geq \E[f(\wk)] \) when using a stochastic gradient update.
+Throughout what follows, we use \( \E[\cdot] \) to denote the expectation taken with respect to all past noise vectors \( \zk, \dots, \z_0 \).\\
+
+\begin{restatable}{lemma}{charStochasticEstimatingSeq}~\label{lemma:characterization_of_stochastic_estimating_sequences}
+    Let \( \phi^*_0 = f(x_0) \) and assume we generate the sequences \( \cbr{\alpha_k}_{k=0}^\infty \), \( \cbr{\wk}_{k=0}^\infty \), \( \cbr{\yk}_{k=0}^\infty \) as follows:
+    \begin{align*}
+        \alpha^2_k &= \frac{\gamma_{k+1}}{\rho L } = \frac{(1-\alpha_k)\gamma_k + \alpha_k \mu}{\rho L}, \\
+        \yk &= \wk - \frac{\alpha_k}{\gamma_k + \alpha_k \mu} \nabla \phi_k(\wk),\\
+        \wkk &= \yk - \frac{1}{\rho L} \grad\rbr{\yk, \zk}.
+    \end{align*}
+    If \( f \) satisfies \( \rho \)-SGC and the initial value \( \gamma_0 \) is independent of \( \cbr{\zk}_{k=0}^\infty \), then for all \( \wk \) the following holds:
+    \[ \E [\inf \phi_k(x)] \geq \E [f(\wk)]. \]
+\end{restatable}
+
+
+We are now ready to prove an accelerated convergence rate for the \( \cbr{\wk}_{k=0}^\infty \) sequence.\\
+
+\begin{restatable}{theorem}{scAcceleratedRate}~\label{thm:accelerated_convergence_rate}
+    Let \( \phi^*_0 = f(x_0) \) and assume we generate the sequences \( \cbr{\alpha_k}_{k=0}^\infty \), \( \cbr{\wk}_{k=0}^\infty \), \( \cbr{\yk}_{k=0}^\infty \) as follows:
+    \begin{align*}
+        \alpha^2_k &= \frac{\gamma_{k+1}}{\rho L } = \frac{(1-\alpha_k)\gamma_k + \alpha_k \mu}{\rho L}, \\
+        \yk &= \wk - \frac{\alpha_k}{\gamma_k + \alpha_k \mu} \nabla \phi_k(\wk),\\
+        \wkk &= \yk - \frac{1}{\rho L} \grad\rbr{\yk, \zk}.
+    \end{align*}
+    Moreover, choose \( \gamma_0 = \mu > 0 \) and \( v_0 = \w_0 \).
+    If \( f \) satisfies \( \rho \)-SGC, the following convergence rate holds:
+    \[ \E\sbr{f(\wk)} - f(\wopt) \leq \rbr{1 - \sqrt{\frac{\mu}{\rho L}}}^{k} \rbr{ f(w_0) - f(\wopt) + \frac{\mu}{2} \norm{\wopt - \w_0}^2 }.  \]
+\end{restatable}
+
+\textbf{Comments}:
+\begin{itemize}
+    \item The strong-growth parameter is \( \rho = \frac{\Lmax}{\mu} \) when \( f \) is \( \mu \)-strongly convex, satisfies interpolation, and is ``individually smooth'', meaning \( \grad(\w, \z) \) is \( L_\z \) Lipschitz continuous and \( \Lmax = \max_\z L_\z \).
+    This implies the final convergence rate is
+    \[ \E\sbr{f(\wk)} - f(\wopt) \leq \rbr{1 - \frac{\mu}{\sqrt{\Lmax L}}}^{k} \rbr{ f(w_0) - f(\wopt) + \frac{\mu}{2} \norm{\wopt - \w_0}^2 }, \]
+    which is nearly the rate for deterministic gradient descent (\( \sqrt{\Lmax L} \) vs \( L \)).
+    \item In comparison to the above, the accelerated rate given by~\citet{vaswani2019fast} in the same setting is
+    \[ \E\sbr{f(\wk)} - f(\wopt) \leq \rbr{1 - \frac{\mu}{\Lmax} \sqrt{\frac{\mu}{L}}}^{k} \rbr{ f(w_0) - f(\wopt) + \frac{\mu}{2} \norm{\wopt - \w_0}^2 }. \]
+    This is worse by a factor of \( \sqrt{\frac{\Lmax}{L}} \kappa^{-1/2} \), which is approximately the difference Nesterov acceleration and gradient descent in the deterministic setting.
+    \item The rate given in Theorem~\ref{thm:accelerated_convergence_rate} is ``accelerated'' with respect to the convergence of stochastic gradient descent in the same setting.
+    It is \emph{not} accelerated in the sense that it obtains the optimal convergence rate for first-order methods on strongly-convex functions.
+\end{itemize}
