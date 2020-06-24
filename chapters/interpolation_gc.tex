@@ -1,0 +1,139 @@
+%! TEX root = ../main.tex
+
+\chapter{Interpolation and Growth Conditions}~\label{ch:interpolation-gc}
+
+\section{Preliminaries}\label{sec:setup}
+
+We consider the unconstrained minimization of a continuous function \( f : \R^d \into \R \) using stochastic gradient descent (SGD).
+Assume that \( f \) is bounded below by \( f(\wopt) = \fopt \) for some \( \wopt \in \bar \R^d \) and let \( \z \in \calZ \) be a noise vector sampled from distribution \( p(\z) \).
+The functions \( f(\w,\z) \) and \( \grad(\w, \z) \) are stochastic estimates of the true function \( f(\w) \) and its gradient \(\grad(\w) \) whose randomness stems from \( \z \).
+The estimates are assumed to be unbiased, meaning
+\[ \E \sbr{f(\w, \z)} = f(\w)  \; \text{and} \; \E \sbr{ \grad(\w, \z) } = \grad(\w). \]
+In this notation, an iteration of stochastic gradient descent with step-size \( \etak \) is
+\begin{align}
+    \textbf{SGD}: \; \wkk = \wk - \etak \grad(\wk, \zk). \label{eq:sgd}
+\end{align}
+Our goal is to show that the sequence of iterates \( \rbr{\wk} \) converges to an optimal input \( \wopt \), function value \( \fopt \), or stationary point as \( k \into \infty \).
+
+\subsection{Finite-sum functions}\label{sec:finite_sum}
+
+A sub-problem that occurs frequently in machine learning and statistics is the minimization of finite-sum functions, which have the form
+\[ f(\w) = \frac{1}{n} \sum_{i=1}^n \fj(w). \]
+For example, maximum likelihood estimation of the parameters of a probability distribution using iid observations is a common problem in both fields that reduces to minimization of a finite-sum function.
+For finite-sum functions, it is common to choose \( \calZ = \cbr{1, \dots, n} \) --- the set of indices for functions in the sum --- and use the gradient and function estimates
+\[f(\w, \z) = f_\z(\w) \; \text{and} \; \grad(\w, \z) = \grad_\z(w). \]
+These are unbiased for \( P(\z) = \text{Uniform}\rbr{\cbr{1, \dots, n}} \).
+Or, a mini-batch of \( m \leq n \) functions from the finite-sum can be used,
+\[ f(\w, \z) = \frac{1}{|\z|} \sum_{i \in \z} f_i(\w) \; \text{ and } \grad(\w, \z) = \frac{1}{|\z|} \sum_{i \in \z} \grad_i(\w), \]
+in which case \( \calZ = \cbr{ A \subseteq \cbr{1, \dots, n} : |A| = m } \).
+
+\subsection{Lipschitz smoothness, convexity, and strong-convexity}\label{sec:lipschitz_convex_sc}
+
+We must make assumptions about the function to minimize in order to prove SGD converges.
+Firstly, we assume throughout that \( f(\cdot, \z) \) is \( L_\z \)-smooth in the norm \( \norm{\cdot} \),
+\begin{align}
+    \textbf{\( L \)-smooth}: \; f(v, \z) \leq f(u, \z) + \abr{\grad(u,\z), v - u} + \frac{L}{2}\norm{v - u}^2. \label{eq:l_smooth}
+\end{align}
+This is equivalent to \( L_\z \)-Lipschitz continuity of the stochastic gradients,
+\[ \norm{\grad(v, \z) - \grad(u, \z)}_* \leq L_\z \norm{v - u}, \]
+where \( \norm{\cdot}_* \) is the conjugate norm of \( \norm{\cdot} \).
+In some cases, we will require that \( f \) is convex, meaning
+\begin{align}
+    \textbf{convex}: \; &f(v) \geq f(u) + \abr{\grad(w), v - u} \label{eq:convex}
+\intertext{or \( \mu \)-strongly-convex in \( \norm{\cdot} \), meaning}
+    \textbf{\( \mu \)-strongly-convex}: \; &f(v) \geq f(u) + \abr{\grad(w), v - u} + \frac{\mu}{2}\norm{v - u}^2. \label{eq:sc}
+\end{align}
+It will be explicit when convexity or strong-convexity are assumed.
+Finally, a function is invex when all its stationary points are global minima:
+\begin{align}
+    \grad(\w) = 0 \implies f(\w) \leq f(u) \; \forall u \in \R^d.\label{eq:invex}
+\end{align}
+
+\section{Interpolation}~\label{sec:interpolation}
+
+There are three different notions of interpolation.\\
+
+\begin{definition}[Interpolation 1: Global Minima are Stochastic Global Minima]\label{def:interpolation_minima}
+    A function \( f \) satisfies interpolation if
+    \[ f(\wopt) \leq f(\w) \; \forall \w \in \R^d \implies f(\wopt, \z) \leq f(\w, \z) \; \forall \w \in \R^d \; \forall \z \in \calZ. \]
+
+\end{definition}
+
+\begin{definition}[Interpolation 2: Stationary Points are Stochastic Stationary Points]\label{def:interpolation_gradients}
+
+    A function \( f \) satisfies interpolation if
+    \[ \grad(\wopt) = 0 \implies \grad(\wopt, \z) = 0 \; \forall \z \in \calZ. \]
+
+\end{definition}
+
+\begin{definition}[Interpolation 3: Global Minima are Stochastic Stationary Points]\label{def:interpolation_minima_to_gradients}
+
+    A function \( f \) satisfies interpolation if
+    \[ f(\wopt) \leq f(\w) \; \forall \w \in \R^d \implies \grad(\wopt, \z) = 0  \; \forall \z \in \calZ. \]
+
+\end{definition}
+
+The relationship between these modes of interpolation is as follows:
+\begin{restatable}{theorem}{interpRelationships}~\label{thm:interp-relationships}
+    In the general setting, only the following holds:
+    \[ \autoref{def:interpolation_minima} \implies \autoref{def:interpolation_minima_to_gradients} \]
+    However, if \( f \) is invex, then all definitions are equivalent.
+\end{restatable}
+
+
+\begin{restatable}{theorem}{boundedBelow}~\label{thm:bounded-below}
+    A function \( f \) satisfies \autoref{def:interpolation_minima} almost surely if
+    \[ f(\w, \z ) \geq f(\wopt) \; \forall \w \in \R^d, \forall \z \in \calZ. \]
+\end{restatable}
+
+
+\section{Growth conditions}\label{sec:growth_conditions}
+
+According to \citet{schmidt2013fast}, the first authors to consider growth conditions on the norms of the stochastic gradients were \citet{tseng1998incremental} and
+\citet{solodov1998incremental}, who assumed the maximum norm is bounded by a linear function of the norm of the true gradient,
+\begin{align}
+    \max_{z \in \calZ} \norm{\grad(\w, \z)}^2 \leq \rho \norm{\grad(x)}^2 \label{eq:tseng_gc}
+\end{align}
+
+\citet{vaswani2019fast} use a related condition, which they call the strong growth condition (SGC).
+\begin{definition}[Strong Growth] Condition\label{def:strong_growth}
+    A function \(f\) satisfies SGC with parameter \(\rho \) and noise random variables \(\z \in \calZ \) if
+    \[ \E\sbr{\norm{\grad(\w, \z)}^2} \leq \rho \norm{\grad(\w, \z)}^2 \]
+    holds for all \(\w \in \R^d\).
+\end{definition}
+
+The following theorem characterizes the relationship between \autoref{eq:tseng_gc} and SGC.
+
+\begin{restatable}[Formulations of Strong Growth]{theorem}{sgcRelationships}\label{thm:sgc_relationships}
+    The original growth condition proposed by~\citet{solodov1998incremental} and~\citet{tseng1998incremental} and given in \autoref{eq:tseng_gc} implies SGC, but
+    SGC does not imply \autoref{eq:tseng_gc} in the general setting.
+    If we further assume that \( \calZ \) is finite, then SGC implies \autoref{eq:tseng_gc} almost-surely.
+\end{restatable} 
+
+
+A relaxed version of the strong growth condition is the weak growth condition, which was recently proposed by \citet{vaswani2019fast}.
+
+\begin{definition}[Weak Growth Condition]\label{def:weak_growth}
+    An \(L\)-smooth function \(f\) with minimizer \(\wopt \) satisfies WGC with parameter \(\rho \) and noise random variables \( \z \) if
+    \[ \E\sbr{\norm{\grad(\w, \z)}^2} \leq \rho L (f(\w) - f(\wopt)), \]
+    holds for all \(\w \in \R^d\).
+\end{definition}
+
+
+\begin{restatable}[Interpolation and Weak Growth]{theorem}{interpToWGC}~\label{thm:interp_to_wgc}
+    Let \( f \) be an \( L \)-smooth function satisfying \autoref{def:interpolation_minima}.
+    Furthermore, assume that \( f(\cdot, \z) \) is \( L_\z \)-smooth for all \( \z \in \calZ. \)
+    Then \( f \) satisfies WGC with parameter
+    \[ \rho = \frac{L_{\text{max}}}{L}, \]
+    where \( L_{\text{max}} = \max_{\z \in \calZ} L_\z \).
+\end{restatable}
+
+
+\begin{restatable}[Interpolation and Strong Growth]{theorem}{interpToSGC}~\label{thm:interp_to_sgc}
+    Let \( f \) be an \( L \)-smooth function satisfying \autoref{def:interpolation_minima}.
+    Furthermore, assume that \( f(\cdot, \z) \) is \( L_\z \)-smooth for all \( \z \in \calZ \),
+    and \( f \) satisfies the Polyak-Łojasiewicz condition with parameter \( mu \).
+    Then \( f \) satisfies SGC with parameter
+    \[ \rho = \frac{L_{\text{max}}}{\mu}, \]
+    where \( L_{\text{max}} = \max_{\z \in \calZ} L_\z \).
+\end{restatable}

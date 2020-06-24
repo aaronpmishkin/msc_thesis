@@ -182,9 +182,9 @@
 % writing packages
 \usepackage[chapter]{easy-todo}
 
+\usepackage{geometry}
+
 %% **TEMPORARY** %%
-\usepackage{lineno}
-\linenumbers
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -318,7 +318,7 @@
 %% Document meta-data: be sure to also change the \hypersetup information
 %%
 
-\title{Over-parameterization, Growth Conditions, and Stochastic Gradient Descent}
+\title{Interpolation, Growth Conditions, and Stochastic Gradient Descent}
 %\subtitle{If you want a subtitle}
 
 \author{Aaron Mishkin}
@@ -436,7 +436,13 @@
 \include{chapters/intro}
 
 %    2. Main body
+\include{chapters/interpolation_gc}
+
 \include{chapters/sgd}
+
+\include{chapters/acceleration}
+
+\include{chapters/line_search}
 
 %    3. Notes
 %    4. Footnotes
@@ -446,16 +452,29 @@
 \raggedright
 \bibliographystyle{abbrvnat}
 \bibliography{refs}
-\end{singlespace}
 
 \appendix
+
+\newgeometry{margin=1in}
+
 %    6. Appendices (including copies of all required UBC Research
 %       Ethics Board's Certificates of Approval)
 %\include{reb-coa}	% pdfpages is useful here
-\include{appendices/appendix}
+
+\chapter{Proofs}~\label{app:proofs}
+
+\include{appendices/useful_lemmas}
+
+\include{appendices/interpolation_gc}
 
 \include{appendices/sgd}
 
+\include{appendices/acceleration}
+
+\include{appendices/line_search}
+
+
+\end{singlespace}
 
 \backmatter
 %    7. Index

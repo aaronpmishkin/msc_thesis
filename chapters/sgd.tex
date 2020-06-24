@@ -1,18 +1,58 @@
 %!TEX root = ../main.tex
 
-\chapter{Stochastic Gradient Descent}\label{ch:sgd}
+\chapter{Stochastic Gradient Descent}~\label{ch:sgd}
 
-\section{Convergence for Convex Functions}
+
+\section{Convergence for Strongly-Convex Functions}~\label{sec:sgd-sc}
+
+We establish the convergence rate of SGD for strongly-convex functions under the strong growth condition. The following theorem allows for a larger step-size and establishes asymptotically faster convergence than the corresponding theorem in \citet{vaswani2019fast}.
+
+\begin{restatable}{theorem}{sgcConvex}~\label{thm:sgc-convex}
+    Let \( f \) be a \( \mu \)-strongly-convex, \( L \)-smooth function satisfying the strong growth condition with constant \( \rho \).
+    Then stochastic gradient descent with step-size \( \eta \leq \frac{2}{\rho(\mu + L)} \) converges as 
+    \[ f(\wk) - f(\wopt) \leq \rbr{\frac{L}{\mu}}\rbr{1 - \frac{2\eta \mu L}{\mu + L}}^k \rbr{f(\w_0) - f(\wopt)}. \] 
+\end{restatable}
+
+See \autoref{app:sgd-sc} for proof.
+A key feature of this theorem is is that it requires only the full function \( f \) to be strongly-convex; the individual/stochastic functions \( f(\cdot, \z) \) may be merely convex, as is typically the case in the finite-sum setting.
+Stochastic gradient descent is sub-optimal if the stochastic functions are also strongly-convex and the optimization procedure has direct access to \( f(\cdot, \z ) \) for each \( \z \).
+In this case, gradient descent on the stochastic function with smallest condition number \( \kappa_{\text{min}} \) converges to the global minimize of the full function \( f \) as \( O\rbr{\exp\cbr{\frac{-4 k}{\kappa_{\text{min}} + 1}}} \).
+Despite being a poor algorithmic choice, SGD will converge deterministically in this setting, as established in the following theorem.
+
+\begin{restatable}{theorem}{sgcIndSC}~\label{thm:sgc-ind-sc}
+    Let \( f \) be a \( \mu \)-strongly-convex, \( L \)-smooth function satisfying the strong growth condition with constant \( \rho \).
+    Furthermore, assume that the stochastic functions \( f(\cdot, \z) \) are (i) \( \mu_\z \)-strongly-convex and (ii) \( L_\z \)-smooth.
+    Let \( \mumax, \mumin \) be the largest and smallest strong-convexity constants for the stochastic functions, respectively.
+    Similarly, let \( \Lmax, \Lmin \) be the largest and smallest Lipschitz constants of the stochastic gradients.
+    Then stochastic gradient descent with step-size \( \eta \leq \frac{2}{\mumax + \Lmax} \) converges deterministically at the rate 
+    \[ f(\wkk) - f(\wopt) \leq \frac{L}{\mu} \rbr{1 - \frac{2 \eta \mumin \Lmin}{\mumax + \Lmax}}^k \rbr{f(\w_0) - f(\wopt)}. \] 
+\end{restatable}
+
+
+\section{Convergence for Convex Functions}~\label{sec:sgd-convex}
 \todo{Clarify the improvements in this proof}
 
 We establish the convergence rate of SGD for convex functions under the weak growth condition. These results improve on those given by \citet{vaswani2019fast} by constant factors. 
 Moreover, we provide cleaner and simpler proofs.
+
+
 \begin{restatable}{theorem}{wgcConvex}~\label{thm:wgc-convex}
-    Let \( f  \) be a convex, \( L  \)-smooth function satisfying the weak growth condition with constant \( \rho  \). 
-    Then stochastic gradient descent with step-size \( \eta < \rbr{\frac{\rho + 1}{\rho}}L^{-1} \) converges as
-    \[ \E\sbr{f(\bar w_K)} - f(\wopt) \leq \frac{1}{2\eta \, C \, K} \norm{\w_0 - \wopt}^2,   \]
-    where \( \bar \w_K = \frac{1}{K} \sum_{k=0}^K \wk \) and \( C = \min\cbr{1,1+\rho \rbr{1 - \eta L}} \). 
+    Let \( f \) be a convex, \( L \)-smooth function satisfying the weak growth condition with constant \( \rho  \).
+    Then stochastic gradient descent with step-size \( \eta < \frac{1}{\rho L} \) converges as
+    \[ \f(\bar \w_K) - f(\wopt) \leq \frac{1}{2 \eta \rbr{1 - \eta \rho L} \, K} \norm{\w_0 - \wopt}^2, \]
+    where \( \bar \w_K = \frac{1}{K} \sum_{k=0}^K \wk \). 
 \end{restatable}
-See \autoref{app:sgd} for proof.
+
+A slightly larger step-size can be obtained if we further assume that the stochastic functions are themselves Lipschitz-smooth.
+
+\begin{restatable}{theorem}{wgcConvexIndSmooth}~\label{thm:wgc-convex-ind-smooth}
+    Let \( f \) be a convex, \( L \)-smooth function satisfying the weak growth condition with constant \( \rho  \).
+    Moreover, suppose that the stochastic functions \( f(\cdot, \z) \) are \( L_\z \)-smooth for each \( \z \), with \( \Lmax = \max_\z L_\z \).
+    Then stochastic gradient descent with step-size \( \eta < \frac{1}{\rho L} + \frac{1}{\Lmax} \) converges as
+    \[ \E\sbr{f(\bar w_K)} - f(\wopt) \leq \frac{1}{2\eta \, C \, K} \norm{\w_0 - \wopt}^2,   \]
+    where \( \bar \w_K = \frac{1}{K} \sum_{k=0}^K \wk \) and \( C = 1 + \min \cbr{ 0, \rho L \rbr{\frac{1}{\Lmax} - \eta }} \). 
+\end{restatable}
+
+See \autoref{app:sgd-convex} for proof.
 
 \endinput

@@ -1,0 +1,98 @@
+%! TEX root = ../main.tex
+
+\section{Interpolation and Growth Conditions: Proofs}~\label{app:interpolation_gc}
+
+
+\interpRelationships*
+\begin{proof}
+    \( (\autoref{def:interpolation_minima} \implies \autoref{def:interpolation_minima_to_gradients}) \)
+    The stochastic functions \( f(\w,\z) \) are minimized at \( \wopt \) for all \( \z \in \calZ \) and thus \( \grad(\wopt, \z) = 0 \forall \z \in \calZ \).\\
+
+    \( (\autoref{def:interpolation_minima_to_gradients} \centernot \implies \autoref{def:interpolation_minima}) \), \(
+    (\autoref{def:interpolation_gradients} \centernot \implies \autoref{def:interpolation_minima}) \)
+    We construct a simple counter example.
+    Consider the finite-sum function
+    \[ f(\w) = f_1(\w) + f_2(\w) = 3\w^2 - \w^2. \]
+    The ``sub-functions'' are stationary at the global minimum of \( f(0) = 0 \), but \( f_2(\w) \) is maximized at this point.\\
+
+    \( (\autoref{def:interpolation_minima} \centernot \implies \autoref{def:interpolation_gradients}) \) This also follows from a simple finite-sum function.
+    Consider
+    \[ f(\w) = f_1(\w) + f_2(\w) = - \cos(\w) - \cos(\frac{\w}{2}). \]
+    The global minimizers of \( f \) are \(\calX_0 = \cbr{\rbr{-1}^{t} (4\pi) t : t \in \cbr{0,1, \dots }} \).
+    Furthermore, the sub-functions \( f_1(\w) \) and \( f_2(\w) \) are also globally minimized at every point in \( \calX_0 \).
+    However, \( f \) has infinitely many stationary points which are not stationary points of \( f_1 \) or \( f_2 \).\\
+
+    Now, suppose \( f \) is invex. The equivalence of all three definitions follows immediately, since all stationary points of invex functions are global minima.
+\end{proof}
+
+\boundedBelow*
+\begin{proof}
+    Since \( f(\w, \z ) \geq f(\wopt) \), the optimality gap \( f(\w,\z) - f(\wopt) \) must be non-negative for all \( \w \) and \( \z \).
+    Since the stochastic functions are unbiased,
+    \begin{align*}
+        \E \sbr{f(\wopt,\z) - f(\wopt)} = 0,
+    \end{align*}
+    and it must be that \( f(\wopt,\z) - f(\wopt) = 0 \) almost surely.
+    Moreover, \( f(\wopt) = f(\wopt,\z) \leq f(\w, \z) \) for all \( \w \in \R^d \) almost surely, which completes the proof.
+\end{proof}
+
+
+\sgcRelationships*
+\begin{proof}
+    \( \rbr{\Longrightarrow} \) Assume that \autoref{eq:tseng_gc} holds.
+    Then,
+    \begin{align*}
+        \E \sbr{\norm{\grad(\w,\z)}^2 } &\leq \E \sbr{\max_{\z \in \calZ} \norm{\grad(\w,\z)}^2 } \leq \rho \norm{\grad(\w)}^2,
+    \end{align*}
+    which completes the forward direction.\\
+    \( \rbr{\Longleftarrow} \) Assume that SGC holds and \( \calZ \) is finite with probability mass function \( p(\z) \).
+    In this case, SGC is
+    \begin{align*}
+        \rho \norm{\grad(\w, \z)}^2 \geq
+        \E \sbr{\norm{\grad(\w,\z)}^2 } &= \sum_{\z_i \in \calZ} \norm{\grad(\w,\z_i)}^2 p(\z_i)\\
+        &\geq \norm{\grad(\w,\z_i)}^2 p(\z_i),
+        \intertext{for all \( \z_i \in \calZ \). Furthermore, for \( \z_i \) such that \( p(\z_i) > 0 \) }
+        \frac{\rho}{ p(\z_i)} \norm{\grad(\w, \z)}^2 &\geq \norm{\grad(\w,\z_i)}^2\\
+        \implies \max \cbr{\norm{\grad(\w,\z_i)}^2 : \z_i \in \calZ, p(\z_i) > 0 } &\leq \frac{\rho}{p_{\text{min}}} \norm{\grad(\w, \z)}^2,
+    \end{align*}
+    where \( p_{\text{min}} = \min \cbr{p(\z_i) : \z_i \in \calZ, p(\z_i) > 0 } \).
+    We conclude that \autoref{eq:tseng_gc} holds almost surely with \(\rho' = \sfrac{\rho}{p_{\text{min}}}\).
+    Now, consider when \( \calZ \) is allowed to be infinite.
+    Let \( f(w) = w \) and choose \( \calZ = \sbr{0,1} \) with probability density function \( p(\z) = \frac{\z}{2} \).
+    Finally, let
+    \[ f(\w, \z) = \frac{2 \w}{\z} \; \text{and} \; \grad(\w, \z) = \frac{2}{\z}. \]
+    A simple calculation shows that the stochastic function and gradient evaluations are unbiased,
+    \begin{align*}
+        \E \sbr{f(\w, \z)} &= \int_{0}^1 \frac{2\w}{\z} \frac{\z}{2} d\z = \int_{0}^1 \w d\z = w\\
+        \E \sbr{\grad(\w, \z)} &= \int_{0}^1 \frac{2}{\z} \frac{\z}{2} d\z = \int_{0}^1 1 d\z = 1.\\
+    \end{align*}
+    However, as \( \z \into 0 \), the norm \( \norm{\grad(\w, \z)}^2 \into \infty \) and so \autoref{eq:tseng_gc} does not hold almost surely for finite \( \rho \).
+\end{proof}
+
+
+\interpToWGC*
+\begin{proof}
+    Starting from \( L_{\z} \)-smoothness of \( f(\cdot, \z) \),
+    \begin{align*}
+        f(u, \z) &\leq f(\w, \z) + \abr{\grad(\w, \z), u - \w} + \frac{L_\z}{2}\norm{u - \w}^2\\
+        \intertext{Choosing \( u = \w - \frac{1}{L_\z}\grad(\w, \z) \),}
+        f(u, \z) &\leq f(\w, \z) - \frac{1}{L_{\z}}\abr{\grad(\w, \z), \grad(\w,\z)} + \frac{L_\z}{2L^2_\z}\norm{\grad(\w,\z)}^2\\
+        &= f(\w, \z) - \frac{1}{2L_{\z}}\norm{\grad(\w,\z)}^2.\\
+        \intertext{Letting \( L_{\text{max}} = \max \cbr{L_\z : \z \in \calZ} \) gives }
+        f(u, \z) &\leq f(\w, \z) - \frac{1}{2L_{{\text{max}}}}\norm{\grad(\w,\z)}^2.\\
+        \intertext{Noting that \( f(u,\z) \geq f(\wopt) \) by interpolation and then taking expectations w.r.t \( \z \) gives the following:}
+        f(\wopt, \z) &\leq f(\w, \z) - \frac{1}{2L_{{\text{max}}}}\norm{\grad(\w,\z)}^2.\\
+        \implies f(\wopt) &\leq f(\w) - \frac{1}{2L_{{\text{max}}}}\E \norm{\grad(\w,\z)}^2.\\
+        \implies \E \norm{\grad(\w,\z)}^2 &\leq 2 L_{\text{max}} \rbr{f(\wopt) - f(\w)}.
+    \end{align*}
+    We conclude that WGC holds with \( \rho = \frac{L_{\text{max}}}{L} \).
+\end{proof}
+
+\interpToSGC*
+\begin{proof}
+    \autoref{thm:interp_to_wgc} implies that \( f \) satisfies WGC with parameter
+    \[ \rho' = \rho = \frac{L_{\text{max}}}{L}. \]
+    \citet[Proposition 1]{vaswani2019fast} implies that \( f \) satisfies the SGC with parameter
+    \[ \rho = \frac{\rho' L}{\mu} = \frac{L_{\text{max}}}{\mu}.  \]
+    This concludes the proof.
+\end{proof}
