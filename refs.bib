@@ -95,6 +95,28 @@
 }
 
 
+@inproceedings{vaswani2019painless,
+  author    = {Sharan Vaswani and
+               Aaron Mishkin and
+               Issam H. Laradji and
+               Mark Schmidt and
+               Gauthier Gidel and
+               Simon Lacoste{-}Julien},
+  editor    = {Hanna M. Wallach and
+               Hugo Larochelle and
+               Alina Beygelzimer and
+               Florence d'Alch{\'{e}}{-}Buc and
+               Emily B. Fox and
+               Roman Garnett},
+  title     = {Painless Stochastic Gradient: Interpolation, Line-Search, and Convergence
+               Rates},
+  booktitle = {Advances in Neural Information Processing Systems 32: Annual Conference
+               on Neural Information Processing Systems 2019, NeurIPS 2019, 8-14
+               December 2019, Vancouver, BC, Canada},
+  pages     = {3727--3740},
+  year      = {2019},
+}
+
 ### Acceleration ###
 
 @inproceedings{flammarion2015averaging,
@@ -129,4 +151,54 @@
                of a meeting held 12-14 December 2011, Granada, Spain},
   pages     = {1458--1466},
   year      = {2011},
+}
+
+
+% Almost Sure References
+# almost sure convergence under weakest assumptions (according to Orabona)
+@article{bertsekas2000gradient,
+  title={Gradient convergence in gradient methods with errors},
+  author={Bertsekas, Dimitri P. and Tsitsiklis, John N.},
+  journal={SIAM Journal on Optimization},
+  volume={10},
+  number={3},
+  pages={627--642},
+  year={2000},
+  publisher={SIAM}
+}
+
+# survey of almost sure convergence of stochastic gradient, subgradient, and proximal methods for finite-sum functions.
+@article{bertsekas2011incremental,
+  title={Incremental gradient, subgradient, and proximal methods for convex optimization: A survey},
+  author={Bertsekas, Dimitri P},
+  journal={Optimization for Machine Learning},
+  volume={2010},
+  number={1-38},
+  pages={3},
+  year={2011},
+  publisher={MIT press}
+}
+
+# almost sure convergence of SGD with diminishing step size; larger bound on step-size than previous work.
+@article{nguyen2018sgd,
+  title={S{GD} and {H}ogwild! convergence without the bounded gradients assumption},
+  author={Nguyen, Lam M. and Nguyen, Phuong Ha and van Dijk, Marten and Richt{\'a}rik, Peter and Scheinberg, Katya and Tak{\'a}{\v{c}}, Martin},
+  journal={arXiv preprint arXiv:1802.03801},
+  year={2018}
+}
+
+@book{ccinlar2011probability,
+  title={Probability and stochastics},
+  author={{\c{C}}{\i}nlar, Erhan},
+  volume={261},
+  year={2011},
+  publisher={Springer Science \& Business Media}
+}
+
+@book{neveu1975discrete,
+  title={Discrete-parameter martingales},
+  author={Neveu, Jacques},
+  volume={10},
+  year={1975},
+  publisher={Elsevier}
 }

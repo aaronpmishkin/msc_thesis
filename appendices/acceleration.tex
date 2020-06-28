@@ -2,27 +2,9 @@
 
 \section{Acceleration: Proofs}~\label{app:acceleration}
 
-\sgcDecreaseCondition*
-\begin{proof}
-    The proof follows from L-smoothness of \( f \) and the stochastic gradient update.
-    \begin{align*}
-        f(\wkk) &\leq f(\wk) + \abr{\grad(\wk), \wkk - \wk} + \frac{L}{2}\norm{\wkk - \wk}^2\\
-        &\leq f(\wk) + \abr{\grad(\wk), \wkk - \wk} + \frac{L}{2}\norm{\wkk - \wk}^2\\
-        &= f(\wk) - \frac{1}{\rho L} \abr{\grad(\wk), \grad(\wk, \zk)} + \frac{1}{2\rho^2 L}\norm{\grad(\wk, \zk)}^2\\
-        \intertext{Taking expectations with respect to \( \zk \):}
-        \E_{\zk}[f(\wkk)] &\leq f(\wk) - \frac{1}{\rho L} \norm{\grad(\wk)}^2 + \frac{1}{2\rho^2 L}\E_{\zk} \sbr{\norm{\grad(\wk, \zk)}^2}\\
-        &\leq f(\wk) - \frac{1}{\rho L} \norm{\grad(\wk)}^2 + \frac{\rho}{2\rho^2 L} \norm{\grad(\wk)}^2 \tag{by \( \rho \)-SGC}\\
-        &\leq f(\wk) - \frac{1}{2 \rho L} \norm{\grad(\wk)}^2.
-        \intertext{Taking expectations with respect to \( \z_{k-1} \ldots \z_0 \):}
-        \implies \E[f(\wkk)] & \leq \E \sbr{f(\wk) - \frac{1}{2 \rho L} \norm{\grad(\wk)}^2}.
-    \end{align*}
-    which completes the proof.
-\end{proof}
-
-
 \charStochasticEstimatingSeq*
 \begin{proof}
-    The proof continues largely as before; the main difference is that we use Lemma~\ref{lemma:SGC-decrease-condition} instead of the typical Descent Lemma.
+    The proof continues largely as before; the main difference is that we use Lemma~\ref{lemma:sgc-decrease-condition} instead of the typical Descent Lemma.
     Notice that \( \gamma_0 \ind \cbr{\zk}_{k=0}^\infty \) implies the \( \cbr{\gamma_k}_{k=0}^\infty \), \( \cbr{\alpha_k}_{k=0}^\infty \), and \( \cbr{\lambda_k}_{k=0}^\infty \) evolve \emph{independently} of the stochastic processes \( \cbr{\yk}_{k=0}^\infty \), \( \cbr{\wk}_{k=0}^\infty \), and \( \cbr{v_k}_{k=0}^\infty \).
     This will be key in our analysis.\\
 
@@ -41,7 +23,7 @@
         &\geq  (1-\alpha_k) \E[f(\yk)] + \E\sbr{\alpha_k f(\yk) - \frac{1}{2\rho L} \norm{\grad(\yk)}^2} \\
         & \quad \quad + (1-\alpha_k) \E\sbr{\abr{\grad(\yk), \wk - \yk} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
         &=  \E\sbr{f(\yk) - \frac{1}{2\rho L} \norm{\grad(\yk)}^2} + (1-\alpha_k) \E\sbr{\abr{\grad(\yk), \wk - \yk} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
-        \intertext{Lemma~\ref{lemma:SGC-decrease-condition} implies }
+        \intertext{Lemma~\ref{lemma:sgc-decrease-condition} with step-size \( \eta = \frac{1}{\rho L} \) implies }
         \E[\phi_{k+1}^*] &\geq \E\sbr{f(\wkk)} + (1-\alpha_k) \E\sbr{\abr{\grad(\yk), \wk - \yk} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
         \intertext{The remainder of the proof is largely unchanged from the determnistic case:}
         \phi_{k+1}^*  &=  \E[f(\wkk)] + (1-\alpha_k) \E\sbr{\frac{\alpha_k}{\gamma_k + \alpha_k \mu} \abr{\grad(\yk), \nabla\phi_k(\wk)} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\

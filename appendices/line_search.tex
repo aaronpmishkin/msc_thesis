@@ -1,3 +1,60 @@
 %! TEX root = ../main.tex
 
 \section{Line Search: Proofs}~\label{app:line-search}
+
+\stepSizeBound*
+\begin{proof}
+    Let \( \etak \) be the step-size returned by the exact Arimjo line-search and denote \( \wkk = \wk - \eta \grad(\wk,\zk) \).
+    That is, \( \wkk \) is the typical stochastic gradient descent update using \( \etak \).
+    Individual smoothness implies
+    \begin{align*}
+        f(\wkk, \zk) &\leq f(\wk, \zk) - \abr{grad(\wk, \zk), \wkk - \wk} + \frac{\Lk}{2}\norm{\wkk - \wk}^2\\
+                     &= f(\wk, \zk) - \etak \norm{\grad(\wk, \zk)}^2 + \frac{\Lk \etak^2}{2}\norm{\grad(\wk, \zk)}^2\\
+                     &= f(\wk, \zk) - \etak \rbr{1 - \frac{\Lk \etak}{2}}\norm{\grad(\wk, \zk)}^2.
+    \end{align*}
+    The step-size satisfies \autoref{eq:armijo-ls}, implying that
+    \[ f(\wkk, \zk) \leq f(\wk, \zk) - c \cdot \etak \norm{\grad(\wk, \zk)}^2. \]
+    Moreover, \( \etak \) is the maximal step-size satisfying \autoref{eq:armijo-ls} since the line-search is exact.
+    Thus,
+    \begin{align*}
+        c \cdot \etak &\geq \etak \rbr{1 - \frac{\Lk \etak}{2}}\\
+        \implies \etak &\geq \frac{2(1-c)}{\Lk},
+    \end{align*}
+    which completes the first part of the proof.
+    Let us now upper-bound \( \etak \). 
+    Starting from \autoref{eq:armijo-ls}, 
+    \begin{align*}
+        f(\wkk, \zk) &\leq f(\wk, \zk) - c \cdot \etak \norm{\grad(\wk, \zk)}^2\\
+        \implies \etak &\leq \frac{f(\wk, \zk) - f(\wkk, \zk)}{c \norm{\grad(\wk, \zk)}^2}\\
+        \intertext{Interpolation implies \( f(\wkk, \zk) \geq f(\wopt, \zk) \), which gives}
+        \etak &\leq \frac{f(\wk, \zk) - f(\wopt, \zk)}{c \norm{\grad(\wk, \zk)}^2}.
+    \end{align*}
+    This completes the proof.
+\end{proof}
+
+
+\scLineSearch*
+\begin{proof}
+   \begin{align*}
+       \norm{\wkk - \wopt}^2 &= \norm{\wk - \etak \grad(\wk, \zk) - \wopt}^2\\
+                             &= \etak^2 \norm{\grad(\wk, \zk)}^2 - 2\etak \abr{\grad(\wk, \zk), \wk - \wopt} +  \norm{\wk - \wopt}^2.
+                             \intertext{Using interpolation and \autoref{lemma:pre-coercivity},}
+       \norm{\wkk - \wopt}^2 &\leq \etak^2 \norm{\grad(\wk, \zk)}^2 - 2 \etak \rbr{f(\wk, \zk) - f(\wopt, \zk) + \frac{1}{2 \Lk}\norm{\grad(\wk, \zk)}^2} + \norm{\wk - \wopt}^2\\
+                             &\leq \etak\rbr{\etak - \frac{1}{\Lk}}\norm{\grad(\wk, \zk)}^2 - 2 \etak \rbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2.
+                             \intertext{\autoref{lemma:step-size-bound} implies}
+       \norm{\wkk - \wopt}^2 &\leq \rbr{\frac{\etak}{c} - \frac{1}{c \Lk}} \rbr{f(\wk, \zk) - f(\wopt, \zk)} - 2 \etak \rbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2\\
+                             &= \etak \rbr{2 - \frac{1}{c}} \rbr{f(\wk, \zk) - f(\wopt, \zk)} - \frac{1}{c \Lk} \rbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2.
+                             \intertext{If \( c \geq \frac{1}{2} \) then \( \etak (2 - \frac{1}{c}) \rbr{f(\wk, \zk) - f(\wopt, \zk)} \leq 0 \) by interpolation and}
+       \norm{\wkk - \wopt}^2 &\leq - \frac{1}{c \Lk} \rbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2\\
+                             &\leq \frac{2}{\Lmax} \rbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2.
+                             \intertext{Taking expectations with respect to \( \zk \):}
+       \implies \E \sbr{\norm{\wkk - \wopt}^2} &\leq - \frac{2}{\Lmax} \E \sbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2\\
+                                               &= - \frac{2}{\Lmax} \rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2\\
+                                               &\leq - \frac{\mu}{\Lmax}\norm{\wk - \wopt}^2 + \norm{\wk - \wopt}^2 \tag{by \( \mu \)-strong-convexity}\\
+                                               &= \rbr{1 - \frac{\mu}{\Lmax}} \norm{\wk - \wopt}^2.
+                                                   \intertext{Taking expectations and recursing,}
+       \implies \E \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \frac{\mu}{\Lmax}}^k \norm{\w_0 - \wopt}^2 \\
+   \implies \E \sbr{f(\wkk)} - f(\wopt) &\leq \rbr{\frac{L}{\mu}}\rbr{1 - \frac{\mu}{\Lmax}}^k \rbr{f(w_0) - f(\wopt)}. \tag{by \autoref{lemma:iterate-bounds}}
+\end{align*} 
+\end{proof}
+

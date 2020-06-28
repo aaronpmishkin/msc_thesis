@@ -72,15 +72,6 @@ where \( \grad(x,\z) \) denotes a stochastic gradient.
 We will use this to establish a version of Lemma~\ref{lemma:characterization_of_estimating_sequences} that holds when \( \wk \) is obtained by stochastic gradient descent.
 However, we first establish that stochastic gradient descent satisfies a decrease condition similar to the Descent Lemma when the SGC is satisfied.\\
 
-\begin{restatable}{lemma}{sgcDecreaseCondition}~\label{lemma:SGC-decrease-condition}
-    Let \( f \) satisfy the SGC with parameter \( \rho \) and consider stochastic gradient updates of the form
-    \[ \wkk = \wk - \frac{1}{\rho L} \grad(\wk, \zk). \]
-    Then the following expected decrease condition holds:
-    \[ \E \sbr{f(\wkk)} \leq \E \sbr{f(\wk) - \frac{1}{2 \rho L}\norm{\grad(\wk)}^2},  \]
-    where the expectation is taken with respect to all stochastic vectors \( \zk, \ldots, \z_0 \).
-\end{restatable}
-
-
 Let us now prove that \( \E[\inf_x \phi_k(x)] \geq \E[f(\wk)] \) when using a stochastic gradient update.
 Throughout what follows, we use \( \E[\cdot] \) to denote the expectation taken with respect to all past noise vectors \( \zk, \dots, \z_0 \).\\
 

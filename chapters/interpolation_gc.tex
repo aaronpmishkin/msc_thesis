@@ -2,6 +2,44 @@
 
 \chapter{Interpolation and Growth Conditions}~\label{ch:interpolation-gc}
 
+
+\begin{restatable}[L-Smooth]{definition}{LSmooth}~\label{def:l-smooth}
+    A function \( f : \R^d \rightarrow \R \) is \( L \)-smooth if  
+    \[ f(v) \leq f(w) \abr{\grad(\w), v - \w} + \frac{L}{2}\norm{v - \w}^2 \]
+    for all \( \w,v \in \R^d \).
+\end{restatable}
+This definition of \( L \)-smoothness is equivalent to Lipschitz continuity of the gradient mapping,
+\[ \norm{\grad(w) - \grad(v)} \leq L \norm{w - v} \quad \forall \w,v \in \R^d. \]
+\todo{reference for this basic result}
+
+\begin{restatable}[Convex]{definition}{convex}~\label{def:convex}
+    A function \( f : \R^d \rightarrow \R \) is convex if  
+    \[ f(v) \geq f(\w) + \abr{\grad(\w), v - \w}, \]
+    for all \( \w, v \in \R^d \).
+\end{restatable}
+
+\begin{restatable}[Strongly-Convex]{definition}{stronglyConvex}~\label{def:sc}
+    A function \( f : \R^d \rightarrow \R \) is \( \mu \)-strongly-convex if  
+    \[ f(v) \geq f(\w) + \abr{\grad(\w), v - \w} + \frac{\mu}{2}\norm{v - \w}^2, \]
+    for all \( \w, v \in \R^d \).
+\end{restatable}
+
+\begin{restatable}[Individually Smooth]{definition}{individuallySmooth}~\label{def:individually-smooth}
+    The random function \( f(\cdot, \Z) \) is said to be individually smooth if the realizations \( f(\cdot, \z) \) are \( L_\z \)-smooth for each \( \z \in \calZ \).
+\end{restatable}
+
+For individually-smooth functions, we denote \( \Lmax = \max_{\z \in \calZ} L_\z \). 
+The expectation of an individually-smooth random function is \( L \)-smooth with \( L \leq \Lmax \), since
+\begin{align*}
+    f(v, \z) &\leq f(\w, \z) + \abr{\grad(\w, \z), v - \w} + \frac{L_\z}{2} \norm{v - \w}^2\\
+             &\leq f(\w, \z) + \abr{\grad(\w, \z), v - \w} + \frac{\Lmax}{2} \norm{v - \w}^2\\
+\implies \E \sbr{f(v, \z)} &\leq \E \sbr{f(\w, \z)} + \abr{\E\sbr{\grad(\w, \z)}, v - \w} + \frac{\Lmax}{2} \norm{v - \w}^2.
+\end{align*}
+
+\todo{Fix notation around \( \z \) and \( \Z \)}
+
+\todo{Can exchange gradient and expectation for finite \( \calZ \)}.
+
 \section{Preliminaries}\label{sec:setup}
 
 We consider the unconstrained minimization of a continuous function \( f : \R^d \into \R \) using stochastic gradient descent (SGD).
@@ -95,26 +133,26 @@ According to \citet{schmidt2013fast}, the first authors to consider growth condi
     \max_{z \in \calZ} \norm{\grad(\w, \z)}^2 \leq \rho \norm{\grad(x)}^2 \label{eq:tseng_gc}
 \end{align}
 
-\citet{vaswani2019fast} use a related condition, which they call the strong growth condition (SGC).
-\begin{definition}[Strong Growth] Condition\label{def:strong_growth}
-    A function \(f\) satisfies SGC with parameter \(\rho \) and noise random variables \(\z \in \calZ \) if
+\citet{vaswani2019fast} use a related condition, which they call the strong growth condition.
+\begin{definition}[Strong Growth Condition]\label{def:strong_growth}
+    A function \(f\) satisfies the strong growth condition with parameter \(\rho \) and noise random variables \(\z \in \calZ \) if
     \[ \E\sbr{\norm{\grad(\w, \z)}^2} \leq \rho \norm{\grad(\w, \z)}^2 \]
     holds for all \(\w \in \R^d\).
 \end{definition}
 
-The following theorem characterizes the relationship between \autoref{eq:tseng_gc} and SGC.
+The following theorem characterizes the relationship between \autoref{eq:tseng_gc} and the strong growth condition.
 
 \begin{restatable}[Formulations of Strong Growth]{theorem}{sgcRelationships}\label{thm:sgc_relationships}
-    The original growth condition proposed by~\citet{solodov1998incremental} and~\citet{tseng1998incremental} and given in \autoref{eq:tseng_gc} implies SGC, but
-    SGC does not imply \autoref{eq:tseng_gc} in the general setting.
-    If we further assume that \( \calZ \) is finite, then SGC implies \autoref{eq:tseng_gc} almost-surely.
+    The original growth condition proposed by~\citet{solodov1998incremental} and~\citet{tseng1998incremental} and given in \autoref{eq:tseng_gc} implies the strong growth condition, but
+    the strong growth condition does not imply \autoref{eq:tseng_gc} in the general setting.
+    If we further assume that \( \calZ \) is finite, then the strong growth condition implies \autoref{eq:tseng_gc} almost-surely.
 \end{restatable} 
 
 
 A relaxed version of the strong growth condition is the weak growth condition, which was recently proposed by \citet{vaswani2019fast}.
 
 \begin{definition}[Weak Growth Condition]\label{def:weak_growth}
-    An \(L\)-smooth function \(f\) with minimizer \(\wopt \) satisfies WGC with parameter \(\rho \) and noise random variables \( \z \) if
+    An \(L\)-smooth function \(f\) with minimizer \(\wopt \) satisfies the weak growth condition with parameter \(\rho \) and noise random variables \( \z \) if
     \[ \E\sbr{\norm{\grad(\w, \z)}^2} \leq \rho L (f(\w) - f(\wopt)), \]
     holds for all \(\w \in \R^d\).
 \end{definition}
@@ -123,7 +161,7 @@ A relaxed version of the strong growth condition is the weak growth condition, w
 \begin{restatable}[Interpolation and Weak Growth]{theorem}{interpToWGC}~\label{thm:interp_to_wgc}
     Let \( f \) be an \( L \)-smooth function satisfying \autoref{def:interpolation_minima}.
     Furthermore, assume that \( f(\cdot, \z) \) is \( L_\z \)-smooth for all \( \z \in \calZ. \)
-    Then \( f \) satisfies WGC with parameter
+    Then \( f \) satisfies the weak growth condition with parameter
     \[ \rho = \frac{L_{\text{max}}}{L}, \]
     where \( L_{\text{max}} = \max_{\z \in \calZ} L_\z \).
 \end{restatable}
@@ -132,8 +170,8 @@ A relaxed version of the strong growth condition is the weak growth condition, w
 \begin{restatable}[Interpolation and Strong Growth]{theorem}{interpToSGC}~\label{thm:interp_to_sgc}
     Let \( f \) be an \( L \)-smooth function satisfying \autoref{def:interpolation_minima}.
     Furthermore, assume that \( f(\cdot, \z) \) is \( L_\z \)-smooth for all \( \z \in \calZ \),
-    and \( f \) satisfies the Polyak-Łojasiewicz condition with parameter \( mu \).
-    Then \( f \) satisfies SGC with parameter
+    and \( f \) satisfies the Polyak-Łojasiewicz condition with parameter \( \mu \).
+    Then \( f \) satisfies the strong growth condition with parameter
     \[ \rho = \frac{L_{\text{max}}}{\mu}, \]
     where \( L_{\text{max}} = \max_{\z \in \calZ} L_\z \).
 \end{restatable}

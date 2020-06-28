@@ -93,11 +93,16 @@
 %% Floor and Ceiling %%
 \usepackage{mathtools} % required for \DeclarePairedDelimeter
 
+% almost surely equal:
+\def\equas{\stackrel{\text{\rm\tiny a.s.}}{=}}
+% independent
 \newcommand{\ind}[0]{\perp \!\!\! \perp }
 
 \DeclarePairedDelimiter{\ceilpair}{\lceil}{\rceil}
 \DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
 \newcommand{\argdot}{{\,\vcenter{\hbox{\tiny$\bullet$}}\,}} %generic argument dot
+
+\newcommand{\seq}[1]{\rbr{#1}}
 
 % easy bracketing:
 \newcommand{\rbr}[1]{\left(#1\right)}
@@ -129,6 +134,9 @@
 
 % Gradient Descent Symbols
 
+\newcommand{\iter}{k}
+
+\newcommand{\Lk}{L_{\zk}}
 \newcommand{\Lmax}{L_{\text{max}}}
 \newcommand{\mumax}{\mu_{\text{max}}}
 \newcommand{\Lmin}{L_{\text{min}}}
@@ -144,10 +152,12 @@
 \newcommand{\wkk}{w_{k+1}}
 \newcommand{\wopt}{w^*}
 % noise
+\newcommand{\Z}{Z}
 \newcommand{\z}{z}
-\newcommand{\zk}{z_k}
+\newcommand{\zk}{z_{k}}
 \newcommand{\zkk}{z_{k+1}}
 % step-sizes
+\newcommand{\etamax}{\eta_{\text{max}}}
 \newcommand{\etak}{\eta_k}
 \newcommand{\etakk}{\eta_{k+1}}
 

@@ -28,3 +28,90 @@
     \[ \abr{\grad(x) - \grad(y), x - y} \geq \frac{\mu L}{L + \mu}\norm{x - y}^2 + \frac{1}{L + \mu} \norm{\grad(x) - \grad(y)}^2.  \] 
 \end{restatable}
 
+\subsection{Progress Conditions}~\label{app:progress-conditions}
+
+\begin{restatable}{lemma}{sgcDecreaseCondition}~\label{lemma:sgc-decrease-condition}
+    Let \( f \) be an \( L \)-smooth function satisfying the strong growth condition with parameter \( \rho \).
+    Then stochastic gradient descent with step-size \( \eta \) satisfies the following expected decrease condition:
+    \[ \E_{\zk} \sbr{f(\wkk)} \leq f(\wk) - \eta \rbr{1 - \frac{\rho L \eta}{2}}\norm{\grad(\wk)}^2. \]
+\end{restatable}
+
+\begin{proof}
+    The proof follows from L-smoothness of \( f \) and the stochastic gradient update.
+    \begin{align*}
+        f(\wkk) &\leq f(\wk) + \abr{\grad(\wk), \wkk - \wk} + \frac{L}{2}\norm{\wkk - \wk}^2\\
+        &\leq f(\wk) + \abr{\grad(\wk), \wkk - \wk} + \frac{L}{2}\norm{\wkk - \wk}^2\\
+        &= f(\wk) - \eta \abr{\grad(\wk), \grad(\wk, \zk)} + \frac{L \eta^2}{2}\norm{\grad(\wk, \zk)}^2\\
+        \intertext{Taking expectations with respect to \( \zk \):}
+        \E_{\zk}[f(\wkk)] &\leq f(\wk) - \eta \norm{\grad(\wk)}^2 + \frac{L \eta^2}{2}\E_{\zk} \sbr{\norm{\grad(\wk, \zk)}^2}\\
+        &\leq f(\wk) - \eta \norm{\grad(\wk)}^2 + \frac{\rho L \eta^2}{2} \norm{\grad(\wk)}^2 \tag{by \( \rho \)-SGC}\\
+        &\leq f(\wk) - \eta \rbr{1 - \frac{\rho L \eta}{2}}\norm{\grad(\wk)}^2,
+    \end{align*}
+    which completes the proof.
+\end{proof}
+
+\begin{restatable}{lemma}{convexIntermediate}~\label{lemma:convex-intermediate}
+    Let \( f \) be a convex, \( L \)-smooth function.
+    Moreover, assume that the stochastic functions \( \f(\cdot, \z) \) are \( L_\z \)-smooth.
+    Then stochastic gradient descent with step-size \( \eta \) satisfies the following inequality: 
+    \[ f(\wk) - f(\wopt) \leq \frac{1}{2\eta \, C} \rbr{\norm{\wk - \wopt}^2 - \E \sbr{\norm{\wkk - \wopt}^2}}, \]
+    where \(  C = 1 + \min \cbr{ 0, \rho L \rbr{\frac{1}{\Lmax} - \eta }} \). 
+    Furthermore, if \( \eta \leq \frac{1}{\Lmax} \), then 
+    \[ f(\wk) - f(\wopt) \leq \frac{1}{2 \eta}\rbr{\norm{\wk - \wopt}^2 - \E_{\zk}\sbr{\norm{\wkk - \wopt}^2}}. \]
+\end{restatable}
+
+\begin{proof}
+    \begin{align*}
+       \norm{\wkk - \wopt}^2 &= \norm{(\wkk - \wk) + (\wk - \wopt)}^2\\
+                             &= \norm{\wkk - \wk}^2 + 2 \abr{\wkk - \wk, \wk - \wopt} + \norm{\wk - \wopt}^2\\
+                             &= \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \abr{\grad(\wk, \zk), \wk - \wopt} + \norm{\wk - \wopt}^2. 
+                             \intertext{The weak growth condition implies \( \grad(\wopt, \z) = 0 \) for all \( \z \). We may thus use \autoref{lemma:pre-coercivity} at \( \wk \) and \( \wopt \) to obtain}
+                       \norm{\wkk - \wopt}^2 &\leq \eta^2 \norm{\grad(\wk, \zk)}^2 + 2 \eta \rbr{f(\wopt, \zk) - f(\wk, \zk) - \frac{1}{2L_\z} \norm{\grad(\wk, \zk)}^2}  + \norm{\wk - \wopt}^2\\ 
+                                             &\leq \eta^2 \norm{\grad(\wk, \zk)}^2 + 2 \eta \rbr{f(\wopt, \zk) - f(\wk, \zk) - \frac{1}{2\Lmax} \norm{\grad(\wk, \zk)}^2}  + \norm{\wk - \wopt}^2\\
+                         &\leq \rbr{\eta^2 - \frac{\eta}{\Lmax}} \norm{\grad(\wk, \zk)}^2 + 2 \eta \rbr{f(\wopt, \zk) - f(\wk, \zk)} + \norm{\wk - \wopt}^2.
+     \intertext{Taking expectations with respect to \( \zk \):}
+                      \E \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{\eta^2 - \frac{\eta}{\Lmax}} \E \sbr{\norm{\grad(\wk, \zk)}^2} + 2 \eta \E\sbr{f(\wopt, \zk) - f(\wk, \zk)} + \norm{\wk - \wopt}^2,\\
+                         &\leq \rbr{\eta^2 - \frac{\eta}{\Lmax}} \E \sbr{\norm{\grad(\wk, \zk)}^2} + 2 \eta \rbr{f(\wopt) - f(\wk)} + \norm{\wk - \wopt}^2.
+\E \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{\eta^2 - \frac{\eta}{\Lmax}} \E \sbr{\norm{\grad(\wk, \zk)}^2} + 2 \eta \rbr{f(\wopt) - f(\wk)} + \norm{\wk - \wopt}^2.
+                         \intertext{\textbf{Case 1}: If \( \eta \leq \frac{1}{\Lmax} \) then \( \eta^2 - \frac{\eta}{\Lmax} \leq 0 \) and thus }
+                      \E \sbr{\norm{\wkk - \wopt}^2} &\leq  2 \eta\rbr{f(\wopt) - f(\wk)} + \norm{\wk - \wopt}^2\\ 
+                         &= -2\eta \rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2.
+                         \intertext{Re-arranging the expression establishes the second part of the lemma:}
+     \implies f(\wk) - f(\wopt) &\leq \frac{1}{2 \eta}\rbr{\norm{\wk - \wopt}^2 - \E_{\zk}\sbr{\norm{\wkk - \wopt}^2}}.
+                         \intertext{\textbf{Case 2}: If \( \eta > \frac{1}{\Lmax} \) then \( \eta^2 - \frac{\eta}{\Lmax} > 0 \) and the weak growth condition implies}
+                      \E \sbr{\norm{\wkk - \wopt}^2} &\leq 2 \eta \rho L \rbr{\eta - \frac{1}{\Lmax}}\rbr{\f(\wk) - f(\wopt)} + 2 \eta\rbr{f(\wopt) - f(\wk)} + \norm{\wk - \wopt}^2\\ 
+                                           &= -2 \eta \rbr{1 + \rho L \rbr{\frac{1}{\Lmax} - \eta }}\rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2.
+                                           \intertext{Let us combine the cases. If \( \eta \in \rbr{\Lmax^{-1}, \frac{1}{\rho L} + \frac{1}{\Lmax} } \) then \( 1 + \rho L \rbr{\frac{1}{\Lmax} - \eta } \in (0, 1) \). If \( \eta \leq L^{-1} \), then \( 1 + \rho L \rbr{\frac{1}{\Lmax} - \eta } > 1\). Denoting \( C = 1 + \min \cbr{ 0, \rho L \rbr{\frac{1}{\Lmax} - \eta }} \), we obtain: }
+                      \E \sbr{\norm{\wkk - \wopt}^2} &\leq -2 \eta \, C \rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2
+\end{align*}
+Rearranging the expression to put the optimality gap on the left-hand side, 
+\begin{align*}
+    2\eta \, C \rbr{f(\wk) - f(\wopt)} &\leq \norm{\wk - \wopt}^2 - \E\sbr{\norm{\wkk - \wopt}^2}\\ 
+    \implies f(\wk) - f(\wopt) &\leq \frac{1}{2\eta \, C} \rbr{\norm{\wk - \wopt}^2 - \E \sbr{\norm{\wkk - \wopt}^2}},
+    \intertext{which completes the first part of the lemma.}
+\end{align*}
+\end{proof}
+
+\begin{restatable}{lemma}{wgcDecreaseCondition}~\label{lemma:wgc-decrease-condition}
+    Let \( f \) be an \( L \)-smooth, convex function satisfying the weak growth condition with parameter \( \rho \). 
+    Moreover, suppose that the stochastic functions \( f(\cdot, \z) \) are \( L_\z \)-smooth.
+    Then the following decrease condition holds for stochastic gradient descent with step-size \( \eta \leq \frac{1}{\Lmax} \):
+    \[ \E_{\zk} \sbr{f(\wkk) + \rho L^2 \eta \norm{\wkk - \wopt}^2} \leq f(\wk) + \rho L^2 \eta \norm{\wk - \wopt}^2 - \eta \norm{\grad(\wk)}^2. \]
+\end{restatable}
+
+\begin{proof}
+    By \( L \)-smoothness of \( f \) we obtain
+    \begin{align*}
+        f(\wkk) &\leq f(\wk) + \abr{\grad(\wk), \wkk - \wk} + \frac{L}{2}{\wkk - \wk}^2\\
+                &= f(\wk) - \eta \abr{\grad(\wk), \grad(\wk, \zk)} + \frac{L \eta^2}{2} \norm{\grad(\wk, \zk)}^2. 
+                \intertext{Taking expectations with respect to \( \zk \):}
+        \E_{\zk} \sbr{f(\wkk)} &\leq f(\wk) - \eta \E_{\zk} \sbr{\abr{\grad(\wk), \grad(\wk, \zk)}} + \frac{L \eta^2}{2} \E_{\zk} \sbr{\norm{\grad(\wk, \zk)}}^2\\
+                             &= f(\wk) - \eta \norm{\grad(\wk)}^2 + \frac{L \eta^2}{2} \E_{\zk} \sbr{\norm{\grad(\wk, \zk)}}^2.
+                             \intertext{The weak growth condition implies}
+        \E_{\zk} \sbr{f(\wkk)} &\leq f(\wk) - \eta \norm{\grad(\wk)}^2 + 2 \rho L^2 \eta^2 \rbr{f(\wk) - f(\wopt)}.
+        \intertext{Using \autoref{lemma:convex-intermediate} and the fact that \( \eta \leq \frac{1}{\Lmax} \), }
+        \E_{\zk} \sbr{f(\wkk)} &\leq f(\wk) - \eta \norm{\grad(\wk)}^2 + \rho L^2 \eta \rbr{\norm{\wk - \wopt}^2 - \E_{\zk} \sbr{\norm{\wkk - \wopt}^2}}\\
+        \implies \E_{\zk} \sbr{f(\wkk) + \rho L^2 \eta \norm{\wkk - \wopt}^2} &\leq f(\wk) + \rho L^2 \eta \norm{\wk - \wopt}^2 - \eta \norm{\grad(\wk)}^2.
+    \end{align*}
+\end{proof}
+

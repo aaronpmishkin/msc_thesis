@@ -84,30 +84,9 @@
 \wgcConvexIndSmooth*
 
 \begin{proof}
+   Starting from \autoref{lemma:convex-intermediate},
    \begin{align*}
-       \norm{\wkk - \wopt}^2 &= \norm{(\wkk - \wk) + (\wk - \wopt)}^2\\
-                             &= \norm{\wkk - \wk}^2 + 2 \abr{\wkk - \wk, \wk - \wopt} + \norm{\wk - \wopt}^2\\
-                             &= \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \abr{\grad(\wk, \zk), \wk - \wopt} + \norm{\wk - \wopt}^2. 
-                             \intertext{The weak growth condition implies \( \grad(\wopt, \z) = 0 \) for all \( \z \). We may thus use \autoref{lemma:pre-coercivity} at \( \wk \) and \( \wopt \) to obtain}
-                       \norm{\wkk - \wopt}^2 &\leq \eta^2 \norm{\grad(\wk, \zk)}^2 + 2 \eta \rbr{f(\wopt, \zk) - f(\wk, \zk) - \frac{1}{2L_\z} \norm{\grad(\wk, \zk)}^2}  + \norm{\wk - \wopt}^2\\ 
-                                             &\leq \eta^2 \norm{\grad(\wk, \zk)}^2 + 2 \eta \rbr{f(\wopt, \zk) - f(\wk, \zk) - \frac{1}{2\Lmax} \norm{\grad(\wk, \zk)}^2}  + \norm{\wk - \wopt}^2\\
-                         &\leq \rbr{\eta^2 - \frac{\eta}{\Lmax}} \norm{\grad(\wk, \zk)}^2 + 2 \eta \rbr{f(\wopt, \zk) - f(\wk, \zk)} + \norm{\wk - \wopt}^2.
-     \intertext{Taking expectations with respect to \( \zk \):}
-                      \E \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{\eta^2 - \frac{\eta}{\Lmax}} \E \sbr{\norm{\grad(\wk, \zk)}^2} + 2 \eta \E\sbr{f(\wopt, \zk) - f(\wk, \zk)} + \norm{\wk - \wopt}^2\\
-                         &\leq \rbr{\eta^2 - \frac{\eta}{\Lmax}} \E \sbr{\norm{\grad(\wk, \zk)}^2} + 2 \eta \rbr{f(\wopt) - f(\wk)} + \norm{\wk - \wopt}^2.
-                         \intertext{\textbf{Case 1}: If \( \eta \leq \frac{1}{\Lmax} \) then \( \eta^2 - \frac{\eta}{\Lmax} \leq 0 \) and thus }
-                      \E \sbr{\norm{\wkk - \wopt}^2} &\leq  2 \eta\rbr{f(\wopt) - f(\wk)} + \norm{\wk - \wopt}^2\\ 
-                         &= -2\eta \rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2.
-     \intertext{\textbf{Case 2}: If \( \eta > \frac{1}{\Lmax} \) then \( \eta^2 - \frac{\eta}{\Lmax} > 0 \) and the weak growth condition implies}
-                      \E \sbr{\norm{\wkk - \wopt}^2} &\leq 2 \eta \rho L \rbr{\eta - \frac{1}{\Lmax}}\rbr{\f(\wk) - f(\wopt)} + 2 \eta\rbr{f(\wopt) - f(\wk)} + \norm{\wk - \wopt}^2\\ 
-                                           &= -2 \eta \rbr{1 + \rho L \rbr{\frac{1}{\Lmax} - \eta }}\rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2.
-                                           \intertext{Let us combine the cases. If \( \eta \in \rbr{\Lmax^{-1}, \frac{1}{\rho L} + \frac{1}{\Lmax} } \) then \( 1 + \rho L \rbr{\frac{1}{\Lmax} - \eta } \in (0, 1) \). If \( \eta \leq L^{-1} \), then \( 1 + \rho L \rbr{\frac{1}{\Lmax} - \eta } > 1\). Denoting \( C = 1 + \min \cbr{ 0, \rho L \rbr{\frac{1}{\Lmax} - \eta }} \), we obtain: }
-                      \E \sbr{\norm{\wkk - \wopt}^2} &\leq -2 \eta \, C \rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2
-\end{align*}
-Rearranging the expression to put the optimality gap on the left-hand side, 
-\begin{align*}
-    2\eta \, C \rbr{f(\wk) - f(\wopt)} &\leq \norm{\wk - \wopt}^2 - \E\sbr{\norm{\wkk - \wopt}^2}\\ 
-    \implies f(\wk) - f(\wopt) &\leq \frac{1}{2\eta \, C} \rbr{\norm{\wk - \wopt}^2 - \E \sbr{\norm{\wkk - \wopt}^2}}\\
+    f(\wk) - f(\wopt) &\leq \frac{1}{2\eta \, C} \rbr{\norm{\wk - \wopt}^2 - \E \sbr{\norm{\wkk - \wopt}^2}}\\
 \intertext{Taking expectations and summing over iterations now gives,}
     \implies \frac{1}{K} \sum_{k=0}^{K -1} \E \sbr{f(\wk) - f(\wopt)} &\leq \frac{1}{2\eta \, C \, K}\sum_{k=0}^{K-1}\rbr{\E\sbr{\norm{\wk - \wopt}^2} - \E\sbr{\norm{\wkk - \wopt}^2}}\\
                                                          &= \frac{1}{2\eta \, C \, K}\rbr{\norm{\w_0 - \wopt}^2 - \E\sbr{\norm{\w_{K} - \wopt}^2}}\\
@@ -118,6 +97,67 @@ Rearranging the expression to put the optimality gap on the left-hand side,
 \end{proof}
 
 \todo{Can we prove a final iterate version of this using the strategy in Bubeck's ConvexOpt? If not, can we prove that SGD is not guaranteed to make progress at every iteration even when WGC holds?}
+
+\subsection{Almost Sure Convergence}~\label{app:almost-sure-convergece}
+
+\wgcAlmostSure*
+\begin{proof}
+    We proceed by showing that the sequence of distances to the minimizer \( \seq{\norm{\wk - \wopt}^2} \) satisfies the conditions of Theorem~\ref{thm:positive_supermartingales}.
+    Moreover, as by-product, we obtain that the series \( \sum_{k=0}^{\infty} \rbr{f(\wk) - f(\wopt)} \) is convergent and thus \( f(\wk) \rightarrow \fopt \).
+
+    Lemma~\ref{lemma:convex-intermediate} gives the decrease condition
+    \begin{align*}
+        \E \sbr{\norm{\wkk - \wopt}^2 \mid \calF_\iter} \leq  \norm{\wk - \wopt}^2 - 2 \eta C \rbr{f(\wk) - f(\wopt)},
+    \end{align*}
+    where \( C \geq 1 \) since \( \eta < \frac{1}{\rho L} + \frac{1}{\Lmax} \)
+    The conditions of Theorem~\ref{thm:positive_supermartingales} are satisfied with \( A_\iter = 0 \) for all \( \iter \).
+    So, the sequence \( \seq{\norm{\wk - \wopt}^2} \) converges to a non-negative random variable \(\lim_{\iter \rightarrow \infty} \norm{\wk - \wopt}^2 \) almost surely.
+    We also have
+    \begin{align*}
+        \sum_{k=0}^{\infty} 2\eta C \sbr{f(\wk) - f(\wopt)} < \infty
+        \implies \sum_{k=0}^{\infty} \sbr{f(\wk) - f(\wopt)} < \infty,
+    \end{align*}
+    almost surely.
+    Therefore,
+    \[ \lim_{\iter \rightarrow \infty} f(\wk) - f(\wopt) \equas 0, \]
+    and the proof is complete.
+\end{proof}
+
+\sgcAlmostSure*
+\begin{proof}
+    Consider the stochastic process defined by the optimality gaps \( \seq{f(\wk) - f(\wopt)} \).
+    We show that this sequence satisfies the conditions of Theorem~\ref{thm:positive_supermartingales} and, as a by-product, establish almost sure convergence of the final iterate to a stationary point.
+
+    Lemma~\ref{lemma:sgc-decrease-condition} gives the decrease condition
+    \begin{align*}
+        \E \sbr{f(\wkk) - f(\wopt) \mid \calF_\iter} &\leq \rbr{f(\wk) - f(\wopt)} - \eta \rbr{1 - \frac{\rho L \eta}{2}}\norm{\grad(\wk)}^2.
+    \end{align*}
+    Since \( \eta < \frac{2}{\rho L} \),
+    \begin{align*}
+        \eta \rbr{1 - \frac{\eta \rho L}{2}}\norm{\grad(\wk)}^2 > 0,
+    \end{align*}
+    and the conditions of Theorem~\ref{thm:positive_supermartingales} are satisfied with \( A_\iter = 0 \) for all \( \iter \).
+    The sequence \( \seq{f(\wk) - f(\wopt)} \) converges almost surely to a non-negative random variable \(\lim_{\iter \rightarrow \infty} f(\wk) - f(\wopt) \) almost surely.
+    Of more interest is that
+    \begin{align*}
+        \sum_{k=0}^{\infty} \eta \rbr{1 - \frac{\eta \rho L}{2}} \norm{\grad(\wk)}^2 < \infty
+        \implies \sum_{k=0}^{\infty} \norm{\grad(\wk)}^2 < \infty,
+    \end{align*}
+    almost surely.
+    Accordingly, the sequence of gradient norms satisfies
+    \[ \lim_{\iter \rightarrow \infty} \norm{\grad(\wk)}^2 \equas 0, \]
+    and we conclude that the final iterate of stochastic gradient descent converges almost surely to a stationary point.
+\end{proof}
+
+
+
+
+
+
+
+
+
+
 
 %% Old Proof with WGC
 
