@@ -11,7 +11,7 @@ The following theorem allows for a larger step-size and establishes asymptotical
 \begin{restatable}{theorem}{sgcConvex}~\label{thm:sgc-convex}
     Let \( f \) be a \( \mu \)-strongly-convex, \( L \)-smooth function satisfying the strong growth condition with constant \( \rho \).
     Then stochastic gradient descent with step-size \( \eta \leq \frac{2}{\rho(\mu + L)} \) converges as 
-    \[ f(\wk) - f(\wopt) \leq \rbr{\frac{L}{\mu}}\rbr{1 - \frac{2\eta \mu L}{\mu + L}}^k \rbr{f(\w_0) - f(\wopt)}. \] 
+    \[ \E\sbr{f(\wk)} - f(\wopt) \leq \rbr{\frac{L}{\mu}}\rbr{1 - \frac{2\eta \mu L}{\mu + L}}^k \rbr{f(\w_0) - f(\wopt)}. \] 
 \end{restatable}
 
 See \autoref{app:sgd-sc} for proof.
@@ -40,7 +40,7 @@ Moreover, we provide cleaner and simpler proofs.
 \begin{restatable}{theorem}{wgcConvex}~\label{thm:wgc-convex}
     Let \( f \) be a convex, \( L \)-smooth function satisfying the weak growth condition with constant \( \rho  \).
     Then stochastic gradient descent with step-size \( \eta < \frac{1}{\rho L} \) converges as
-    \[ \f(\bar \w_K) - f(\wopt) \leq \frac{1}{2 \eta \rbr{1 - \eta \rho L} \, K} \norm{\w_0 - \wopt}^2, \]
+    \[ \E\sbr{\f(\bar \w_K)} - f(\wopt) \leq \frac{1}{2 \eta \rbr{1 - \eta \rho L} \, K} \norm{\w_0 - \wopt}^2, \]
     where \( \bar \w_K = \frac{1}{K} \sum_{k=0}^K \wk \). 
 \end{restatable}
 

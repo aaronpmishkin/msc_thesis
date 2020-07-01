@@ -40,11 +40,11 @@
                                    &= \eta \rbr{\eta - \frac{2}{\mumax + \Lmax}}\norm{\grad(\wk)}^2 + \rbr{1 - \frac{2 \eta \mumin \Lmin}{\mumin + \Lmax}}\norm{\wk - \wopt}^2.
                                    \intertext{If \( \eta \leq \frac{2}{\rbr{\mumax + \Lmax}} \) then \( \eta - \frac{2}{\mumax + \Lmax} \leq 0 \) and we obtain}
        \E \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \frac{2 \eta \mumin \Lmin}{\mumax + \Lmax}}\norm{\wk - \wopt}^2.
-       \intertext{Recursing on this inequality,}
-       \implies \norm{\wkk - \wopt}^2 &\leq \rbr{1 - \frac{2 \eta \mumin \Lmin}{\mumax + \Lmax}}^k \norm{\w_0 - \wopt}^2.
+       \intertext{Taking expectations and recursing on this inequality,}
+       \implies E\sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \frac{2 \eta \mumin \Lmin}{\mumax + \Lmax}}^k \norm{\w_0 - \wopt}^2.
        \intertext{Application of \autoref{lemma:iterate-bounds} completes the proof:}
-       \implies \frac{2}{L} \rbr{f(\wkk)} - f(\wopt) &\leq \frac{2}{\mu} \rbr{1 - \frac{2 \eta \mumin \Lmin}{\mumax + \Lmax}}^k \rbr{f(\w_0) - f(\wopt)}\\
-       \implies f(\wkk) - f(\wopt) &\leq \frac{L}{\mu} \rbr{1 - \frac{2 \eta \mumin \Lmin}{\mumax + \Lmax}}^k \rbr{f(\w_0) - f(\wopt)}.
+       \implies \frac{2}{L} \rbr{\E\sbr{f(\wkk)} - f(\wopt)} &\leq \frac{2}{\mu} \rbr{1 - \frac{2 \eta \mumin \Lmin}{\mumax + \Lmax}}^k \rbr{f(\w_0) - f(\wopt)}\\
+       \implies \E\sbr{f(\wkk)} - f(\wopt) &\leq \frac{L}{\mu} \rbr{1 - \frac{2 \eta \mumin \Lmin}{\mumax + \Lmax}}^k \rbr{f(\w_0) - f(\wopt)}.
     \end{align*}
 \end{proof}
 
@@ -71,12 +71,12 @@
        2 \eta \rbr{1 - \eta \rho L} \rbr{f(\wk) - f(\wopt)} &\leq \norm{\wk - \wopt}^2 - \E \sbr{\norm{\wkk - \wopt}^2}.
        \intertext{If \( \eta < \frac{1}{\rho L} \) then \( 1 - \eta \rho L > 0 \). We obtain }
        f(\wk) - f(\wopt) &\leq \frac{1}{2 \eta \rbr{1 - \eta \rho L}} \rbr{\norm{\wk - \wopt}^2 - \E\sbr{\norm{\wkk - \wopt}^2}}.
-           \intertext{Taking expectations and summing over iterations now gives}
+       \intertext{Taking expectations and summing from \( k = 0 \) to \( K - 1 \) now gives}
    \frac{1}{K} \sum_{k=0}^{K-1} \E \sbr{f(\wk)} - f(\wopt) &\leq \frac{1}{2 \eta \rbr{1 - \eta \rho L} \, K} \sum_{k=0}^{K-1} \rbr{\E \sbr{\norm{\wk - \wopt}^2} - \E \sbr{\norm{\wkk - \wopt}^2}}\\
                                                            &\leq \frac{1}{2 \eta \rbr{1 - \eta \rho L} \, K} \rbr{\norm{\w_0 - \wopt}^2 - \norm{\w_K - \wopt}^2}\\
                                                            &\leq \frac{1}{2 \eta \rbr{1 - \eta \rho L} \, K} \norm{\w_0 - \wopt}^2.
                                                            \intertext{Noting \( \frac{1}{K} \sum_{k=0}^{K-1} f(\wk) \geq f(\bar \w_K) \) by convexity leads to the final result,}
-   f(\bar \w_K) - f(\wopt) &\leq \frac{1}{2 \eta \rbr{1 - \eta \rho L} \, K} \norm{\w_0 - \wopt}^2.
+   \E\sbr{f(\bar \w_K)} - f(\wopt) &\leq \frac{1}{2 \eta \rbr{1 - \eta \rho L} \, K} \norm{\w_0 - \wopt}^2.
    \end{align*}
 \end{proof}
 
@@ -87,7 +87,7 @@
    Starting from \autoref{lemma:convex-intermediate},
    \begin{align*}
     f(\wk) - f(\wopt) &\leq \frac{1}{2\eta \, C} \rbr{\norm{\wk - \wopt}^2 - \E \sbr{\norm{\wkk - \wopt}^2}}\\
-\intertext{Taking expectations and summing over iterations now gives,}
+    \intertext{Taking expectations and summing from \( k = 0 \) to \( K - 1 \) now gives}
     \implies \frac{1}{K} \sum_{k=0}^{K -1} \E \sbr{f(\wk) - f(\wopt)} &\leq \frac{1}{2\eta \, C \, K}\sum_{k=0}^{K-1}\rbr{\E\sbr{\norm{\wk - \wopt}^2} - \E\sbr{\norm{\wkk - \wopt}^2}}\\
                                                          &= \frac{1}{2\eta \, C \, K}\rbr{\norm{\w_0 - \wopt}^2 - \E\sbr{\norm{\w_{K} - \wopt}^2}}\\
                                                          &\leq \frac{1}{2\eta \, C \, K} \norm{\w_0 - \wopt}^2\\
