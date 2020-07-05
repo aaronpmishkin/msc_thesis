@@ -10,7 +10,7 @@ The following theorem allows for a larger step-size and establishes asymptotical
 
 \begin{restatable}{theorem}{sgcConvex}~\label{thm:sgc-convex}
     Let \( f \) be a \( \mu \)-strongly-convex, \( L \)-smooth function satisfying the strong growth condition with constant \( \rho \).
-    Then stochastic gradient descent with step-size \( \eta \leq \frac{2}{\rho(\mu + L)} \) converges as 
+    Then stochastic gradient descent with fixed step-size \( \eta \leq \frac{2}{\rho(\mu + L)} \) converges as 
     \[ \E\sbr{f(\wk)} - f(\wopt) \leq \rbr{\frac{L}{\mu}}\rbr{1 - \frac{2\eta \mu L}{\mu + L}}^k \rbr{f(\w_0) - f(\wopt)}. \] 
 \end{restatable}
 
@@ -23,9 +23,7 @@ Despite being a poor algorithmic choice, SGD will converge deterministically in 
 \begin{restatable}{theorem}{sgcIndSC}~\label{thm:sgc-ind-sc}
     Let \( f \) be a \( \mu \)-strongly-convex, \( L \)-smooth function satisfying the strong growth condition with constant \( \rho \).
     Furthermore, assume that the stochastic functions \( f(\cdot, \z) \) are (i) \( \mu_\z \)-strongly-convex and (ii) \( L_\z \)-smooth.
-    Let \( \mumax \) and \( \mumin \) be the largest and smallest strong-convexity constants for the stochastic functions, respectively.
-    Similarly, let \( \Lmax \) and \( \Lmin \) be the largest and smallest Lipschitz constants of the stochastic gradients.
-    Then stochastic gradient descent with step-size \( \eta \leq \frac{2}{\mumax + \Lmax} \) converges deterministically at the rate 
+    Then stochastic gradient descent with fixed step-size \( \eta \leq \frac{2}{\mumax + \Lmax} \) converges deterministically at the rate 
     \[ f(\wkk) - f(\wopt) \leq \frac{L}{\mu} \rbr{1 - \frac{2 \eta \mumin \Lmin}{\mumax + \Lmax}}^k \rbr{f(\w_0) - f(\wopt)}. \] 
 \end{restatable}
 
@@ -39,9 +37,9 @@ Moreover, we provide cleaner and simpler proofs.
 
 \begin{restatable}{theorem}{wgcConvex}~\label{thm:wgc-convex}
     Let \( f \) be a convex, \( L \)-smooth function satisfying the weak growth condition with constant \( \rho  \).
-    Then stochastic gradient descent with step-size \( \eta < \frac{1}{\rho L} \) converges as
+    Then stochastic gradient descent with fixed step-size \( \eta < \frac{1}{\rho L} \) converges as
     \[ \E\sbr{\f(\bar \w_K)} - f(\wopt) \leq \frac{1}{2 \eta \rbr{1 - \eta \rho L} \, K} \norm{\w_0 - \wopt}^2, \]
-    where \( \bar \w_K = \frac{1}{K} \sum_{k=0}^K \wk \). 
+    where \( \bar \w_K = \frac{1}{K} \sum_{k=0}^{K-1} \wk \). 
 \end{restatable}
 
 A slightly larger step-size can be obtained if we further assume that the stochastic functions are themselves Lipschitz-smooth.
@@ -49,9 +47,9 @@ A slightly larger step-size can be obtained if we further assume that the stocha
 \begin{restatable}{theorem}{wgcConvexIndSmooth}~\label{thm:wgc-convex-ind-smooth}
     Let \( f \) be a convex, \( L \)-smooth function satisfying the weak growth condition with constant \( \rho  \).
     Moreover, suppose that the stochastic functions \( f(\cdot, \z) \) are \( L_\z \)-smooth for each \( \z \), with \( \Lmax = \max_\z L_\z \).
-    Then stochastic gradient descent with step-size \( \eta < \frac{1}{\rho L} + \frac{1}{\Lmax} \) converges as
-    \[ \E\sbr{f(\bar w_K)} - f(\wopt) \leq \frac{1}{2\eta \, C \, K} \norm{\w_0 - \wopt}^2,   \]
-    where \( \bar \w_K = \frac{1}{K} \sum_{k=0}^K \wk \) and \( C = 1 + \min \cbr{ 0, \rho L \rbr{\frac{1}{\Lmax} - \eta }} \). 
+    Then stochastic gradient descent with fixed step-size \( \eta < \frac{1}{\rho L} + \frac{1}{\Lmax} \) converges as
+    \[ \E\sbr{f(\bar w_K)} - f(\wopt) \leq \frac{1}{2\eta \, \delta \, K} \norm{\w_0 - \wopt}^2,   \]
+    where \( \bar \w_K = \frac{1}{K} \sum_{k=0}^{K-1} \wk \) and \( \delta = 1 + \min \cbr{ 0, \rho L \rbr{\frac{1}{\Lmax} - \eta }} \). 
 \end{restatable}
 
 See \autoref{app:sgd-convex} for proof.
@@ -87,18 +85,25 @@ This theorem is due to~\citet{neveu1975discrete} and will be the cornerstone of 
 \end{theorem}
 With this necessary martingale theorem in hand, we are now ready to study the almost-sure convergence of stochastic gradient descent.
 
-\begin{restatable}{theorem}{wgcAlmostSure}~\label{theorem:wgc-almost-sure}
-    Let \( \f \) be an \( L \)-smooth, convex function that is bounded below.
-    Assume that \( f \) has at least one finite minimizer \( \wopt \).
+\begin{restatable}{theorem}{wgcAlmostSure}~\label{thm:wgc-almost-sure}
+    Let \( \f \) be a convex, \( L \)-smooth function with at least one finite minimizer.
     Moreover, suppose that the stochastic functions \( f(\cdot, \z) \) are \( L_\z \)-smooth for each \( \z \), with \( \Lmax = \max_\z L_\z \).
-    If \( f \) satisfies the weak growth condition with parameter \( \rho \), then stochastic gradient descent with step-size \( \eta < \frac{1}{\rho L} + \frac{1}{\Lmax} \) converges to \( \fopt \) almost surely.
+    If \( f \) satisfies the weak growth condition with parameter \( \rho \), then stochastic gradient descent with fixed step-size \( \eta < \frac{1}{\rho L} + \frac{1}{\Lmax} \) converges to a minimizer of \( f \) almost surely,
 \end{restatable}
 
-\todo{note that the conditions can be relaxed not avoid individual smoothness at the cost of a larger step-size.}
+The proof is given in \autoref{app:almost-sure-convergence}.
+First, we establish that the sequence of distances to a finite minimizer \( \seq{\norm{\wk - \wopt}^2} \) satisfies the conditions of Theorem~\ref{thm:positive_supermartingales}.
+As by-product, we obtain that the series \( \sum_{k=0}^{\infty} \rbr{f(\wk) - f(\wopt)} \) is convergent and then deduce
+\[ \lim_{k\rightarrow\infty} \wk \in \argmin_w f(\w), \] 
+almost surely using the weak growth condition.
 
-\begin{restatable}{theorem}{sgcAlmostSure}~\label{theorem:sgc-almost-sure}
-    Let \( \f \) be an \( L \)-smooth function that is bounded below and satisfies the strong growth condition with parameter \(\rho \).
-    Then stochastic gradient descent with fixed step-size \(\eta < \frac{2}{\rho L} \) converges to a stationary point almost surely.
+It is straightforward to prove an alternative version of \autoref{thm:wgc-almost-sure} which does not require individual smoothness.
+In this case, convergence is established for \( \eta < \frac{1}{\rho L} \) using the same progress condition as in \autoref{thm:wgc-convex}, namely \autoref{eq:cwg-alternate-progress}.
+
+\begin{restatable}{theorem}{sgcAlmostSure}~\label{thm:sgc-almost-sure}
+    Let \( \f \) be an \( L \)-smooth function satisfying the strong growth condition with parameter \(\rho \).
+    Then stochastic gradient descent with fixed step-size \(\eta < \frac{2}{\rho L} \) converges to a stationary point of \( f \) almost surely.
 \end{restatable}
 
 \endinput
+

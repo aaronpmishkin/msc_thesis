@@ -4,26 +4,44 @@
 
 \subsection{Convergence for Strongly Convex Functions}~\label{app:sgd-sc}
 
+\begin{restatable}{lemma}{sgcDecreaseCondition}~\label{lemma:sgc-decrease-condition}
+    Let \( f \) be an \( L \)-smooth function satisfying the strong growth condition with parameter \( \rho \).
+    Then stochastic gradient descent with fixed step-size \( \eta \) satisfies the following expected decrease condition:
+    \[ \Ek \sbr{f(\wkk)} \leq f(\wk) - \eta \rbr{1 - \frac{\rho L \eta}{2}}\norm{\grad(\wk)}^2. \]
+\end{restatable}
+
+\begin{proof}
+    Starting from \( L \)-smoothness of \( f \),
+    \begin{align*}
+        f(\wkk) &\leq f(\wk) + \abr{\grad(\wk), \wkk - \wk} + \frac{L}{2}\norm{\wkk - \wk}^2\\
+        &= f(\wk) - \eta \abr{\grad(\wk), \grad(\wk, \zk)} + \frac{L \eta^2}{2}\norm{\grad(\wk, \zk)}^2\\
+        \intertext{Taking expectations with respect to \( \zk \):}
+        \implies \Ek[f(\wkk)] &\leq f(\wk) - \eta \norm{\grad(\wk)}^2 + \frac{L \eta^2}{2}\Ek \sbr{\norm{\grad(\wk, \zk)}^2}.
+        \intertext{Using the strong growth condition,}
+        \implies f(\wkk) - f(\wk) &\leq f(\wk) - \eta \norm{\grad(\wk)}^2 + \frac{\rho L \eta^2}{2} \norm{\grad(\wk)}^2\\
+        &\leq f(\wk) - \eta \rbr{1 - \frac{\rho L \eta}{2}}\norm{\grad(\wk)}^2.
+    \end{align*}
+\end{proof}
+
+
 \sgcConvex*
 \begin{proof}
     \begin{align*}
-        \norm{\wkk - \wopt}^2 &= \norm{(\wkk - \wk) + (\wk - \wopt)}^2\\
-                             &= \norm{\wkk - \wk}^2 + 2 \abr{\wkk - \wk, \wk - \wopt} + \norm{\wk - \wopt}^2\\
+        \norm{\wkk - \wopt}^2 &= \norm{\wk - \eta \grad(\wk, \zk) + - \wopt}^2\\
                              &= \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \abr{\grad(\wk, \zk), \wk - \wopt} + \norm{\wk - \wopt}^2.
                              \intertext{Taking expectations with respect to \( \zk \), }
-       \E \sbr{\norm{\wkk - \wopt}^2} &= \eta^2 \E \sbr{\norm{\grad(\wk, \zk)}^2} - 2 \eta \E \sbr{\abr{\grad(\wk, \zk), \wk - \wopt}} + \norm{\wk - \wopt}^2\\
-                                      &= \eta^2 \E \sbr{\norm{\grad(\wk, \zk)}^2} - 2 \eta \abr{\grad(\wk), \wk - \wopt} + \norm{\wk - \wopt}^2.
-                                      \intertext{Now we use the strong growth condition to control \( \E \sbr{\norm{\grad(\wk, \zk)}^2} \), which yields}
-       \E\sbr{\norm{\wkk - \wk}^2} &\leq \eta^2 \rho \norm{\grad(\wk)}^2 - 2 \eta \abr{\grad(\wk), \wk - \wopt} + \norm{\wk - \wopt}^2.
+       \implies \Ek \sbr{\norm{\wkk - \wopt}^2} &= \eta^2 \Ek \sbr{\norm{\grad(\wk, \zk)}^2} - 2 \eta \Ek \sbr{\abr{\grad(\wk, \zk), \wk - \wopt}} + \norm{\wk - \wopt}^2\\
+                                      &= \eta^2 \Ek \sbr{\norm{\grad(\wk, \zk)}^2} - 2 \eta \abr{\grad(\wk), \wk - \wopt} + \norm{\wk - \wopt}^2.
+                                      \intertext{Now we use the strong growth condition to control \( \Ek \sbr{\norm{\grad(\wk, \zk)}^2} \), which yields}
+       \Ek\sbr{\norm{\wkk - \wk}^2} &\leq \eta^2 \rho \norm{\grad(\wk)}^2 - 2 \eta \abr{\grad(\wk), \wk - \wopt} + \norm{\wk - \wopt}^2.
                                       \intertext{Coercivity of the gradient (\autoref{lemma:coercivity}) implies}
-       \E\sbr{\norm{\wkk - \wk}^2} &\leq \eta^2 \rho \norm{\grad(\wk)}^2 - 2 \eta \rbr{\frac{\mu L }{\mu + L} \norm{\wk - \wopt}^2 + \frac{1}{\mu + L}\norm{\grad(\wk)}^2} + \norm{\wk - \wopt}^2\\
+       \Ek\sbr{\norm{\wkk - \wk}^2} &\leq \eta^2 \rho \norm{\grad(\wk)}^2 - 2 \eta \rbr{\frac{\mu L }{\mu + L} \norm{\wk - \wopt}^2 + \frac{1}{\mu + L}\norm{\grad(\wk)}^2} + \norm{\wk - \wopt}^2\\
                                    &= \eta \rbr{\eta \rho  - \frac{2}{\mu + L}}\norm{\grad(\wk)}^2 + \rbr{1 - \frac{2 \eta \mu L}{\mu + L}}\norm{\wk - \wopt}^2.
                                    \intertext{If \( \eta \leq \frac{2}{\rho \rbr{\mu + L}} \) then \( \eta \rho - \frac{2}{\mu + L} \leq 0 \) and we obtain}
-       \E \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \frac{2 \eta \mu L}{\mu + L}}\norm{\wk - \wopt}^2.
+       \Ek \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \frac{2 \eta \mu L}{\mu + L}}\norm{\wk - \wopt}^2.
        \intertext{Taking expectations and recursing on this inequality,}
        \implies \E \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \frac{2 \eta \mu L}{\mu + L}}^k \norm{\w_0 - \wopt}^2.
-       \intertext{Application of \autoref{lemma:iterate-bounds} completes the proof:}
-       \implies \frac{2}{L} \rbr{\E \sbr{f(\wkk)} - f(\wopt)} &\leq \frac{2}{\mu} \rbr{1 - \frac{2 \eta \mu L}{\mu + L}}^k \rbr{f(\w_0) - f(\wopt)}\\
+       \intertext{\autoref{lemma:iterate-bounds} now completes the proof:}
        \implies \E \sbr{f(\wkk)} - f(\wopt) &\leq \frac{L}{\mu} \rbr{1 - \frac{2 \eta \mu L}{\mu + L}}^k \rbr{f(\w_0) - f(\wopt)}.
     \end{align*}
 \end{proof}
@@ -34,43 +52,77 @@
         \norm{\wkk - \wopt}^2 &= \norm{(\wkk - \wk) + (\wk - \wopt)}^2\\
                              &= \norm{\wkk - \wk}^2 + 2 \abr{\wkk - \wk, \wk - \wopt} + \norm{\wk - \wopt}^2\\
                              &= \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \abr{\grad(\wk, \zk), \wk - \wopt} + \norm{\wk - \wopt}^2.
-                                     \intertext{Coercivity of the stochastic gradient (\autoref{lemma:coercivity}) implies}
+                            \intertext{Coercivity of the stochastic gradient (\autoref{lemma:coercivity}) implies}
         \norm{\wkk - \wk}^2 &\leq \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \rbr{\frac{\mu_\z L_\z }{\mu_\z + L_\z} \norm{\wk - \wopt}^2 + \frac{1}{\mu_\z + L_\z}\norm{\grad(\wk, \zk)}^2} \\ & \hspace{2cm} + \norm{\wk - \wopt}^2\\
                             &\leq \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \rbr{\frac{\mumin \Lmin }{\mumax + \Lmax} \norm{\wk - \wopt}^2 + \frac{1}{\mumax + \Lmax}\norm{\grad(\wk, \zk)}^2} \\ & \hspace{2cm} + \norm{\wk - \wopt}^2\\
-                                   &= \eta \rbr{\eta - \frac{2}{\mumax + \Lmax}}\norm{\grad(\wk)}^2 + \rbr{1 - \frac{2 \eta \mumin \Lmin}{\mumin + \Lmax}}\norm{\wk - \wopt}^2.
+                                   &= \eta \rbr{\eta - \frac{2}{\mumax + \Lmax}}\norm{\grad(\wk, \zk)}^2 + \rbr{1 - \frac{2 \eta \mumin \Lmin}{\mumin + \Lmax}}\norm{\wk - \wopt}^2.
                                    \intertext{If \( \eta \leq \frac{2}{\rbr{\mumax + \Lmax}} \) then \( \eta - \frac{2}{\mumax + \Lmax} \leq 0 \) and we obtain}
-       \E \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \frac{2 \eta \mumin \Lmin}{\mumax + \Lmax}}\norm{\wk - \wopt}^2.
-       \intertext{Taking expectations and recursing on this inequality,}
-       \implies E\sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \frac{2 \eta \mumin \Lmin}{\mumax + \Lmax}}^k \norm{\w_0 - \wopt}^2.
-       \intertext{Application of \autoref{lemma:iterate-bounds} completes the proof:}
-       \implies \frac{2}{L} \rbr{\E\sbr{f(\wkk)} - f(\wopt)} &\leq \frac{2}{\mu} \rbr{1 - \frac{2 \eta \mumin \Lmin}{\mumax + \Lmax}}^k \rbr{f(\w_0) - f(\wopt)}\\
-       \implies \E\sbr{f(\wkk)} - f(\wopt) &\leq \frac{L}{\mu} \rbr{1 - \frac{2 \eta \mumin \Lmin}{\mumax + \Lmax}}^k \rbr{f(\w_0) - f(\wopt)}.
+       \norm{\wkk - \wopt}^2 &\leq \rbr{1 - \frac{2 \eta \mumin \Lmin}{\mumax + \Lmax}}\norm{\wk - \wopt}^2.
+       \intertext{Recursing on this inequality,}
+       \implies \norm{\wkk - \wopt}^2 &\leq \rbr{1 - \frac{2 \eta \mumin \Lmin}{\mumax + \Lmax}}^k \norm{\w_0 - \wopt}^2.
+       \intertext{Application of \autoref{lemma:iterate-bounds} completes the proof,}
+       \implies f(\wkk) - f(\wopt) &\leq \frac{L}{\mu} \rbr{1 - \frac{2 \eta \mumin \Lmin}{\mumax + \Lmax}}^k \rbr{f(\w_0) - f(\wopt)}.
     \end{align*}
+\end{proof}
+
+\subsection{Convergence for Convex Functions}~\label{app:sgd-convex}
+
+\begin{restatable}{lemma}{convexIntermediate}~\label{lemma:convex-intermediate}
+    Let \( f \) be a convex, \( L \)-smooth function.
+    Moreover, assume that the stochastic functions \( \f(\cdot, \z) \) are \( L_\z \)-smooth.
+    Then stochastic gradient descent with step-size \( \eta \) satisfies the following inequality: 
+    \[ f(\wk) - f(\wopt) \leq \frac{1}{2\eta \, \delta} \rbr{\norm{\wk - \wopt}^2 - \Ek \sbr{\norm{\wkk - \wopt}^2}}, \]
+    where \(  \delta = \min \cbr{ 1, 1 + \rho L \rbr{\frac{1}{\Lmax} - \eta }} \). 
+    Furthermore, if \( \eta \leq \frac{1}{\Lmax} \), then 
+    \[ f(\wk) - f(\wopt) \leq \frac{1}{2 \eta}\rbr{\norm{\wk - \wopt}^2 - \Ek\sbr{\norm{\wkk - \wopt}^2}}. \]
+\end{restatable}
+
+\begin{proof}
+    \begin{align*}
+       \norm{\wkk - \wopt}^2 &= \norm{\wk - \etak \grad(\wk, \zk) + - \wopt}^2\\
+                             &= \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \abr{\grad(\wk, \zk), \wk - \wopt} + \norm{\wk - \wopt}^2. 
+                             \intertext{The weak growth condition implies \( \grad(\wopt, \z) = 0 \) for all \( \z \). We may thus use \autoref{lemma:pre-coercivity} at \( \wk \) and \( \wopt \) to obtain}
+                       \norm{\wkk - \wopt}^2 &\leq \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \rbr{f(\wk, \zk) - f(\wopt, \zk) + \frac{1}{2L_\z} \norm{\grad(\wk, \zk)}^2}  + \norm{\wk - \wopt}^2\\ 
+                                             &\leq \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \rbr{f(\wk, \zk) - f(\wopt, \zk) + \frac{1}{2\Lmax} \norm{\grad(\wk, \zk)}^2}  + \norm{\wk - \wopt}^2\\
+                         &\leq \rbr{\eta^2 - \frac{\eta}{\Lmax}} \norm{\grad(\wk, \zk)}^2 - 2 \eta \rbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2.
+     \intertext{Taking expectations with respect to \( \zk \):}
+                      \Ek \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{\eta^2 - \frac{\eta}{\Lmax}} \Ek \sbr{\norm{\grad(\wk, \zk)}^2} - 2 \eta \Ek\sbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2,\\
+                         &\leq \rbr{\eta^2 - \frac{\eta}{\Lmax}} \Ek \sbr{\norm{\grad(\wk, \zk)}^2} - 2 \eta \rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2.
+                     \intertext{\textbf{Case 1}: If \( \eta \leq \frac{1}{\Lmax} \) then \( \rbr{\eta^2 - \frac{\eta}{\Lmax}}\rbr{f(\wk, \zk) - f(\wopt, \zk)} \leq 0 \) by interpolation and we obtain }
+                     \Ek \sbr{\norm{\wkk - \wopt}^2} &\leq - 2 \eta\rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2\\
+                     \implies f(\wk) - f(\wopt) &\leq \frac{1}{2\eta} \sbr{\norm{\wk - \wopt}^2 - \Ek \norm{\wkk - \wopt}^2}. 
+                     \intertext{\textbf{Case 2}: If \( \eta > \frac{1}{\Lmax} \) then \( \eta^2 - \frac{\eta}{\Lmax} > 0 \) and the weak growth condition implies}
+                      \Ek \sbr{\norm{\wkk - \wopt}^2} &\leq 2 \eta \rho L \rbr{\eta - \frac{1}{\Lmax}}\rbr{\f(\wk) - f(\wopt)} - 2 \eta\rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2\\ 
+                                           &= -2 \eta \rbr{1 + \rho L \rbr{\frac{1}{\Lmax} - \eta }}\rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2.
+                     \intertext{If \( \eta < \inv{\rho L} + \inv{\Lmax} \), then \( 1 + \rho L \rbr{\frac{1}{\Lmax} - \eta } > 0 \), }
+                      \implies f(\wk) - f(\wopt) &\leq \frac{1}{2 \eta \rbr{1 + \rho L \rbr{\frac{1}{\Lmax} - \eta}}} \rbr{\norm{\wk - \wopt}^2 - \Ek\sbr{\norm{\wkk - \wopt}^2}}. 
+          \intertext{Let us combine the cases by taking the worst-case bound. 
+                     Let \( \delta = \min \cbr{ 1,1 + \rho L \rbr{\frac{1}{\Lmax} - \eta }} \) to obtain: }
+    f(\wk) - f(\wopt) &\leq \frac{1}{2\eta \, \delta} \rbr{\norm{\wk - \wopt}^2 - \Ek \sbr{\norm{\wkk - \wopt}^2}}.
+\end{align*}
+Note that this bound is tight with Case 1 since \( 1 + \rho L \rbr{\inv{\Lmax} - \eta} \geq 1\) when \( \eta \leq \inv{\Lmax} \). 
 \end{proof}
 
 
 
-\subsection{Convergence for Convex Functions}~\label{app:sgd-convex}
-
 \wgcConvex*
 \begin{proof}
     \begin{align*}
-       \norm{\wkk - \wopt}^2 &= \norm{(\wkk - \wk) + (\wk - \wopt)}^2\\
-                             &= \norm{\wkk - \wk}^2 + 2 \abr{\wkk - \wk, \wk - \wopt} + \norm{\wk - \wopt}^2\\
+        \norm{\wkk - \wopt}^2 &= \norm{\wk - \eta \grad(\wk, \zk) - \wopt}^2\\
                              &= \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \abr{\grad(\wk, \zk), \wk - \wopt} + \norm{\wk - \wopt}^2.
                              \intertext{Taking expectations with respect to \( \zk \), }
-       \E \sbr{\norm{\wkk - \wopt}^2} &= \eta^2 \E \sbr{\norm{\grad(\wk, \zk)}^2} - 2 \eta \E \sbr{\abr{\grad(\wk, \zk), \wk - \wopt}} + \norm{\wk - \wopt}^2\\
-                                      &= \eta^2 \E \sbr{\norm{\grad(\wk, \zk)}^2} - 2 \eta \abr{\grad(\wk), \wk - \wopt} + \norm{\wk - \wopt}^2.
+       \Ek \sbr{\norm{\wkk - \wopt}^2} &= \eta^2 \Ek \sbr{\norm{\grad(\wk, \zk)}^2} - 2 \eta \Ek \sbr{\abr{\grad(\wk, \zk), \wk - \wopt}} + \norm{\wk - \wopt}^2\\
+                                      &= \eta^2 \Ek \sbr{\norm{\grad(\wk, \zk)}^2} - 2 \eta \abr{\grad(\wk), \wk - \wopt} + \norm{\wk - \wopt}^2.
                              \intertext{By convexity of \( f \) and the weak growth condition,}
-       \E \sbr{\norm{\wkk - \wopt}^2} &\leq \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2\\
+       \Ek \sbr{\norm{\wkk - \wopt}^2} &\leq \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2\\
                              &\leq 2 \eta^2 \rho L \rbr{f(\wk) - f(\wopt)} - 2 \eta \rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2\\
-                             &= - 2 \eta \rbr{1 - \eta \rho L}\rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2.
+                             &= - 2 \eta \rbr{1 - \eta \rho L}\rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2.\addnumber~\label{eq:cwg-alternate-progress}
    \end{align*}
    Rearranging the expression to put the optimality gap on the left-hand side, 
    \begin{align*}
-       2 \eta \rbr{1 - \eta \rho L} \rbr{f(\wk) - f(\wopt)} &\leq \norm{\wk - \wopt}^2 - \E \sbr{\norm{\wkk - \wopt}^2}.
-       \intertext{If \( \eta < \frac{1}{\rho L} \) then \( 1 - \eta \rho L > 0 \). We obtain }
-       f(\wk) - f(\wopt) &\leq \frac{1}{2 \eta \rbr{1 - \eta \rho L}} \rbr{\norm{\wk - \wopt}^2 - \E\sbr{\norm{\wkk - \wopt}^2}}.
+       2 \eta \rbr{1 - \eta \rho L} \rbr{f(\wk) - f(\wopt)} &\leq \norm{\wk - \wopt}^2 - \Ek \sbr{\norm{\wkk - \wopt}^2}.
+       \intertext{If \( \eta < \frac{1}{\rho L} \) then \( 1 - \eta \rho L > 0 \), }
+       \implies f(\wk) - f(\wopt) &\leq \frac{1}{2 \eta \rbr{1 - \eta \rho L}} \rbr{\norm{\wk - \wopt}^2 - \Ek\sbr{\norm{\wkk - \wopt}^2}}.
        \intertext{Taking expectations and summing from \( k = 0 \) to \( K - 1 \) now gives}
    \frac{1}{K} \sum_{k=0}^{K-1} \E \sbr{f(\wk)} - f(\wopt) &\leq \frac{1}{2 \eta \rbr{1 - \eta \rho L} \, K} \sum_{k=0}^{K-1} \rbr{\E \sbr{\norm{\wk - \wopt}^2} - \E \sbr{\norm{\wkk - \wopt}^2}}\\
                                                            &\leq \frac{1}{2 \eta \rbr{1 - \eta \rho L} \, K} \rbr{\norm{\w_0 - \wopt}^2 - \norm{\w_K - \wopt}^2}\\
@@ -86,48 +138,56 @@
 \begin{proof}
    Starting from \autoref{lemma:convex-intermediate},
    \begin{align*}
-    f(\wk) - f(\wopt) &\leq \frac{1}{2\eta \, C} \rbr{\norm{\wk - \wopt}^2 - \E \sbr{\norm{\wkk - \wopt}^2}}\\
+    f(\wk) - f(\wopt) &\leq \frac{1}{2\eta \, C} \rbr{\norm{\wk - \wopt}^2 - \Ek \sbr{\norm{\wkk - \wopt}^2}}\\
     \intertext{Taking expectations and summing from \( k = 0 \) to \( K - 1 \) now gives}
-    \implies \frac{1}{K} \sum_{k=0}^{K -1} \E \sbr{f(\wk) - f(\wopt)} &\leq \frac{1}{2\eta \, C \, K}\sum_{k=0}^{K-1}\rbr{\E\sbr{\norm{\wk - \wopt}^2} - \E\sbr{\norm{\wkk - \wopt}^2}}\\
-                                                         &= \frac{1}{2\eta \, C \, K}\rbr{\norm{\w_0 - \wopt}^2 - \E\sbr{\norm{\w_{K} - \wopt}^2}}\\
-                                                         &\leq \frac{1}{2\eta \, C \, K} \norm{\w_0 - \wopt}^2\\
+    \implies \frac{1}{K} \sum_{k=0}^{K -1} \E \sbr{f(\wk) - f(\wopt)} &\leq \frac{1}{2\eta \, \delta \, K}\sum_{k=0}^{K-1}\rbr{\E\sbr{\norm{\wk - \wopt}^2} - \E\sbr{\norm{\wkk - \wopt}^2}}\\
+                                                         &= \frac{1}{2\eta \, \delta \, K}\rbr{\norm{\w_0 - \wopt}^2 - \E\sbr{\norm{\w_{K} - \wopt}^2}}\\
+                                                         &\leq \frac{1}{2\eta \, \delta \, K} \norm{\w_0 - \wopt}^2\\
 \intertext{Noting \( \frac{1}{K}\sum_{k=0}^{K-1} f(\wk) \geq f(\bar \w_K) \) by convexity leads to the final result,}
-   \implies \E\sbr{f(\bar w_K)} - f(\wopt) &\leq \frac{1}{2\eta \, C \, K}\norm{\w_0 - \wopt}^2.
+   \implies \E\sbr{f(\bar w_K)} - f(\wopt) &\leq \frac{1}{2\eta \, \delta \, K}\norm{\w_0 - \wopt}^2.
 \end{align*}
 \end{proof}
 
 \todo{Can we prove a final iterate version of this using the strategy in Bubeck's ConvexOpt? If not, can we prove that SGD is not guaranteed to make progress at every iteration even when WGC holds?}
 
-\subsection{Almost Sure Convergence}~\label{app:almost-sure-convergece}
+\subsection{Almost Sure Convergence}~\label{app:almost-sure-convergence}
 
 \wgcAlmostSure*
 \begin{proof}
-    We proceed by showing that the sequence of distances to the minimizer \( \seq{\norm{\wk - \wopt}^2} \) satisfies the conditions of Theorem~\ref{thm:positive_supermartingales}.
-    Moreover, as by-product, we obtain that the series \( \sum_{k=0}^{\infty} \rbr{f(\wk) - f(\wopt)} \) is convergent and thus \( f(\wk) \rightarrow \fopt \).
-
     Lemma~\ref{lemma:convex-intermediate} gives the decrease condition
     \begin{align*}
-        \E \sbr{\norm{\wkk - \wopt}^2 \mid \calF_\iter} \leq  \norm{\wk - \wopt}^2 - 2 \eta C \rbr{f(\wk) - f(\wopt)},
+        \E\sbr{\norm{\wkk - \wopt}^2 \mid \calF_\iter} \leq  \norm{\wk - \wopt}^2 - 2 \eta \delta \rbr{f(\wk) - f(\wopt)},
     \end{align*}
-    where \( C \geq 1 \) since \( \eta < \frac{1}{\rho L} + \frac{1}{\Lmax} \)
-    The conditions of Theorem~\ref{thm:positive_supermartingales} are satisfied with \( A_\iter = 0 \) for all \( \iter \).
-    So, the sequence \( \seq{\norm{\wk - \wopt}^2} \) converges to a non-negative random variable \(\lim_{\iter \rightarrow \infty} \norm{\wk - \wopt}^2 \) almost surely.
-    We also have
-    \begin{align*}
-        \sum_{k=0}^{\infty} 2\eta C \sbr{f(\wk) - f(\wopt)} < \infty
-        \implies \sum_{k=0}^{\infty} \sbr{f(\wk) - f(\wopt)} < \infty,
-    \end{align*}
+    where \( \delta \geq 1 \) since \( \eta < \frac{1}{\rho L} + \frac{1}{\Lmax} \)
+    The conditions of Theorem~\ref{thm:positive_supermartingales} are satisfied with \( A_\iter = 0 \) for all \( \iter \) and implies sequence \( \seq{\norm{\wk - \wopt}^2} \) converges to a non-negative random variable \(\lim_{\iter \rightarrow \infty} \norm{\wk - \wopt}^2 \) almost surely.
+    The theorem also guarantees
+    \begin{align}
+        \sum_{k=0}^{\infty} 2\eta \delta \rbr{f(\wk) - f(\wopt)} &< \infty \nonumber \\
+        \implies \sum_{k=0}^{\infty} \rbr{f(\wk) - f(\wopt)} &< \infty~\label{eq:func_convergence}\\
+        \implies \lim_{k \rightarrow \infty} f(\wk) = f(\wopt). \nonumber
+    \end{align}
     almost surely.
-    Therefore,
-    \[ \lim_{\iter \rightarrow \infty} f(\wk) - f(\wopt) \equas 0, \]
-    and the proof is complete.
+    That is, stochastic gradient descent converges to the optimal function value. 
+    Let us extend this convergence to the sequence of iterates \( \seq{\wk} \).
+    The weak growth condition implies 
+    \begin{align*}
+        \E\sbr{\sum_{k=0}^{K} \norm{\wkk - \wk}^2} &= \E\sbr{\sum_{k=0}^{K} \eta^2 \norm{\grad(wk, \zk)}^2}\\
+                                                   &\leq \sum_{k=0}^{K} \rho \eta^2 \E\sbr{f(\wk) - f(\wopt)}\\
+        \implies \lim_{K\rightarrow \infty} \E \sbr{\sum_{k=0}^{K} \norm{\wkk - \wk}^2} &\leq \lim_{K\rightarrow\infty} \E \sbr{\sum_{k=0}^{K} \rho \eta^2 \rbr{f(\wk) - f(\wopt)}}\\
+        \intertext{The partial sums are increasing \( K \), so we may apply the monotone convergence theorem (MCT) to obtain} 
+        \E \sbr{\sum_{k=0}^{\infty} \norm{\wkk - \wk}^2} &\leq  \E \sbr{\sum_{k=0}^{\infty} \rho \eta^2 \rbr{f(\wk) - f(\wopt)}}\\
+                                                                  &< \infty. \tag{by \autoref{eq:func_convergence}}
+    \end{align*}
+    The series \(  \sum_{k=0}^{\infty} \norm{\wkk - \wk}^2 \) is a non-negative random variable with finite expectation and so converges almost surely: 
+    \[ \sum_{k=0}^{\infty} \norm{\wkk - \wk}^2 < \infty. \]
+    Thus, \( \lim_{k \rightarrow \infty} \norm{\wkk - \wk}^2 \equas 0 \) and the Cauchy criterion now guarantees \( \lim_{k \rightarrow \infty} \wk = \w_\infty \) for some random variable \( \w_\infty \).
+    Continuity of \( f \) and the continuous mapping theorem imply 
+    \[ f(\w_\infty) \equas \lim_{k\rightarrow \infty} f(\wk) \equas f(\wopt). \]
+    We conclude \( \w_\infty \in \argmin_\w f(\w) \) almost surely.
 \end{proof}
 
 \sgcAlmostSure*
 \begin{proof}
-    Consider the stochastic process defined by the optimality gaps \( \seq{f(\wk) - f(\wopt)} \).
-    We show that this sequence satisfies the conditions of Theorem~\ref{thm:positive_supermartingales} and, as a by-product, establish almost sure convergence of the final iterate to a stationary point.
-
     Lemma~\ref{lemma:sgc-decrease-condition} gives the decrease condition
     \begin{align*}
         \E \sbr{f(\wkk) - f(\wopt) \mid \calF_\iter} &\leq \rbr{f(\wk) - f(\wopt)} - \eta \rbr{1 - \frac{\rho L \eta}{2}}\norm{\grad(\wk)}^2.
@@ -139,14 +199,32 @@
     and the conditions of Theorem~\ref{thm:positive_supermartingales} are satisfied with \( A_\iter = 0 \) for all \( \iter \).
     The sequence \( \seq{f(\wk) - f(\wopt)} \) converges almost surely to a non-negative random variable \(\lim_{\iter \rightarrow \infty} f(\wk) - f(\wopt) \) almost surely.
     Of more interest is that
-    \begin{align*}
-        \sum_{k=0}^{\infty} \eta \rbr{1 - \frac{\eta \rho L}{2}} \norm{\grad(\wk)}^2 < \infty
-        \implies \sum_{k=0}^{\infty} \norm{\grad(\wk)}^2 < \infty,
-    \end{align*}
+    \begin{align}
+        \sum_{k=0}^{\infty} \eta \rbr{1 - \frac{\eta \rho L}{2}} \norm{\grad(\wk)}^2 &< \infty \nonumber\\
+        \implies \sum_{k=0}^{\infty} \norm{\grad(\wk)}^2 &< \infty, \label{eq:stationary-convergence}
+    \end{align}
     almost surely.
     Accordingly, the sequence of gradient norms satisfies
     \[ \lim_{\iter \rightarrow \infty} \norm{\grad(\wk)}^2 \equas 0, \]
-    and we conclude that the final iterate of stochastic gradient descent converges almost surely to a stationary point.
+    and we conclude that the sequence of gradients converges almost surely to a stationary point.
+   
+    Let us extend this convergence to the sequence of iterates \( \seq{\wk} \).
+    The strong growth condition implies 
+    \begin{align*}
+        \E\sbr{\sum_{k=0}^{K} \norm{\wkk - \wk}^2} &= \E\sbr{\sum_{k=0}^{K} \eta^2 \norm{\grad(wk, \zk)}^2}\\
+                                                   &\leq \sum_{k=0}^{K} \rho \eta^2 \E\sbr{\norm{\grad(wk, \zk)}^2}\\
+        \implies \lim_{K\rightarrow \infty} \E \sbr{\sum_{k=0}^{K} \norm{\wkk - \wk}^2} &\leq \lim_{K\rightarrow\infty} \E \sbr{\sum_{k=0}^{K} \rho \eta^2 \norm{\grad(wk, \zk)}^2}\\
+        \intertext{The partial sums are increasing \( K \), so we may apply the monotone convergence theorem (MCT) to obtain} 
+        \E \sbr{\sum_{k=0}^{\infty} \norm{\wkk - \wk}^2} &\leq  \E \sbr{\sum_{k=0}^{\infty} \rho \eta^2 \norm{\grad(wk, \zk)}^2}\\
+                                                                  &< \infty. \tag{by \autoref{eq:stationary-convergence}}
+    \end{align*}
+    The series \(  \sum_{k=0}^{\infty} \norm{\wkk - \wk}^2 \) is a non-negative random variable with finite expectation and so converges almost surely: 
+    \[ \sum_{k=0}^{\infty} \norm{\wkk - \wk}^2 < \infty. \]
+    Thus, \( \lim_{k \rightarrow \infty} \norm{\wkk - \wk}^2 \equas 0 \) and the Cauchy criterion now guarantees \( \lim_{k \rightarrow \infty} \wk = \w_\infty \) for some random variable \( \w_\infty \).
+    The mapping \( \w \mapsto \norm{\grad(\w)}^2 \) is a composition of continuous functions and thus is continuous. 
+    The continuous mapping theorem implies  
+    \[ \norm{\grad(\w_\infty)}^2  \equas \lim_{k\rightarrow \infty} \norm{\grad(\wk)}^2 \equas 0, \]
+    which completes the proof.
 \end{proof}
 
 

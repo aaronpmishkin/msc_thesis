@@ -2,6 +2,9 @@
 
 \chapter{Acceleration}~\label{ch:acceleration}
 
+
+
+
 \section{Estimating Sequences}
 
 Suppose that we are trying to minimize a convex function \( f : \R^n \rightarrow \R \) using a deterministic gradient method of the form
@@ -75,7 +78,7 @@ However, we first establish that stochastic gradient descent satisfies a decreas
 Let us now prove that \( \E[\inf_x \phi_k(x)] \geq \E[f(\wk)] \) when using a stochastic gradient update.
 Throughout what follows, we use \( \E[\cdot] \) to denote the expectation taken with respect to all past noise vectors \( \zk, \dots, \z_0 \).\\
 
-\begin{restatable}{lemma}{charStochasticEstimatingSeq}~\label{lemma:characterization_of_stochastic_estimating_sequences}
+\begin{restatable}{lemma}{stochasticEstimatingSeq}~\label{lemma:stochastic-estimating-seq}
     Let \( \phi^*_0 = f(x_0) \) and assume we generate the sequences \( \cbr{\alpha_k}_{k=0}^\infty \), \( \cbr{\wk}_{k=0}^\infty \), \( \cbr{\yk}_{k=0}^\infty \) as follows:
     \begin{align*}
         \alpha^2_k &= \frac{\gamma_{k+1}}{\rho L } = \frac{(1-\alpha_k)\gamma_k + \alpha_k \mu}{\rho L}, \\
@@ -89,16 +92,17 @@ Throughout what follows, we use \( \E[\cdot] \) to denote the expectation taken 
 
 We are now ready to prove an accelerated convergence rate for the \( \cbr{\wk}_{k=0}^\infty \) sequence.\\
 
-\begin{restatable}{theorem}{scAcceleratedRate}~\label{thm:accelerated_convergence_rate}
-    Let \( \phi^*_0 = f(x_0) \) and assume we generate the sequences \( \cbr{\alpha_k}_{k=0}^\infty \), \( \cbr{\wk}_{k=0}^\infty \), \( \cbr{\yk}_{k=0}^\infty \) as follows:
-    \begin{align*}
-        \alpha^2_k &= \frac{\gamma_{k+1}}{\rho L } = \frac{(1-\alpha_k)\gamma_k + \alpha_k \mu}{\rho L}, \\
-        \yk &= \wk - \frac{\alpha_k}{\gamma_k + \alpha_k \mu} \nabla \phi_k(\wk),\\
-        \wkk &= \yk - \frac{1}{\rho L} \grad\rbr{\yk, \zk}.
-    \end{align*}
+\begin{restatable}{theorem}{scAcceleration}~\label{thm:sc-acceleration}
+    Let \( f \) be a \( \mu \)-strongly-convex, \( L \)-smooth function satisfying the strong growth condition with parameter \( rho \).
+    Let \( \phi^*_0 = f(x_0) \) and assume we generate the sequences \( \cbr{\alpha_k}_{k=0}^\infty \), \( \cbr{\wk}_{k=0}^\infty \), \( \cbr{\yk}_{k=0}^\infty \) as in Lemma~\ref{stochastic-estimating-seq}.
     Moreover, choose \( \gamma_0 = \mu > 0 \) and \( v_0 = \w_0 \).
-    If \( f \) satisfies \( \rho \)-SGC, the following convergence rate holds:
+    Then Nesterov's accelerated gradient method converges as  
     \[ \E\sbr{f(\wk)} - f(\wopt) \leq \rbr{1 - \sqrt{\frac{\mu}{\rho L}}}^{k} \rbr{ f(w_0) - f(\wopt) + \frac{\mu}{2} \norm{\wopt - \w_0}^2 }.  \]
+\end{restatable}
+
+\begin{restatable}{theorem}{cAcceleration}~\label{thm:convex-acceleration}
+    Let \( f \) be a convex, \( L \)-smooth function satisfying the strong growth condition with parameter \( \rho \).
+    Then  
 \end{restatable}
 
 \textbf{Comments}:
@@ -113,3 +117,6 @@ We are now ready to prove an accelerated convergence rate for the \( \cbr{\wk}_{
     \item The rate given in Theorem~\ref{thm:accelerated_convergence_rate} is ``accelerated'' with respect to the convergence of stochastic gradient descent in the same setting.
     It is \emph{not} accelerated in the sense that it obtains the optimal convergence rate for first-order methods on strongly-convex functions.
 \end{itemize}
+
+
+

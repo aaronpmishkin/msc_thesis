@@ -25,10 +25,12 @@ As such, this theorem permits all stochastic functions to be convex only.
     Then stochastic gradient descent using the Armijo line-search with \( c \geq \half \) converges as
     \begin{align*}
         \E \sbr{f(\wkk)} - f(\wopt) &\leq \rbr{\frac{L}{\mu}}\rbr{1 - \mu \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax}}^k \rbr{f(w_0) - f(\wopt)}. 
-        \intertext{In particular, when \( c = \half \) and \( \etamax = \infty \) we obtain }
-        \E \sbr{f(\wkk)} - f(\wopt) &\leq \rbr{\frac{L}{\mu}}\rbr{1 - \frac{\mu}{\Lmax}}^k \rbr{f(w_0) - f(\wopt)}.
     \end{align*}
 \end{restatable}
+
+In particular, when \( c = \half \) and \( \etamax = \infty \) we obtain 
+\[\E \sbr{f(\wkk)} - f(\wopt) \leq \rbr{\frac{L}{\mu}}\rbr{1 - \frac{\mu}{\Lmax}}^k \rbr{f(w_0) - f(\wopt)}. \]
+
 
 \begin{restatable}{theorem}{convexLineSearch}~\label{thm:convex-line-search}
     Let \( f \) be a convex, \( L \)-smooth function.
@@ -36,16 +38,17 @@ As such, this theorem permits all stochastic functions to be convex only.
     Then stochastic gradient descent using the Armijo line-search with \( c \geq \half \) converges as 
     \begin{align*}
         \E\sbr{f(\bar \w_K)} - f(\wopt) &\leq \frac{1}{2 \, K} \max\cbr{\frac{\Lmax}{2(1-c)}, \frac{1}{\etamax}} \norm{\w_0 - \wopt}^2, 
-        \intertext{where \( \bar \w_K = \sum_{k=0}^{K-1} \wk \). In particular, when \( c = \half \) and \( \etamax = \infty \) we obtain}
-        \E\sbr{f(\bar \w_K)} - f(\wopt) &\leq \frac{\Lmax}{2 \, K} \norm{\w_0 - \wopt}^2.
+        \intertext{where \( \bar \w_K = \sum_{k=0}^{K-1} \wk \).}
     \end{align*} 
 \end{restatable}
-
+In particular, when \( c = \half \) and \( \etamax = \infty \) we obtain
+\[  \E\sbr{f(\bar \w_K)} - f(\wopt) \leq \frac{\Lmax}{2 \, K} \norm{\w_0 - \wopt}^2. \]
 
 \begin{restatable}{theorem}{nonConvexLineSearch}~\label{thm:non-convex-line-search}
-    Let \( f \) be a convex, \( L \)-smooth function.
+    Let \( f \) be a \( L \)-smooth function.
     Moreover, suppose that the stochastic function \( f(\cdot, \z) \) is individually smooth. 
     Then stochastic gradient descent using the Armijo line-search with \( c >  1 - \frac{\Lmax}{\rho L}\) and \( \etamax <  \frac{2}{\rho L} \) converges as
     \[ \min_{k \in [K]} \norm{\grad(\wk)}^2 \leq \frac{1}{\delta \, K} \rbr{f(w_0) - f(\wopt)}, \]
-    where \( \delta = \rbr{\etamax + \etamin} - \rho \rbr{\etamax - \etamin + L \etamax^2} \)
+    where \( \delta = \rbr{\etamax + \etamin} - \rho \rbr{\etamax - \etamin + L \etamax^2} \).
 \end{restatable}
+

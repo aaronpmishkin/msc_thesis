@@ -5,32 +5,29 @@
 \stepSizeBound*
 \begin{proof}
     Let \( \tetak \) be the step-size returned by the exact Armijo line-search and recall \( \etak = \min\cbr{\tetak, \etamax} \).
-    Denote \( \wkk = \wk - \etak \grad(\wk,\zk) \).
-    That is, \( \wkk \) is the stochastic gradient descent update using \( \etak \).
     Individual smoothness implies
     \begin{align*}
         f(\wkk, \zk) &\leq f(\wk, \zk) - \abr{\grad(\wk, \zk), \wkk - \wk} + \frac{\Lk}{2}\norm{\wkk - \wk}^2\\
                      &= f(\wk, \zk) - \tetak \norm{\grad(\wk, \zk)}^2 + \frac{\Lk \tetak^2}{2}\norm{\grad(\wk, \zk)}^2\\
                      &= f(\wk, \zk) - \tetak \rbr{1 - \frac{\Lk \tetak}{2}}\norm{\grad(\wk, \zk)}^2.
     \end{align*}
-    The step-size \( \tetak \) satisfies \autoref{eq:armijo-ls}, implying that
-    \[ f(\wkk, \zk) \leq f(\wk, \zk) - c \cdot \tetak \norm{\grad(\wk, \zk)}^2. \]
-    Recall that \( \tetak \) is the maximal step-size less satisfying \autoref{eq:armijo-ls} since the line-search is exact.
-    Thus, we obtain
+    This implies that the Armijo condition,
+    \[ f(\wkk, \zk) \leq f(\wk, \zk) - c \cdot \tetak \norm{\grad(\wk, \zk)}^2, \]
+    is guaranteed to hold whenever \( c \, \tetak \leq \tetak\rbr{1 - \frac{\Lk \tetak}{2}} \). 
+    Recalling that \( \tetak \) is the maximal step-size satisfying the Armijo condition (since the line-search is exact) yields,
     \begin{align*}
         c \cdot \tetak &\geq \tetak \rbr{1 - \frac{\Lk \tetak}{2}}\\
         \implies \tetak &\geq \frac{2(1-c)}{\Lk}.
     \end{align*}
-    If \( \etamax \leq \frac{2(1-c)}{\Lk} \) then we must have \( \etak = \etamax \); otherwise, \( \etak \geq \frac{2(1-c)}{\Lk} \).
-    This implies \( \etak \geq \min\cbr{ \frac{2(1-c)}{\Lk}, \etamax}\).\\
-
+    We obtain \( \etak \geq \min\cbr{ \frac{2(1-c)}{\Lk}, \etamax}\). \break
+    
     Let us now upper-bound \( \etak \). 
-    \autoref{eq:armijo-ls} is guaranteed to hold for \( \etak \) since it holds for \( \tetak \) and all \( \eta \leq \frac{2(1-c)}{\Lk} \). 
-    We have 
+    The above argument established that the Armijo condition is satisfied for all \( \eta \leq \frac{2(1-c)}{\Lmax} \). 
+    Thus, it must be satisfied for \( \etak = \min\cbr{\tetak, \etamax} \) and we obtain 
     \begin{align*}
         f(\wkk, \zk) &\leq f(\wk, \zk) - c \cdot \etak \norm{\grad(\wk, \zk)}^2\\
-        \implies \etak &\leq \frac{f(\wk, \zk) - f(\wkk, \zk)}{c \norm{\grad(\wk, \zk)}^2}\\
-        \intertext{Interpolation implies \( f(\wkk, \zk) \geq f(\wopt, \zk) \), which gives}
+        \implies \etak &\leq \frac{f(\wk, \zk) - f(\wkk, \zk)}{c \norm{\grad(\wk, \zk)}^2}.
+        \intertext{Interpolation implies \( f(\wkk, \zk) \geq f(\wopt, \zk) \) and thus}
         \etak &\leq \frac{f(\wk, \zk) - f(\wopt, \zk)}{c \norm{\grad(\wk, \zk)}^2}.
     \end{align*}
     This completes the proof.
@@ -41,7 +38,7 @@
     Moreover, suppose that the stochastic function \( f(\cdot, \z) \) is individually smooth. 
     Then stochastic gradient descent using the Armijo line-search with \( c \geq \half \) satisfies the following
     inequality:
-    \[ f(\wk)- f(\wopt) \leq \max\cbr{c \, \Lmax, \etamax} \rbr{\norm{\wk - \wopt}^2 - \E_{\zk}\sbr{\norm{\wkk - \wopt}^2}}. \]
+    \[ f(\wk)- f(\wopt) \leq \max\cbr{\frac{\Lmax}{2(1-c)},\inv{\etamax}} \rbr{\norm{\wk - \wopt}^2 - \E_{\zk}\sbr{\norm{\wkk - \wopt}^2}}. \]
 \end{restatable}
 \begin{proof}
    \begin{align*}
@@ -63,33 +60,34 @@
        \implies \norm{\wkk - \wopt}^2 &\leq - \min\cbr{\frac{4(1-c)}{\Lk}, 2\Lmax, \frac{1}{c \Lk}} \rbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2.
        \intertext{Noting \( \frac{1}{c\Lk} \geq \frac{4 (1-c)}{\Lk} \) for \( c \in [0.5, 1] \) (with equality holding when \( c = \half \)) implies }
        \norm{\wkk - \wopt}^2 &\leq - 2 \min\cbr{\frac{2(1-c)}{\Lk}, \etamax} \rbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2\\
-                             &\leq - 2 \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax} \rbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2
+                             &\leq - 2 \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax} \rbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2.
                              \intertext{Taking expectations with respect to \( \zk \):}
-       \implies \E \sbr{\norm{\wkk - \wopt}^2} &\leq - 2 \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax} \E \sbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2\\
+       \implies \Ek \sbr{\norm{\wkk - \wopt}^2} &\leq - 2 \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax} \Ek \sbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2\\
                                                &= - 2 \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax} \rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2.
                                                \intertext{Rearranging the expression so the optimality gap is on the left-hand side completes the proof,}
-       \implies f(\wk) - f(\wopt) &\leq \half \max\cbr{\frac{\Lmax}{2(1-c)}, \frac{1}{\etamax}} \rbr{\norm{\wk - \wopt}^2 - \E_{\zk}\sbr{\norm{\wkk - \wopt}^2}}.
+       \implies f(\wk) - f(\wopt) &\leq \half \max\cbr{\frac{\Lmax}{2(1-c)}, \frac{1}{\etamax}} \rbr{\norm{\wk - \wopt}^2 - \Ek \sbr{\norm{\wkk - \wopt}^2}}.
    \end{align*} 
 \end{proof}
 
+\subsection{Convergence for Strongly-Convex Functions}~\label{app:sc-line-search}
 
 \scLineSearch*
 \begin{proof}
     Starting from \autoref{lemma:ls-intermediate},
     \begin{align*}
-                             f(\wk) - f(\wopt) &\leq \half \max\cbr{\frac{\Lmax}{2(1-c)}, \frac{1}{\etamax}} \rbr{\norm{\wk - \wopt}^2 - \E_{\zk}\sbr{\norm{\wkk - \wopt}^2}}\\
-  \implies \E_{\zk}\sbr{\norm{\wkk - \wopt}^2} &\leq \norm{\wk - \wopt}^2 - 2 \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax} \rbr{f(\wk) - f(\wopt)}\\
-                                               &\leq \norm{\wk - \wopt}^2  - \mu \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax}\norm{\wk - \wopt}^2 \tag{by \( \mu \)-SC of \( f \)} \\
+                             f(\wk) - f(\wopt) &\leq \half \max\cbr{\frac{\Lmax}{2(1-c)}, \frac{1}{\etamax}} \rbr{\norm{\wk - \wopt}^2 - \Ek\sbr{\norm{\wkk - \wopt}^2}}\\
+  \implies \Ek\sbr{\norm{\wkk - \wopt}^2} &\leq \norm{\wk - \wopt}^2 - 2 \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax} \rbr{f(\wk) - f(\wopt)}\\
+  \intertext{Strong-convexity and \autoref{lemma:gradient-bounds} imply}
+           \Ek\sbr{\norm{\wkk - \wopt}^2} &\leq \norm{\wk - \wopt}^2  - \mu \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax}\norm{\wk - \wopt}^2 \\
                                                &= \rbr{1 - \mu \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax}} \norm{\wk - \wopt}^2.
                                                    \intertext{Taking expectations and recursing on the inequality,}
        \implies \E \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \mu \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax}}^k \norm{\w_0 - \wopt}^2 \\
        \intertext{\autoref{lemma:iterate-bounds} now yields}
    \implies \E \sbr{f(\wkk)} - f(\wopt) &\leq \rbr{\frac{L}{\mu}}\rbr{1 - \mu \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax}}^k \rbr{f(w_0) - f(\wopt)}. 
-   \intertext{In particular, when \( c = \half \) and \( \etamax = \infty \) we obtain }
-        \E \sbr{f(\wkk)} - f(\wopt) &\leq \rbr{\frac{L}{\mu}}\rbr{1 - \frac{\mu}{\Lmax}}^k \rbr{f(w_0) - f(\wopt)}.
-\end{align*} 
+   \end{align*} 
 \end{proof}
 
+\subsection{Convergence for Convex Functions}~\label{app:convex-line-search}
 
 \convexLineSearch*
 \begin{proof}
@@ -102,10 +100,10 @@
                                                                         &\leq \frac{1}{2 \, K} \max\cbr{\frac{\Lmax}{2(1-c)}, \frac{1}{\etamax}} \norm{\w_0 - \wopt}^2.
                                                                         \intertext{Noting \( \frac{1}{K} \sum_{k=0}^{K-1} f(\wk) \geq f(\bar \w_K) \) by convexity leads to the final result,}
         \implies \E\sbr{f(\bar \w_K)} - f(\wopt) &\leq \frac{1}{2 \, K} \max\cbr{\frac{\Lmax}{2(1-c)}, \frac{1}{\etamax}} \norm{\w_0 - \wopt}^2. 
-         \intertext{In particular, when \( c = \half \) and \( \etamax = \infty \) we obtain}
-        \E\sbr{f(\bar \w_K)} - f(\wopt) &\leq \frac{\Lmax}{2 \, K} \norm{\w_0 - \wopt}^2.    \end{align*}
+    \end{align*}
 \end{proof}
 
+\subsection{Convergence for Non-Convex Functions}~\label{app:non-convex-line-search}
 
 \nonConvexLineSearch*
 \begin{proof}
@@ -115,7 +113,7 @@
         \implies - \abr{a, b} &= \half \rbr{\norm{a - b}^2 - \norm{a}^2 - \norm{b}^2}.~\label{eq:quadratic-expansion}
     \end{align}
 
-    Let \( \Delta_k = f(\wkk) - f(wk) \). Starting from \( L \)-smoothness of \( f \):
+    Let \( \Delta_k = f(\wkk) - f(\wk) \). Starting from \( L \)-smoothness of \( f \):
     \begin{align*}
         \Delta_k &\leq \abr{\grad(\wk), \wkk - \wk} + \frac{L}{2}\norm{\wkk - \wk}^2\\
                          &= - \etak \abr{\grad(\wk), \grad(\wk, \zk)} + \frac{L \etak^2}{2}\norm{\grad(\wk, \zk)}^2.
@@ -123,26 +121,26 @@
         \Delta_k &\leq \frac{\etak}{2}\rbr{\norm{\grad(\wk) - \grad(\wk, \zk)}^2 - \norm{\grad(\wk)}^2 - \norm{\grad(\wk, \zk)}^2} + \frac{L \etak^2}{2}\norm{\grad(\wk, \zk)}^2\\
         \implies 2 \Delta_k &\leq \etak \norm{\grad(\wk) - \grad(\wk, \zk)}^2 - \etak\rbr{\norm{\grad(\wk)}^2 + \norm{\grad(\wk, \zk)}^2} + L \etak^2\norm{\grad(\wk, \zk)}^2. 
         \intertext{Using \( \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax} = \etamin \leq \etak \leq \etamax \) from \autoref{lemma:step-size-bound} and taking expectations with respect to \( \zk \):}
-        2 \rbr{\Delta_k} &\leq \etamax \norm{\grad(\wk) - \grad(\wk, \zk)}^2 - \etamin \rbr{\norm{\grad(\wk)}^2 + \norm{\grad(\wk, \zk)}^2} \\ &\hspace{1em} + L \etamax^2\norm{\grad(\wk, \zk)}^2\\
+        2 \Delta_k &\leq \etamax \norm{\grad(\wk) - \grad(\wk, \zk)}^2 - \etamin \rbr{\norm{\grad(\wk)}^2 + \norm{\grad(\wk, \zk)}^2} \\ &\hspace{1em} + L \etamax^2\norm{\grad(\wk, \zk)}^2\\
         \implies 2 \E_{\zk}\sbr{\Delta_k} &\leq \etamax \E_{\zk}\sbr{\norm{\grad(\wk) - \grad(\wk, \zk)}^2} - \etamin \E_{\zk}\sbr{\norm{\grad(\wk)}^2 + \norm{\grad(\wk, \zk)}^2} \\ &\hspace{1em} + L \etak^2 \E_{\zk}\sbr{\norm{\grad(\wk, \zk)}^2}\\
                                 &= \etamax \E\sbr{\norm{\grad(\wk, \zk)}^2} - \etamax \norm{\grad(\wk)}^2 - \etamin \E_{\zk}\sbr{\norm{\grad(\wk)}^2 + \norm{\grad(\wk, \zk)}^2} \\ &\hspace{1em} + L \etak^2 \E_{\zk}\sbr{\norm{\grad(\wk, \zk)}^2}\\
                                 \intertext{Collecting terms and applying the strong growth condition,}
         2 \E_{\zk}\sbr{\Delta_k} &\leq \rbr{\etamax - \etamin + L \etamax^2} \E_{\zk}\sbr{\norm{\grad(\wk, \zk)}^2} - \rbr{\etamax + \etamin}\norm{\grad(\wk)}^2\\
                                &\leq \rho \rbr{\etamax - \etamin + L \etamax^2} \norm{\grad(\wk)}^2 - \rbr{\etamax + \etamin}\norm{\grad(\wk)}^2\\
                                &= - \rbr{\rbr{\etamax + \etamin} - \rho \rbr{\etamax - \etamin + L \etamax^2}}\norm{\grad(\wk)}^2.
-                               \intertext{Assuming \( \delta = \rbr{\etamax + \etamin} - \rho \rbr{\etamax - \etamin + L \etamax^2} > 0 \),}
+    \end{align*}%%
+    \begin{align*}%%
+        \intertext{Assuming \( \delta = \rbr{\etamax + \etamin} - \rho \rbr{\etamax - \etamin + L \etamax^2} > 0 \),}
         \implies \norm{\grad(\wk)}^2 &\leq \frac{2}{\delta} \E_{\zk}\sbr{-\Delta_k}.
-    \end{align*}%
-    \begin{align*}
-        \intertext{Taking expectations and summing from \( k = 0 \) to \( k = K - 1 \),}
-        \implies \sum_{k=0}^{K-1} \E\sbr{\norm{\grad(\wk)}^2} &\leq \frac{2}{\delta} \sum_{k=0}^{K-1} \E \sbr{- \Delta_k}\\
-                                                              &= \frac{2}{\delta} \sum_{k=0}^{K-1} \E \sbr{f(\wk) - f(\wkk)}\\
-                                                              &= \frac{2}{\delta} \E\sbr{f(\w_0) - f(\wkk)}\\
-                                                              &\leq \frac{2}{\delta} \rbr{f(\w_0) - f(\wopt)}\\
+        \intertext{Taking expectations and summing from \( k = 0 \) to \( K - 1 \),}
+        \implies \frac{1}{K} \sum_{k=0}^{K-1} \E\sbr{\norm{\grad(\wk)}^2} &\leq \frac{2}{\delta \, K} \sum_{k=0}^{K-1} \E \sbr{- \Delta_k}\\
+                                                              &= \frac{2}{\delta \, K} \sum_{k=0}^{K-1} \E \sbr{f(\wk) - f(\wkk)}\\
+                                                              &= \frac{2}{\delta \, K} \E\sbr{f(\w_0) - f(\wkk)}\\
+                                                              &\leq \frac{2}{\delta \, K} \rbr{f(\w_0) - f(\wopt)}\\
         \implies \min_{k \in [K-1]} \E\sbr{\norm{\grad(\wk)}^2} &\leq \frac{2}{\delta \, K} \rbr{f(\w_0) - f(\wopt)}.
     \end{align*}
 
-    It remains to show that \( \delta > 0  \) holds. We proceed in cases.\\
+    It remains to show that \( \delta > 0  \) holds. Our analysis proceeds in cases.\\
     \textbf{Case 1}: \( \etamax \leq \frac{2(1-c)}{\Lmax} \). Then \( \etamin = \etamax \) and 
     \begin{align*}
         \delta &= \rbr{\etamax + \etamax} - \rho \rbr{\etamax - \etamax + L \etamax^2} \\
@@ -151,8 +149,8 @@
     \end{align*}
     \textbf{Case 2}: \( \etamax > \frac{2(1-c)}{\Lmax} \). Then \( \etamin = \frac{2(1-c)}{\Lmax} \) and 
     \begin{align*}
-        \delta =  \rbr{\etamax + \frac{2(1-c)}{\Lmax}} - \rho \rbr{\etamax - \frac{2(1-c)}{\Lmax} + L \etamax^2} \\
-        \intertext{This quadratic is strictly positive when}
+        \delta =  \rbr{\etamax + \frac{2(1-c)}{\Lmax}} - \rho \rbr{\etamax - \frac{2(1-c)}{\Lmax} + L \etamax^2}. 
+        \intertext{This is a concave quadratic in \( \etamax \) and is strictly positive when}
         \etamax \in \rbr{0, \frac{\rbr{1 - \rho} + \sqrt{{(\rho - 1)}^2 + \sfrac{\sbr{8 \rho (1 + \rho) L (1-c)}}{\Lmax}}}{2 L \rho}}.
     \end{align*}
     To avoid contradiction with the case assumption \( \frac{2(1-c)}{\Lmax} < \etamax \), we require
@@ -163,10 +161,21 @@
         \implies \frac{\Lmax}{\rho L} &> (1-c)\\
         \implies c &> 1 - \frac{\Lmax}{\rho L}.
     \end{align*}
-    Substituting this maximum value into the upper-bound on \( \etamax \) shows 
+    The line-search requires \( c \in \rbr{0,1} \).
+    Noting that \( \rho \geq 1 \) by definition, we have \( \frac{\Lmax}{\rho L} > 0 \) as long as \( L, \Lmax > 0 \).
+    This condition holds as long as \( f \) is bounded-below and non-zero.
+    We obtain the non-empty constraint set
+    \[ c \in \rbr{1 - \frac{\Lmax}{\rho L}, 1}. \]
+    Substituting the maximum value for \( c \) into the upper-bound on \( \etamax \) yields a similar requirement,
     \[ \etamax \in \rbr{0, \frac{2}{\rho L}}. \]
-    Moreover, this constraint is consistent with Case 1, since 
-    \[ \frac{2(1-c)}{\Lmax} < \frac{2 \Lmax}{\rho L \Lmax} = \frac{2}{\rho L}. \] 
+    This completes the second case.
+
+    Putting the two cases together gives the final constraints on \( c \) and \( \etamax \) as
+    \[ c \geq 1 - \frac{\Lmax}{\rho L} \quad \quad \etamax < \frac{2}{\rho L}. \]
+    We note that the upper and lower bounds on \( \etak \) are consistent since 
+    \[ \etamin = \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax} < \min\cbr{\frac{2 \Lmax}{\rho L \Lmax}, \etamax} = \max\cbr{\frac{2}{\rho L}, \etamax} \leq \frac{2}{\rho L}, \] 
+    where the last inequality follows from the bound on \( \etamax \).
+    In particular, taking \( c \rightarrow 1 \) and \( \etamax \rightarrow \frac{2}{\rho L} \) yields an adaptive step-size \(\etak \in (0,\frac{2}{\rho L}).  \)
 \end{proof}
 
 

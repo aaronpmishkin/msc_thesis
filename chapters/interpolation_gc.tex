@@ -2,128 +2,145 @@
 
 \chapter{Interpolation and Growth Conditions}~\label{ch:interpolation-gc}
 
-
-\begin{restatable}[L-Smooth]{definition}{LSmooth}~\label{def:l-smooth}
-    A function \( f : \R^d \rightarrow \R \) is \( L \)-smooth if  
-    \[ f(v) \leq f(w) \abr{\grad(\w), v - \w} + \frac{L}{2}\norm{v - \w}^2 \]
-    for all \( \w,v \in \R^d \).
-\end{restatable}
-This definition of \( L \)-smoothness is equivalent to Lipschitz continuity of the gradient mapping,
-\[ \norm{\grad(w) - \grad(v)} \leq L \norm{w - v} \quad \forall \w,v \in \R^d. \]
-\todo{reference for this basic result}
-
-\begin{restatable}[Convex]{definition}{convex}~\label{def:convex}
-    A function \( f : \R^d \rightarrow \R \) is convex if  
-    \[ f(v) \geq f(\w) + \abr{\grad(\w), v - \w}, \]
-    for all \( \w, v \in \R^d \).
-\end{restatable}
-
-\begin{restatable}[Strongly-Convex]{definition}{stronglyConvex}~\label{def:sc}
-    A function \( f : \R^d \rightarrow \R \) is \( \mu \)-strongly-convex if  
-    \[ f(v) \geq f(\w) + \abr{\grad(\w), v - \w} + \frac{\mu}{2}\norm{v - \w}^2, \]
-    for all \( \w, v \in \R^d \).
-\end{restatable}
-
-\begin{restatable}[Individually Smooth]{definition}{individuallySmooth}~\label{def:individually-smooth}
-    The random function \( f(\cdot, \Z) \) is said to be individually smooth if the realizations \( f(\cdot, \z) \) are \( L_\z \)-smooth for each \( \z \in \calZ \).
-\end{restatable}
-
-For individually-smooth functions, we denote \( \Lmax = \max_{\z \in \calZ} L_\z \). 
-The expectation of an individually-smooth random function is \( L \)-smooth with \( L \leq \Lmax \), since
-\begin{align*}
-    f(v, \z) &\leq f(\w, \z) + \abr{\grad(\w, \z), v - \w} + \frac{L_\z}{2} \norm{v - \w}^2\\
-             &\leq f(\w, \z) + \abr{\grad(\w, \z), v - \w} + \frac{\Lmax}{2} \norm{v - \w}^2\\
-\implies \E \sbr{f(v, \z)} &\leq \E \sbr{f(\w, \z)} + \abr{\E\sbr{\grad(\w, \z)}, v - \w} + \frac{\Lmax}{2} \norm{v - \w}^2.
-\end{align*}
-
-\todo{Fix notation around \( \z \) and \( \Z \)}
-
-\todo{Can exchange gradient and expectation for finite \( \calZ \)}.
-
 \section{Preliminaries}\label{sec:setup}
 
-We consider the unconstrained minimization of a continuous function \( f : \R^d \into \R \) using stochastic gradient descent (SGD).
-Assume that \( f \) is bounded below by \( f(\wopt) = \fopt \) for some \( \wopt \in \bar \R^d \) and let \( \z \in \calZ \) be a noise vector sampled from distribution \( p(\z) \).
-The functions \( f(\w,\z) \) and \( \grad(\w, \z) \) are stochastic estimates of the true function \( f(\w) \) and its gradient \(\grad(\w) \) whose randomness stems from \( \z \).
-The estimates are assumed to be unbiased, meaning
-\[ \E \sbr{f(\w, \z)} = f(\w)  \; \text{and} \; \E \sbr{ \grad(\w, \z) } = \grad(\w). \]
-In this notation, an iteration of stochastic gradient descent with step-size \( \etak \) is
-\begin{align}
-    \textbf{SGD}: \; \wkk = \wk - \etak \grad(\wk, \zk). \label{eq:sgd}
-\end{align}
-Our goal is to show that the sequence of iterates \( \rbr{\wk} \) converges to an optimal input \( \wopt \), function value \( \fopt \), or stationary point as \( k \into \infty \).
+This work considers the problem of minimizing a continuous function \( f : \R^d \into \R \) under interpolation-type conditions.
+The focus is on establishing non-asymptotic convergence rates for stochastic, first-order optimization algorithms in the unconstrained setting. 
+The analysis covers stochastic gradient descent with a fixed step-size and with an Armijo-type line-search, as well as Nesterov's accelerated gradient method with stochastic gradients.
+It is straightforward to extend many of the results in this work to constrained or composite smooth/non-smooth optimization using projected or proximal-gradient methods, but such analyses are beyond the scope of his work.
 
-\subsection{Finite-sum functions}\label{sec:finite_sum}
+%% Basic Assumptions
+It is necessary to make some basic assumptions about the function \( f \) in order to establish convergence rates for first-order algorithms.
+We assume that \( f \) is bounded below with at least one finite minimizer.
+That is, there exists \( \wopt \in \R^d \) such that 
+\begin{align*}
+    f(w) \geq f(\wopt) \quad \quad \forall w \in \R^d. 
+\end{align*}
+Additionally, \( f \) is required to be differentiable and \( L \)-smooth, meaning the gradient mapping \( \w \mapsto \grad(\w) \) is an \( L \)-Lipschitz function,
+\[ \norm{\grad(\w) - \grad(v)} \leq L \norm{\w - v} \quad \quad \forall \, \w, v \in \R^d. \]
+This is equivalent to the existence of the following quadratic upper-bound on \( f \):
+\begin{align*}
+    f(v) &\leq f(w) \abr{\grad(\w), v - \w} + \frac{L}{2}\norm{v - \w}^2 &\forall \, \w,v \in \R^d. \tag{\( L \)-Smoothness} 
+    \intertext{At times, we will further assume that \( f \) is convex or \( \mu \)-strongly-convex,}
+    f(v) &\geq f(\w) + \abr{\grad(\w), v - \w} &\forall \, \w,v \in \R^d, \tag{Convexity} \\
+    f(v) &\geq f(\w) + \abr{\grad(\w), v - \w} + \frac{\mu}{2}\norm{v - \w}^2 &\forall \, \w,v \in \R^d. \tag{\( \mu \)-Strong-Convexity}
+\end{align*}
+Convexity is satisfied for many optimization problems occurring in machine learning, including linear and logistic regression. 
+Convexity can be further relaxed to a more limited property of \( f \) --- invexity.
+Formally, we say \( f \) is invex if all stationary points of \( f \) are also global minimizers,
+\[ \grad(\w) = 0 \implies f(\w) \leq f(v) \quad \quad \forall \, v \in \R^d.  \]
+Invexity follows immediately from the definition of convexity given above.
 
-A sub-problem that occurs frequently in machine learning and statistics is the minimization of finite-sum functions, which have the form
-\[ f(\w) = \frac{1}{n} \sum_{i=1}^n \fj(w). \]
-For example, maximum likelihood estimation of the parameters of a probability distribution using iid observations is a common problem in both fields that reduces to minimization of a finite-sum function.
-For finite-sum functions, it is common to choose \( \calZ = \cbr{1, \dots, n} \) --- the set of indices for functions in the sum --- and use the gradient and function estimates
-\[f(\w, \z) = f_\z(\w) \; \text{and} \; \grad(\w, \z) = \grad_\z(w). \]
-These are unbiased for \( P(\z) = \text{Uniform}\rbr{\cbr{1, \dots, n}} \).
-Or, a mini-batch of \( m \leq n \) functions from the finite-sum can be used,
-\[ f(\w, \z) = \frac{1}{|\z|} \sum_{i \in \z} f_i(\w) \; \text{ and } \grad(\w, \z) = \frac{1}{|\z|} \sum_{i \in \z} \grad_i(\w), \]
-in which case \( \calZ = \cbr{ A \subseteq \cbr{1, \dots, n} : |A| = m } \).
+%% Oracle Model
+As stated above, this work is primarily concerned with the analysis of iterative methods for stochastic optimization.
+The defining feature of stochastic optimization algorithms is that they cannot directly access the value or gradient of \( f \).
+Instead, they obtain noisy function and gradient evaluations through a stochastic, first-order oracle (SFO) \oracle. 
+At each iteration \( k \), \oracle{} outputs a stochastic function and gradient \( f(v, \zk) \) and \( \grad(v, \zk) \) at query point \( v \), where \( \zk \) is a random variable with distribution \( P(\zk) \) supported on \( \calZ \subseteq \R \). 
+We assume that \( f(v, \cdot) \) is a deterministic Borel function, meaning the randomness in \( f(v, \zk) \) stems only from the random variable \( \zk \).
+Similarly, \( \grad(v, \cdot) \) is taken to be a deterministic Borel function related to \( f(v, \cdot) \) through the standard differentiation operator,
+\[ \grad(v, \cdot) = \sbr{\partial_{v_1} f(v, \cdot), \ldots, \partial_{v_d} f(v, \cdot)}^\top. \]
+Finally, the oracle outputs are unbiased in the sense that 
+\begin{align*}
+    \E_{\zk} \sbr{f(v, \zk)} = f(v) \quad \text{and} \quad \E_{\z} \sbr{\grad(v, \zk)} = \grad(v). 
+\end{align*}
 
-\subsection{Lipschitz smoothness, convexity, and strong-convexity}\label{sec:lipschitz_convex_sc}
+Some results will further require that the stochastic function \( f(\cdot, \zk) \) is Lipschitz-smooth in the first argument for all iterations \( k \).
+In this case, we say the \oracle{} satisfies \emph{individual smoothness} with parameter \( \Lmax \).
+This is formalized in the following definition.
+\begin{restatable}[Individual Smoothness]{definition}{individuallySmooth}~\label{def:individually-smooth}
+    A SFO \oracle{} is called \( \Lmax \) individually-smooth if the stochastic gradient mapping \( \w \mapsto \grad(\w, \zk) \) is \( \Lk \)-Lipschitz for all iterations \( k \), implying 
+    \[ f(v, \zk) \leq f(\w, \zk) + \abr{\grad(\w, \zk), v - \w} + \frac{\Lk}{2}\norm{v - \w}^2 \quad \forall k \geq 0, \]
+    and \( \Lmax \geq \Lk \) for all \( k \geq 0 \).
+\end{restatable}
+Note that the existence of an \( \Lmax \) individually-smooth and unbiased SFO for \( f \) implies that \( f \) is \( L \)-smooth with \( L \leq \Lmax \) as an immediately corollary.
+\begin{restatable}{corollary}{indSmoothToSmooth}~\label{cor:ind-smooth-to-smooth}
+    Let \( f : \R^d \rightarrow \R \) be a differentiable function.  
+    If there exists an unbiased, \( \Lmax \) individually-smooth SFO \oracle{} for \( f \), then \( f \) is \( L \)-smooth with \( L \leq \Lmax \).
+    Alternatively, if the \( SFO \) is biased but \( \calZ \) is finite, then \( \Ek \sbr{f(\cdot, \zk)} \) is \( \Lmax \)-smooth for all \( k \). 
+\end{restatable}
+See \autoref{app:interpolation-gc} for proof. \hfill \break
 
-We must make assumptions about the function to minimize in order to prove SGD converges.
-Firstly, we assume throughout that \( f(\cdot, \z) \) is \( L_\z \)-smooth in the norm \( \norm{\cdot} \),
-\begin{align}
-    \textbf{\( L \)-smooth}: \; f(v, \z) \leq f(u, \z) + \abr{\grad(u,\z), v - u} + \frac{L}{2}\norm{v - u}^2. \label{eq:l_smooth}
-\end{align}
-This is equivalent to \( L_\z \)-Lipschitz continuity of the stochastic gradients,
-\[ \norm{\grad(v, \z) - \grad(u, \z)}_* \leq L_\z \norm{v - u}, \]
-where \( \norm{\cdot}_* \) is the conjugate norm of \( \norm{\cdot} \).
-In some cases, we will require that \( f \) is convex, meaning
-\begin{align}
-    \textbf{convex}: \; &f(v) \geq f(u) + \abr{\grad(w), v - u} \label{eq:convex}
-\intertext{or \( \mu \)-strongly-convex in \( \norm{\cdot} \), meaning}
-    \textbf{\( \mu \)-strongly-convex}: \; &f(v) \geq f(u) + \abr{\grad(w), v - u} + \frac{\mu}{2}\norm{v - u}^2. \label{eq:sc}
-\end{align}
-It will be explicit when convexity or strong-convexity are assumed.
-Finally, a function is invex when all its stationary points are global minima:
-\begin{align}
-    \grad(\w) = 0 \implies f(\w) \leq f(u) \; \forall u \in \R^d.\label{eq:invex}
-\end{align}
+Individually-smooth SFO oracles are wide-spread throughout machine learning in the form of finite-sum functions. 
+Finite-sum functions are a particular class of structured optimization problem where the objective \( f \) is the sum of \( n \) sub-functions. 
+This is written as
+\begin{align*}
+    f(\w) = \frac{1}{n} \sum_{i = 0}^n f_i(\w), 
+\end{align*}
+where the functions \( f_i : \R^d \rightarrow \R \) may be strongly-convex, convex, or non-convex depending on the problem.
+Such objective functions arise naturally in empirical risk minimization (ERM), where each \( f_i \) typically corresponds to a example \( (x_i, y_i) \) in a training set.
+For example, the classic least-squares regression problem 
+\[ \wopt = \argmin \frac{1}{n} \sum_{i=1}^n \rbr{\abr{w, x_i} - y_i}^2, \]
+has a finite-sum structure with \( f_i(\w) =  \rbr{\abr{w, x_i} - y_i}^2\).
+A simple SFO can be obtained in this setting by uniformly sub-sampling \( m < n \) examples the finite-sum; this yields the following gradient and function estimates:
+\[ f(\w, \zk) = \frac{1}{|\zk|} \sum_{i \in \zk} f_i(\w) \; \text{ and } \grad(\w, \zk) = \frac{1}{|\zk|} \sum_{i \in \zk} \grad_i(\w). \]
+The support set of the random variables \( \zk \) is then \( \calZ = \cbr{ A \subseteq \cbr{1, \dots, n} : |A| = m } \).
+These \emph{mini-batch} function and gradient estimators are unbiased.
+Moreover, if the individual functions \( f_i \) are individually \( L_i \)-smooth, then the mini-batch SFO satisfies individual-smoothness with \( \Lmax = \max_{i\in [n]} L_i \).
+Note that we call general SFOs \oracle{} individually-smooth to invite comparison with this natural property in the finite-sum setting. 
+
 
 \section{Interpolation}~\label{sec:interpolation}
 
-There are three different notions of interpolation.\\
+In this section, we formalize what it means for an optimization problem to satisfy interpolation.
+Specifically, we develop several notions of interpolation as a property of an objective-SFO pair in a similar fashion as was done for individual-smoothness.
+As with individual smoothness, interpolation will be shown to have a realization for finite-sum functions that satisfies standard intuition for the meaning of interpolation in function approximation and machine learning. 
 
-\begin{definition}[Interpolation 1: Global Minima are Stochastic Global Minima]\label{def:interpolation_minima}
-    A function \( f \) satisfies interpolation if
-    \[ f(\wopt) \leq f(\w) \; \forall \w \in \R^d \implies f(\wopt, \z) \leq f(\w, \z) \; \forall \w \in \R^d \; \forall \z \in \calZ. \]
-
+Interpolation can be formalized in the following three ways:
+\begin{definition}[Interpolation: Minimizers]\label{def:interpolation-minima}
+    A function-oracle pair \( (f, \oracle{}) \) satisfy minimizer interpolation if
+    \[ f(\wopt) \leq f(\w) \; \forall \w \in \R^d \implies f(\wopt, \zk) \leq f(\w, \zk) \; \forall \w \in \R^d \; \forall k \geq 0. \]
 \end{definition}
-
-\begin{definition}[Interpolation 2: Stationary Points are Stochastic Stationary Points]\label{def:interpolation_gradients}
-
-    A function \( f \) satisfies interpolation if
-    \[ \grad(\wopt) = 0 \implies \grad(\wopt, \z) = 0 \; \forall \z \in \calZ. \]
-
+\begin{definition}[Interpolation: Stationary Points]\label{def:interpolation-gradients}
+    A function-oracle pair \( (f, \oracle{}) \) satisfy stationary-point interpolation if
+    \[ \grad(\wopt) = 0 \implies \grad(\wopt, \zk) = 0 \; \forall k \geq 0. \]
 \end{definition}
-
-\begin{definition}[Interpolation 3: Global Minima are Stochastic Stationary Points]\label{def:interpolation_minima_to_gradients}
-
-    A function \( f \) satisfies interpolation if
+\begin{definition}[Interpolation: Mixed]\label{def:interpolation-mixed}
+    A function-oracle pair \( (f, \oracle{}) \) satisfy mixed interpolation if
     \[ f(\wopt) \leq f(\w) \; \forall \w \in \R^d \implies \grad(\wopt, \z) = 0  \; \forall \z \in \calZ. \]
-
 \end{definition}
+The axis of variation in these definitions is whether the interpolation requirement is placed on minimizers or stationary points of the function \( f \).
+In words, \autoref{def:interpolation-minima} states that global minimizers of the objective \( f \) must be global minimizers of the stochastic functions given by the SFO at every iteration \( k \).
+In contrast, \autoref{def:interpolation-gradients} puts the same requirement on stationary points of \( f \), while \autoref{def:interpolation-mixed} merely demands that minimizers of \( f \) are stationary points of \( f(\cdot, \zk) \) for all \( k \).
 
-The relationship between these modes of interpolation is as follows:
-\begin{restatable}{theorem}{interpRelationships}~\label{thm:interp-relationships}
-    In the general setting, only the following holds:
-    \[ \autoref{def:interpolation_minima} \implies \autoref{def:interpolation_minima_to_gradients} \]
-    However, if \( f \) is invex, then all definitions are equivalent.
+For general functions, the relationship between these models of interpolation is limited to the following: minimizer interpolation is stronger than mixed interpolation. 
+However, when \( f \) is invex, all three definitions are equivalent.
+This is stated in the following lemma.
+\begin{restatable}{lemma}{interpRelationships}~\label{thm:interp-relationships}
+    For general functions \( f \), only the following holds:
+    \[ \text{Minimizer Interpolation} \; (\autoref{def:interpolation-minima}) \implies \; \text{Mixed Interpolation} \; (\autoref{def:interpolation-mixed}). \]
+    However, if \( f \) is invex, then minimizer, stationary-point, and mixed interpolation are all equivalent.
 \end{restatable}
+This result follows immediately from first-order optimality conditions and the equivalence of stationary points and global minimizers for invex functions.
+For completeness, a short proof with counter-examples for the implications which do not hold is given in \autoref{app:interpolation-gc}.
 
+\begin{figure}[]
+    \centering
+    \includegraphics[width=0.28\linewidth]{example-image-a}
+    \includegraphics[width=0.28\linewidth]{example-image-b}
+    \includegraphics[width=0.28\linewidth]{example-image-c}
+    \caption{Differences in interpolation definitions in the finite-sum setting.}%
+    \label{fig:interpolation-types}
+\end{figure}
 
-\begin{restatable}{theorem}{boundedBelow}~\label{thm:bounded-below}
-    A function \( f \) satisfies \autoref{def:interpolation_minima} almost surely if
-    \[ f(\w, \z ) \geq f(\wopt) \; \forall \w \in \R^d, \forall \z \in \calZ. \]
+Let us return to the finite-sum setting and use a mini-batch oracle to better understand these three definitions of interpolation.
+In particular, let \( f \) and \oracle{} be such that
+\[ f(\w) =  \frac{1}{n} \sum_{i=1}^{n} f_i(\w), \quad f(\w, \zk) = f_{\zk}(\w), \quad \grad(\w, \zk) = \grad_{\zk}(\w),  \]
+where \( P(\zk) \) is a uniform distribution over the support set \( \calZ = \cbr{1, \ldots, n} \).
+The function-oracle pair \( \rbr{f, \oracle{}} \) satisfy minimizer (stationary-point) interpolation if the individual functions \( f_i \) are globally minimized (stationary) at every global minimum (stationary point) of \( f \).
+The differences between minimizer and stationary-point interpolation are readily apparent for finite-sums of non-convex functions, as show in \autoref{fig:interpolation-types}.
+If we further narrow this to linear regression, where \( f_i(\w) = \rbr{\abr{\w, x_i} - y_i}^2 \) for a data point \( \rbr{x_i, y_i} \), then it becomes obvious that minimizer interpolation implies the entire training set can be fit exactly, or interpolated.
+Thus, \autoref{def:interpolation-minima} exactly fits the intuition for interpolation in the context of function approximation.
+
+There are several natural ways to establish interpolation.
+Linear regression problems satisfy interpolation when \( d \geq n \).
+Separable binary classification also trivially satisfies interpolation.
+In the general setting of SFOs, the follow lemma establishes simple conditions for a \( \rbr{f, \oracle{}} \) to satisfy minimizer interpolation.
+\begin{restatable}{lemma}{boundedBelow}~\label{thm:bounded-below}
+    A function-oracle pair \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation (\autoref{def:interpolation-minima}) almost surely if the \oracle{} is unbiased and
+    \[ f(\w, \zk ) \geq f(\wopt) \; \forall \w \in \R^d, \forall k \geq 0. \]
 \end{restatable}
-
+\todo{Expand this section on identifying/establishing interpolation conditions}\\
+\todo{Minimizer interpolation is the most natural. Expand on this?}
 
 \section{Growth conditions}\label{sec:growth_conditions}
 

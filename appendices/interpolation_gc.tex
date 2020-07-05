@@ -1,7 +1,22 @@
 %! TEX root = ../main.tex
 
-\section{Interpolation and Growth Conditions: Proofs}~\label{app:interpolation_gc}
+\section{Interpolation and Growth Conditions: Proofs}~\label{app:interpolation-gc}
 
+\indSmoothToSmooth*
+\begin{proof}
+\begin{align*}
+    f(v, \zk) &\leq f(\w, \zk) + \abr{\grad(\w, \zk), v - \w} + \frac{L_\z}{2} \norm{v - \w}^2\\
+    \implies \Ek \sbr{f(v, \zk)} &\leq \Ek \sbr{f(\w, \zk)} + \abr{\E\sbr{\grad(\w, \zk)}, v - \w} + \frac{\Lmax}{2} \norm{v - \w}^2\\
+    \implies f(v) &\leq \abr{\grad(\w), v - w} + \frac{\Lmax}{2}\norm{v - \w}^2. 
+\end{align*}
+Alternatively, it is straightforward to establish that \( \Ek wsbr{f(\cdot, \zk)} \) is \( L \)-smooth with \( L \leq \Lmax \) when the SFO is biased but \( \calZ \) is finite.
+\begin{align*}
+    f(v, \zk) &\leq f(\w, \zk) + \abr{\grad(\w, \zk), v - \w} + \frac{L_\z}{2} \norm{v - \w}^2\\
+    \implies \Ek \sbr{f(v, \zk)} &\leq \Ek \sbr{f(\w, \zk)} + \abr{\E\sbr{\grad(\w, \zk)}, v - \w} + \frac{\Lmax}{2} \norm{v - \w}^2\\
+                                 &\leq \Ek \sbr{f(\w, \zk)} + \abr{\nabla \E\sbr{f(\w, \zk)}, v - \w} + \frac{\Lmax}{2} \norm{v - \w}^2,
+\end{align*}
+where the order of the gradient and expectation operators can be exchanged by the dominated convergence theorem.
+\end{proof}
 
 \interpRelationships*
 \begin{proof}
