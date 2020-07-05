@@ -143,52 +143,56 @@ In the general setting of SFOs, the follow lemma establishes simple conditions f
 \todo{Minimizer interpolation is the most natural. Expand on this?}
 
 \section{Growth conditions}\label{sec:growth_conditions}
+\todo{This is equivalent to bounding the variance, which is quite common. There should be a whole bunch of citations by Lan.}
 
-According to \citet{schmidt2013fast}, the first authors to consider growth conditions on the norms of the stochastic gradients were \citet{tseng1998incremental} and
-\citet{solodov1998incremental}, who assumed the maximum norm is bounded by a linear function of the norm of the true gradient,
-\begin{align}
-    \max_{z \in \calZ} \norm{\grad(\w, \z)}^2 \leq \rho \norm{\grad(x)}^2 \label{eq:tseng_gc}
-\end{align}
-
-\citet{vaswani2019fast} use a related condition, which they call the strong growth condition.
-\begin{definition}[Strong Growth Condition]\label{def:strong_growth}
-    A function \(f\) satisfies the strong growth condition with parameter \(\rho \) and noise random variables \(\z \in \calZ \) if
-    \[ \E\sbr{\norm{\grad(\w, \z)}^2} \leq \rho \norm{\grad(\w, \z)}^2 \]
-    holds for all \(\w \in \R^d\).
+Interpolation is directly related to the idea of placing \emph{growth conditions} on the stochastic gradients.
+Informally, growth conditions are a class of regularity condition that constrain the noise in \( \grad(v, \wk) \) in terms of the objective \( f \).
+For example, the following condition was used as early as the classical analysis of stochastic optimization algorithms by \citet{poljak1973pseudogradient}, and continues to appear in current work~\ref{bertsekas2000gradient, khaled2020better}  
+\[ \Ek \sbr{\norm{\grad(v, \zk)}^2} \leq \rho \norm{\grad(v)}^2 + \sigma^2,  \]
+where \( \rho, \sigma \geq 0 \).
+\citet{tseng1998incremental} and \citet{solodov1998incremental} strengthened this condition to require the maximum stochastic gradient norm to be almost surely bounded by the true gradient.
+Following~\citet{khaled2020better}, we call this condition maximal strong growth.
+\begin{definition}[Maximal Strong Growth]~\label{def:maximal-sg}
+    A function-oracle pair \( \rbr{f, \oracle{}} \) satisfies maximal strong growth if  
+    \begin{align*}
+        \max_{k \geq 0} \norm{\grad(\w, \zk)}^2 \leq \rho \norm{\grad(x)}^2, 
+    \end{align*}
+    holds almost surely for all \( \w \in \R^d \). 
 \end{definition}
-
-The following theorem characterizes the relationship between \autoref{eq:tseng_gc} and the strong growth condition.
-
-\begin{restatable}[Formulations of Strong Growth]{theorem}{sgcRelationships}\label{thm:sgc_relationships}
-    The original growth condition proposed by~\citet{solodov1998incremental} and~\citet{tseng1998incremental} and given in \autoref{eq:tseng_gc} implies the strong growth condition, but
-    the strong growth condition does not imply \autoref{eq:tseng_gc} in the general setting.
-    If we further assume that \( \calZ \) is finite, then the strong growth condition implies \autoref{eq:tseng_gc} almost-surely.
+A relaxed version of this condition called strong growth was proposed by \citet{vaswani2019fast}.
+\begin{definition}[Strong Growth]\label{def:sgc}
+    A function-oracle pair \( \rbr{f, \oracle{}} \) satisfies strong growth with parameter \(\rho \) if
+    \[ \Ek \sbr{\norm{\grad(\w, \z)}^2} \leq \rho \norm{\grad(\w)}^2, \]
+    holds for all \( k \geq 0 \) and \( \w \in \R^d \).
+\end{definition}
+It is straightforward to show that strong growth is indeed a weaker condition than maximal strong growth, which we do in the following lemma.
+\begin{restatable}[Formulations of Strong Growth]{lemma}{sgcRelationships}\label{thm:sgc-relationships}
+    Let \( \rbr{f, \oracle{}} \) be a function-oracle pair. 
+    If \( \rbr{f, \oracle{}} \) satisfies maximal strong growth (\autoref{def:maximal-sg}), then it also satisfies strong growth (\autoref{def:sgc}).
+    However, strong growth does not imply maximal strong growth for a general SFO \oracle{}. 
+    If we further assume that the support set \( \calZ \) is finite, then the strong growth and maximal strong growth conditions are equivalent. 
 \end{restatable} 
-
-
 A relaxed version of the strong growth condition is the weak growth condition, which was recently proposed by \citet{vaswani2019fast}.
-
-\begin{definition}[Weak Growth Condition]\label{def:weak_growth}
-    An \(L\)-smooth function \(f\) with minimizer \(\wopt \) satisfies the weak growth condition with parameter \(\rho \) and noise random variables \( \z \) if
-    \[ \E\sbr{\norm{\grad(\w, \z)}^2} \leq \rho L (f(\w) - f(\wopt)), \]
-    holds for all \(\w \in \R^d\).
+\begin{definition}[Weak Growth Condition]\label{def:wgc}
+    A function-oracle pair \( \rbr{f, \oracle{}} \) satisfies weak growth with parameter \(\rho \) if
+    \[ \Ek \sbr{\norm{\grad(\w, \zk)}^2} \leq \rho L (f(\w) - f(\wopt)), \]
+    holds for all \( k \geq 0 \) and \( \w \in \R^d\).
 \end{definition}
 
+We now elucidate the exact relationship between interpolation, strong growth, and weak growth.
 
-\begin{restatable}[Interpolation and Weak Growth]{theorem}{interpToWGC}~\label{thm:interp_to_wgc}
-    Let \( f \) be an \( L \)-smooth function satisfying \autoref{def:interpolation_minima}.
-    Furthermore, assume that \( f(\cdot, \z) \) is \( L_\z \)-smooth for all \( \z \in \calZ. \)
-    Then \( f \) satisfies the weak growth condition with parameter
-    \[ \rho = \frac{L_{\text{max}}}{L}, \]
-    where \( L_{\text{max}} = \max_{\z \in \calZ} L_\z \).
+\begin{restatable}[Interpolation and Weak Growth]{lemma}{interpToWGC}~\label{thm:interpolation-to-wgc}
+    Let \( f \) be an \( L \)-smooth function and \oracle{} an \( \Lmax \) individually-smooth SFO.
+    Furthermore, assume that \( \rbr{f, \oracle{}} \) satisfy minimizer interpolation (\autoref{def:interpolation-minima}).
+    Then \( \rbr{f, \oracle{}} \) satisfies the weak growth condition with parameter
+    \[ \rho = \frac{L_{\text{max}}}{L}. \]
 \end{restatable}
 
 
-\begin{restatable}[Interpolation and Strong Growth]{theorem}{interpToSGC}~\label{thm:interp_to_sgc}
-    Let \( f \) be an \( L \)-smooth function satisfying \autoref{def:interpolation_minima}.
-    Furthermore, assume that \( f(\cdot, \z) \) is \( L_\z \)-smooth for all \( \z \in \calZ \),
-    and \( f \) satisfies the Polyak-Łojasiewicz condition with parameter \( \mu \).
-    Then \( f \) satisfies the strong growth condition with parameter
-    \[ \rho = \frac{L_{\text{max}}}{\mu}, \]
-    where \( L_{\text{max}} = \max_{\z \in \calZ} L_\z \).
+\begin{restatable}[Interpolation and Strong Growth]{lemma}{interpToSGC}~\label{thm:interpolation_to_sgc}
+    Let \( f \) be an \( L \)-smooth function and \oracle{} an \( \Lmax \) individually-smooth SFO.
+    Furthermore, assume that \( \rbr{f, \oracle{}} \) satisfy minimizer interpolation (\autoref{def:interpolation-minima}).
+    If \( f \) also satisfies the Polyak-Łojasiewicz condition with parameter \( \mu \), then \( \rbr{f, \oracle{}} \) satisfies the strong growth condition with parameter
+    \[ \rho = \frac{L_{\text{max}}}{\mu}. \]
 \end{restatable}
+\todo{Define the PL condition in the preliminaries.}
