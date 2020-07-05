@@ -9,7 +9,7 @@
 \end{restatable}
 
 The proof of Lemma~\ref{lemma:iterate-bounds} follows immediately from the definitions of Lipschitz-smoothness and strong convexity evaluated at \( \w \) and \( \wopt \).
-
+\fred{Add ref. to definition of smoothnes and SC?}
 \begin{restatable}{lemma}{gradientBounds}~\label{lemma:gradient-bounds}
     Let \( f \) be an \( L \)-smooth function. 
     Then \( f \) satisfies the following inequality for all  \( w \in \R^d \) as follows: 
@@ -32,3 +32,4 @@ See \citet[Lemma 3.5]{bubeck2015convex} for proof.
     \[ \abr{\grad(x) - \grad(y), x - y} \geq \frac{\mu L}{\mu + L}\norm{x - y}^2 + \frac{1}{\mu + L} \norm{\grad(x) - \grad(y)}^2.  \] 
 \end{restatable}
 See \citet[Lemma 3.11]{bubeck2015convex} for proof.
+\fred{Could call it coercivity}

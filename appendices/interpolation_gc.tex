@@ -3,6 +3,14 @@
 \section{Interpolation and Growth Conditions: Proofs}~\label{app:interpolation-gc}
 
 \indSmoothToSmooth*
+\fred{
+    The second statement is 
+    \begin{quote}
+        If there exists a biased, $\Lmax$ individually-smooth SFO for $f$, the expected loss under the biased distribution is $\Lmax$ smooth
+    \end{quote}
+    ?
+    Do you need that anywhere?
+}
 \begin{proof}
 \begin{align*}
     f(v, \zk) &\leq f(\w, \zk) + \abr{\grad(\w, \zk), v - \w} + \frac{L_\z}{2} \norm{v - \w}^2\\
@@ -16,18 +24,29 @@ Alternatively, it is straightforward to establish that \( \Ek wsbr{f(\cdot, \zk)
                                  &\leq \Ek \sbr{f(\w, \zk)} + \abr{\nabla \E\sbr{f(\w, \zk)}, v - \w} + \frac{\Lmax}{2} \norm{v - \w}^2,
 \end{align*}
 where the order of the gradient and expectation operators can be exchanged by the dominated convergence theorem.
+\fred{for my feeble brain, lineary of expectations and gradients would be sufficient justification}
 \end{proof}
 
 \interpRelationships*
+\fred{I get autoref issues in the proof. I see $?? \implies ??$}
 \begin{proof}
     \( (\autoref{def:interpolation_minima} \implies \autoref{def:interpolation_minima_to_gradients}) \)
     The stochastic functions \( f(\w,\z) \) are minimized at \( \wopt \) for all \( \z \in \calZ \) and thus \( \grad(\wopt, \z) = 0 \forall \z \in \calZ \).\\
+
+    \fred{Technically, the counterexamples are not part of the proof of the lemma, but additional discussion points. Maybe best moved to a paragraph after the proof?
+
+    Also; proof by picture}
 
     \( (\autoref{def:interpolation_minima_to_gradients} \centernot \implies \autoref{def:interpolation_minima}) \), \(
     (\autoref{def:interpolation_gradients} \centernot \implies \autoref{def:interpolation_minima}) \)
     We construct a simple counter example.
     Consider the finite-sum function
     \[ f(\w) = f_1(\w) + f_2(\w) = 3\w^2 - \w^2. \]
+    \fred{
+    Took me $.5$ms too many to parse what you meant and realise one of them was non-convex.
+    Also, sum vs. average of functions. How about
+    \[ f_1(\w) = 3\w^2, \quad f_2(\w) = -\w^2, \quad f(\w) = \frac{1}{2}f_1(\w) + \frac{1}{2}f_2(\w) = \w^2. \]
+    }
     The ``sub-functions'' are stationary at the global minimum of \( f(0) = 0 \), but \( f_2(\w) \) is maximized at this point.\\
 
     \( (\autoref{def:interpolation_minima} \centernot \implies \autoref{def:interpolation_gradients}) \) This also follows from a simple finite-sum function.
@@ -41,6 +60,18 @@ where the order of the gradient and expectation operators can be exchanged by th
 \end{proof}
 
 \boundedBelow*
+\fred{$\forall k \geq 0$ suggest $k$ could be $<0$?}
+
+\fred{
+I don't think I follow the proof. Where do you get $f(\w, \z ) \geq f(\wopt)$ from?
+The following seem to satisfy minimizer interpolation and unbiasedness,
+\[
+f_1(x) = x^2, \quad f_2(x) = x^2 + 1, \quad f(x) = \frac{1}{2}(f_1(x) + f_2(x)) = x^2 + \frac{1}{2}.
+\]
+All are minimized at $x=0$ but $f_1(0) < f(0) < f_2(0)$.
+
+What you want probably holds if you add it as an assumption, but I think you need to tweak definitions.
+}
 \begin{proof}
     Since \( f(\w, \z ) \geq f(\wopt) \), the optimality gap \( f(\w,\z) - f(\wopt) \) must be non-negative for all \( \w \) and \( \z \).
     Since the stochastic functions are unbiased,
@@ -72,6 +103,7 @@ where the order of the gradient and expectation operators can be exchanged by th
     \end{align*}
     where \( p_{\text{min}} = \min \cbr{p(\z_i) : \z_i \in \calZ, p(\z_i) > 0 } \).
     We conclude that \autoref{eq:tseng_gc} holds almost surely with \(\rho' = \sfrac{\rho}{p_{\text{min}}}\).
+    \fred{Need a ``counterexample for infinite thingy'' introductory sentence and a par break}
     Now, consider when \( \calZ \) is allowed to be infinite.
     Let \( f(w) = w \) and choose \( \calZ = \sbr{0,1} \) with probability density function \( p(\z) = \frac{\z}{2} \).
     Finally, let
@@ -87,6 +119,7 @@ where the order of the gradient and expectation operators can be exchanged by th
 
 \interpToWGC*
 \begin{proof}
+    \fred{This relies on similar arguments as Lemma 2, I'm super comfy with it.}
     Starting from \( L_{\z} \)-smoothness of \( f(\cdot, \z) \),
     \begin{align*}
         f(u, \z) &\leq f(\w, \z) + \abr{\grad(\w, \z), u - \w} + \frac{L_\z}{2}\norm{u - \w}^2\\
