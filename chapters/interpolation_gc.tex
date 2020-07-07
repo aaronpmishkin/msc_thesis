@@ -35,28 +35,32 @@ Invexity follows immediately from the definition of convexity given above.
 As stated above, this work is primarily concerned with the analysis of iterative methods for stochastic optimization.
 The defining feature of stochastic optimization algorithms is that they cannot directly access the value or gradient of \( f \).
 Instead, they obtain noisy function and gradient evaluations through a stochastic, first-order oracle (SFO) \oracle. 
-At each iteration \( k \), \oracle{} outputs a stochastic function and gradient \( f(v, \zk) \) and \( \grad(v, \zk) \) at query point \( v \), where \( \zk \) is a random variable with distribution \( P(\zk) \) supported on \( \calZ \subseteq \R \). 
+At each iteration \( k \), \oracle{} outputs a stochastic function and gradient \( f(v, \zk) \) and \( \grad(v, \zk) \) at query point \( v \), where \( \zk \) is a random variable with distribution \( \mu_k \) supported on \( \calZ_k \subseteq \R \). 
+The distributions \( \mu_k \) are permitted to change across iterations, in which case we say \oracle{} is supported on
+\[ \calZ = \bigcup_{k\geq 0} \calZ_k. \]
 We assume that \( f(v, \cdot) \) is a deterministic Borel function, meaning the randomness in \( f(v, \zk) \) stems only from the random variable \( \zk \).
 Similarly, \( \grad(v, \cdot) \) is taken to be a deterministic Borel function related to \( f(v, \cdot) \) through the standard differentiation operator,
 \[ \grad(v, \cdot) = \sbr{\partial_{v_1} f(v, \cdot), \ldots, \partial_{v_d} f(v, \cdot)}^\top. \]
 Finally, the oracle outputs are unbiased in the sense that 
 \begin{align*}
-    \E_{\zk} \sbr{f(v, \zk)} = f(v) \quad \text{and} \quad \E_{\z} \sbr{\grad(v, \zk)} = \grad(v). 
+    \E_{\zk} \sbr{f(v, \zk)} = f(v) \quad \text{and} \quad \E_{\z} \sbr{\grad(v, \zk)} = \grad(v), 
 \end{align*}
+for all \( k \geq 0 \).
 
-Some results will further require that the stochastic function \( f(\cdot, \zk) \) is Lipschitz-smooth in the first argument for all iterations \( k \).
+Some results will further require that the stochastic function \( f(\cdot, \zk) \) is Lipschitz-smooth in the first argument for all outcomes in \( \calZ \).
 In this case, we say the \oracle{} satisfies \emph{individual smoothness} with parameter \( \Lmax \).
 This is formalized in the following definition.
 \begin{restatable}[Individual Smoothness]{definition}{individuallySmooth}~\label{def:individually-smooth}
-    A SFO \oracle{} is called \( \Lmax \) individually-smooth if the stochastic gradient mapping \( \w \mapsto \grad(\w, \zk) \) is \( \Lk \)-Lipschitz for all iterations \( k \), implying 
-    \[ f(v, \zk) \leq f(\w, \zk) + \abr{\grad(\w, \zk), v - \w} + \frac{\Lk}{2}\norm{v - \w}^2 \quad \forall k \geq 0, \]
-    and \( \Lmax \geq \Lk \) for all \( k \geq 0 \).
+    A SFO \oracle{} is called \( \Lmax \) individually-smooth if the stochastic gradient mapping \( \w \mapsto \grad(\w, \z) \) is \( L_{\z} \)-Lipschitz with \( L_{\z} \leq \Lmax \) for all \( \z \in \calZ \).
 \end{restatable}
-Note that the existence of an \( \Lmax \) individually-smooth and unbiased SFO for \( f \) implies that \( f \) is \( L \)-smooth with \( L \leq \Lmax \) as an immediately corollary.
+Individual smoothness implies the quadratic upper bound
+\[ f(v, \z) \leq f(\w, \z) + \abr{\grad(\w, \z), v - \w} + \frac{\Lmax}{2}\norm{v - \w}^2 \quad \forall v, \w \in \R^d, \]
+holds point-wise over \( \calZ \) and thus holds almost-surely for all \( \zk \), \( k \geq 0 \).
+Note that the existence of an \( \Lmax \) individually-smooth, unbiased SFO for \( f \) implies that \( f \) is \( L \)-smooth with \( L \leq \Lmax \) as an immediately corollary.
 \begin{restatable}{corollary}{indSmoothToSmooth}~\label{cor:ind-smooth-to-smooth}
     Let \( f : \R^d \rightarrow \R \) be a differentiable function.  
     If there exists an unbiased, \( \Lmax \) individually-smooth SFO \oracle{} for \( f \), then \( f \) is \( L \)-smooth with \( L \leq \Lmax \).
-    Alternatively, if the \( SFO \) is biased but \( \calZ \) is finite, then \( \Ek \sbr{f(\cdot, \zk)} \) is \( \Lmax \)-smooth for all \( k \). 
+    Alternatively, if \( \oracle{} \) is biased but \( \calZ \) is finite, then \( \Ek \sbr{f(\cdot, \zk)} \) is \( \Lmax \)-smooth for all \( k \). 
 \end{restatable}
 See \autoref{app:interpolation-gc} for proof. \hfill \break
 
@@ -71,13 +75,14 @@ Such objective functions arise naturally in empirical risk minimization (ERM), w
 For example, the classic least-squares regression problem 
 \[ \wopt = \argmin \frac{1}{n} \sum_{i=1}^n \rbr{\abr{w, x_i} - y_i}^2, \]
 has a finite-sum structure with \( f_i(\w) =  \rbr{\abr{w, x_i} - y_i}^2\).
-A simple SFO can be obtained in this setting by uniformly sub-sampling \( m < n \) examples the finite-sum; this yields the following gradient and function estimates:
+A simple SFO can be obtained in this setting by uniformly sub-sampling \( m < n \) examples from the finite-sum; this yields the following gradient and function estimates:
 \[ f(\w, \zk) = \frac{1}{|\zk|} \sum_{i \in \zk} f_i(\w) \; \text{ and } \grad(\w, \zk) = \frac{1}{|\zk|} \sum_{i \in \zk} \grad_i(\w). \]
 The support set of the random variables \( \zk \) is then \( \calZ = \cbr{ A \subseteq \cbr{1, \dots, n} : |A| = m } \).
-These \emph{mini-batch} function and gradient estimators are unbiased.
+It is straightforward to show that these \emph{mini-batch} function and gradient estimators are unbiased.
 Moreover, if the individual functions \( f_i \) are individually \( L_i \)-smooth, then the mini-batch SFO satisfies individual-smoothness with \( \Lmax = \max_{i\in [n]} L_i \).
-Note that we call general SFOs \oracle{} individually-smooth to invite comparison with this natural property in the finite-sum setting. 
+We call general SFOs \oracle{} individually-smooth specifically to invite comparison with this natural property of the finite-sum setting. 
 
+\todo{Note somewhere that requiring a condition point-wise over \( \calZ \) is equivalent to requiring it holds almost surely for all \( k \), since every outcome in \( \calZ \) as is in the support of some \( \mu_k \). }
 
 \section{Interpolation}~\label{sec:interpolation}
 
@@ -87,28 +92,33 @@ As with individual smoothness, interpolation will be shown to have a realization
 
 Interpolation can be formalized in the following three ways:
 \begin{definition}[Interpolation: Minimizers]\label{def:interpolation-minima}
-    A function-oracle pair \( (f, \oracle{}) \) satisfy minimizer interpolation if
-    \[ f(\wopt) \leq f(\w) \; \forall \w \in \R^d \implies f(\wopt, \zk) \leq f(\w, \zk) \; \forall \w \in \R^d \; \forall k \geq 0. \]
+    A function-oracle pair \( (f, \oracle{}) \) satisfies minimizer interpolation if for all \( \z \in \calZ \),
+    \[ f(\wopt) \leq f(\w) \; \forall \w \in \R^d \implies f(\wopt, \z) \leq f(\w, \z) \; \forall \w \in \R^d.  \]
 \end{definition}
 \begin{definition}[Interpolation: Stationary Points]\label{def:interpolation-gradients}
-    A function-oracle pair \( (f, \oracle{}) \) satisfy stationary-point interpolation if
-    \[ \grad(\wopt) = 0 \implies \grad(\wopt, \zk) = 0 \; \forall k \geq 0. \]
+    A function-oracle pair \( (f, \oracle{}) \) satisfies stationary-point interpolation if for all \( \z \in \calZ \),
+    \[ \grad(\wopt) = 0 \implies \grad(\wopt, \z) = 0. \]
 \end{definition}
 \begin{definition}[Interpolation: Mixed]\label{def:interpolation-mixed}
-    A function-oracle pair \( (f, \oracle{}) \) satisfy mixed interpolation if
-    \[ f(\wopt) \leq f(\w) \; \forall \w \in \R^d \implies \grad(\wopt, \z) = 0  \; \forall \z \in \calZ. \]
+    A function-oracle pair \( (f, \oracle{}) \) satisfies mixed interpolation if for all \( \z \in \calZ \),
+    \[ f(\wopt) \leq f(\w) \; \forall \w \in \R^d \implies \grad(\wopt, \z) = 0. \]
 \end{definition}
 The axis of variation in these definitions is whether the interpolation requirement is placed on minimizers or stationary points of the function \( f \).
-In words, \autoref{def:interpolation-minima} states that global minimizers of the objective \( f \) must be global minimizers of the stochastic functions given by the SFO at every iteration \( k \).
-In contrast, \autoref{def:interpolation-gradients} puts the same requirement on stationary points of \( f \), while \autoref{def:interpolation-mixed} merely demands that minimizers of \( f \) are stationary points of \( f(\cdot, \zk) \) for all \( k \).
+In words, \autoref{def:interpolation-minima} states that global minimizers of the objective \( f \) must be global minimizers of the stochastic functions given by the SFO almost surely at every iteration \( k \).
+In contrast, \autoref{def:interpolation-gradients} puts the same requirement on stationary points of \( f \), while \autoref{def:interpolation-mixed} merely demands that minimizers of \( f \) are stationary points of \( f(\cdot, \z) \) for all outcomes \( \z \).
 
-For general functions, the relationship between these models of interpolation is limited to the following: minimizer interpolation is stronger than mixed interpolation. 
+For general functions and SFOs, the relationship between these models of interpolation is limited to the following: minimizer interpolation and stationary-point interpolation are stronger than mixed interpolation. 
 However, when \( f \) is invex, all three definitions are equivalent.
 This is stated in the following lemma.
 \begin{restatable}{lemma}{interpRelationships}~\label{thm:interp-relationships}
-    For general functions \( f \), only the following holds:
-    \[ \text{Minimizer Interpolation} \; (\autoref{def:interpolation-minima}) \implies \; \text{Mixed Interpolation} \; (\autoref{def:interpolation-mixed}). \]
-    However, if \( f \) is invex, then minimizer, stationary-point, and mixed interpolation are all equivalent.
+    Let \( \rbr{f, \oracle{}} \) be an arbitrary function-SFO pair. 
+    Then only the following relationships hold between models of interpolation:
+    \begin{align*}
+        \text{Minimizer Interpolation} \; (\autoref{def:interpolation-minima}) &\implies \; \text{Mixed Interpolation} \; (\autoref{def:interpolation-mixed})\\
+                                                                               & \text{and} &\\
+        \text{Stationary-Point Interpolation} \; (\autoref{def:interpolation-gradients}) &\implies \; \text{Mixed Interpolation} \; (\autoref{def:interpolation-mixed}).
+    \end{align*}
+    However, if \oracle{} is such that \( f(\cdot, \zk) \) is invex for all \( \z \in \calZ \), then minimizer, stationary-point, and mixed interpolation are equivalent.
 \end{restatable}
 This result follows immediately from first-order optimality conditions and the equivalence of stationary points and global minimizers for invex functions.
 For completeness, a short proof with counter-examples for the implications which do not hold is given in \autoref{app:interpolation-gc}.
@@ -136,8 +146,8 @@ Linear regression problems satisfy interpolation when \( d \geq n \).
 Separable binary classification also trivially satisfies interpolation.
 In the general setting of SFOs, the follow lemma establishes simple conditions for a \( \rbr{f, \oracle{}} \) to satisfy minimizer interpolation.
 \begin{restatable}{lemma}{boundedBelow}~\label{thm:bounded-below}
-    A function-oracle pair \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation (\autoref{def:interpolation-minima}) almost surely if the \oracle{} is unbiased and
-    \[ f(\w, \zk ) \geq f(\wopt) \; \forall \w \in \R^d, \forall k \geq 0. \]
+    A function-oracle pair \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation (\autoref{def:interpolation-minima}) if \oracle{} is unbiased and 
+    \[ f(\w, \z ) \geq f(\wopt) \; \forall \w \in \R^d,  \quad \forall \z \in \calZ. \]
 \end{restatable}
 \todo{Expand this section on identifying/establishing interpolation conditions}\\
 \todo{Minimizer interpolation is the most natural. Expand on this?}
@@ -147,7 +157,7 @@ In the general setting of SFOs, the follow lemma establishes simple conditions f
 
 Interpolation is directly related to the idea of placing \emph{growth conditions} on the stochastic gradients.
 Informally, growth conditions are a class of regularity condition that constrain the noise in \( \grad(v, \wk) \) in terms of the objective \( f \).
-For example, the following condition was used as early as the classical analysis of stochastic optimization algorithms by \citet{poljak1973pseudogradient}, and continues to appear in current work~\ref{bertsekas2000gradient, khaled2020better}  
+For example, the following condition was used as early as the classical analysis of stochastic optimization algorithms by \citet{poljak1973pseudogradient}, and continues to appear in current work~\citep{bertsekas2000gradient, khaled2020better}  
 \[ \Ek \sbr{\norm{\grad(v, \zk)}^2} \leq \rho \norm{\grad(v)}^2 + \sigma^2,  \]
 where \( \rho, \sigma \geq 0 \).
 \citet{tseng1998incremental} and \citet{solodov1998incremental} strengthened this condition to require the maximum stochastic gradient norm to be almost surely bounded by the true gradient.
@@ -155,23 +165,31 @@ Following~\citet{khaled2020better}, we call this condition maximal strong growth
 \begin{definition}[Maximal Strong Growth]~\label{def:maximal-sg}
     A function-oracle pair \( \rbr{f, \oracle{}} \) satisfies maximal strong growth if  
     \begin{align*}
-        \max_{k \geq 0} \norm{\grad(\w, \zk)}^2 \leq \rho \norm{\grad(x)}^2, 
+        \norm{\grad(\w, \zk)}^2 \leq \rho \norm{\grad(x)}^2, 
     \end{align*}
-    holds almost surely for all \( \w \in \R^d \). 
+    holds for all \( \w \in \R^d \) and \( \z \in \calZ \).
 \end{definition}
+This condition is called \emph{maximal} strong growth because it implies 
+    \[ \max_{E} \int_{E} \norm{\grad(\w, \zk)}^2 d\mu_k(\z) \leq \rho \norm{\grad(\w)}, \]
+    where \( E \) is any event with non-zero probability under the measure \( \mu_k \). 
 A relaxed version of this condition called strong growth was proposed by \citet{vaswani2019fast}.
 \begin{definition}[Strong Growth]\label{def:sgc}
     A function-oracle pair \( \rbr{f, \oracle{}} \) satisfies strong growth with parameter \(\rho \) if
-    \[ \Ek \sbr{\norm{\grad(\w, \z)}^2} \leq \rho \norm{\grad(\w)}^2, \]
+    \[ \Ek \sbr{\norm{\grad(\w, \zk)}^2} \leq \rho \norm{\grad(\w)}^2, \]
     holds for all \( k \geq 0 \) and \( \w \in \R^d \).
 \end{definition}
 It is straightforward to show that strong growth is indeed a weaker condition than maximal strong growth, which we do in the following lemma.
 \begin{restatable}[Formulations of Strong Growth]{lemma}{sgcRelationships}\label{thm:sgc-relationships}
     Let \( \rbr{f, \oracle{}} \) be a function-oracle pair. 
     If \( \rbr{f, \oracle{}} \) satisfies maximal strong growth (\autoref{def:maximal-sg}), then it also satisfies strong growth (\autoref{def:sgc}).
-    However, strong growth does not imply maximal strong growth for a general SFO \oracle{}. 
-    If we further assume that the support set \( \calZ \) is finite, then the strong growth and maximal strong growth conditions are equivalent. 
+    However, strong growth does not imply maximal strong growth for a general \oracle{}.  
 \end{restatable} 
+A simple sufficient condition for the equivalence of maximal strong and strong growth is that the support set \( \calZ \) for the SFO is finite.
+\begin{restatable}{lemma}{sgcFiniteSupport}\label{thm:sgc-finite-support}
+    Let \( \rbr{f, \oracle{}} \) be a function-SFO pair satisfying the strong growth condition with constant \( \rho \).
+    Moreover, assume \oracle{} is such that the support set \( \calZ \) is finite and each \( \zk \) admits probability mass function \( p_k \). 
+    Then \( \rbr{f, \oracle{}} \) also satisfies maximal strong growth.
+\end{restatable}
 A relaxed version of the strong growth condition is the weak growth condition, which was recently proposed by \citet{vaswani2019fast}.
 \begin{definition}[Weak Growth Condition]\label{def:wgc}
     A function-oracle pair \( \rbr{f, \oracle{}} \) satisfies weak growth with parameter \(\rho \) if
@@ -187,7 +205,6 @@ We now elucidate the exact relationship between interpolation, strong growth, an
     Then \( \rbr{f, \oracle{}} \) satisfies the weak growth condition with parameter
     \[ \rho = \frac{L_{\text{max}}}{L}. \]
 \end{restatable}
-
 
 \begin{restatable}[Interpolation and Strong Growth]{lemma}{interpToSGC}~\label{thm:interpolation_to_sgc}
     Let \( f \) be an \( L \)-smooth function and \oracle{} an \( \Lmax \) individually-smooth SFO.

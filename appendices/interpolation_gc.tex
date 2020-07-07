@@ -5,109 +5,133 @@
 \indSmoothToSmooth*
 \begin{proof}
 \begin{align*}
-    f(v, \zk) &\leq f(\w, \zk) + \abr{\grad(\w, \zk), v - \w} + \frac{L_\z}{2} \norm{v - \w}^2\\
+    f(v, \zk) &\leq f(\w, \zk) + \abr{\grad(\w, \zk), v - \w} + \frac{\Lk}{2} \norm{v - \w}^2\\
     \implies \Ek \sbr{f(v, \zk)} &\leq \Ek \sbr{f(\w, \zk)} + \abr{\E\sbr{\grad(\w, \zk)}, v - \w} + \frac{\Lmax}{2} \norm{v - \w}^2\\
     \implies f(v) &\leq \abr{\grad(\w), v - w} + \frac{\Lmax}{2}\norm{v - \w}^2. 
 \end{align*}
-Alternatively, it is straightforward to establish that \( \Ek wsbr{f(\cdot, \zk)} \) is \( L \)-smooth with \( L \leq \Lmax \) when the SFO is biased but \( \calZ \) is finite.
+Alternatively, it is straightforward to establish that \( \Ek \sbr{f(\cdot, \zk)} \) is \( L \)-smooth with \( L \leq \Lmax \) when the SFO is biased but \( \calZ \) is finite.
+Let's do this now as follows:
 \begin{align*}
-    f(v, \zk) &\leq f(\w, \zk) + \abr{\grad(\w, \zk), v - \w} + \frac{L_\z}{2} \norm{v - \w}^2\\
+    f(v, \zk) &\leq f(\w, \zk) + \abr{\grad(\w, \zk), v - \w} + \frac{\Lk}{2} \norm{v - \w}^2\\
     \implies \Ek \sbr{f(v, \zk)} &\leq \Ek \sbr{f(\w, \zk)} + \abr{\E\sbr{\grad(\w, \zk)}, v - \w} + \frac{\Lmax}{2} \norm{v - \w}^2\\
                                  &\leq \Ek \sbr{f(\w, \zk)} + \abr{\nabla \E\sbr{f(\w, \zk)}, v - \w} + \frac{\Lmax}{2} \norm{v - \w}^2,
 \end{align*}
-where the order of the gradient and expectation operators can be exchanged by the dominated convergence theorem.
+where the order of the gradient and expectation operators was exchanged by appealing to the dominated convergence theorem.
 \end{proof}
+
+\subsection{Interpolation}~\label{app:interpolation}
 
 \interpRelationships*
 \begin{proof}
-    \( (\autoref{def:interpolation_minima} \implies \autoref{def:interpolation_minima_to_gradients}) \)
-    The stochastic functions \( f(\w,\z) \) are minimized at \( \wopt \) for all \( \z \in \calZ \) and thus \( \grad(\wopt, \z) = 0 \forall \z \in \calZ \).\\
+    \( \rbr{\text{Minimizer Interpolation} \implies \text{Mixed Interpolation}} \)\\
+    The stochastic functions \( f(\w, \z) \) are minimized at \( \wopt \) for all \( \z \in \calZ \).
+    First-order optimality conditions now imply \( \grad(\wopt, \z) = 0 \).\hfill \break
 
-    \( (\autoref{def:interpolation_minima_to_gradients} \centernot \implies \autoref{def:interpolation_minima}) \), \(
-    (\autoref{def:interpolation_gradients} \centernot \implies \autoref{def:interpolation_minima}) \)
+    \( \rbr{\text{Stationary-Point Interpolation} \implies \text{Mixed Interpolation}} \)\\
+    Suppose \( \wopt \) is a global minimizer of \( f \). 
+    First-order optimality conditions imply \( \wopt \) is a stationary point \( f \).
+    Stationary-point interpolation now implies \( \wopt \) is a stationary point of \( f(\cdot, \z) \) for all \( \z \in \calZ \).\hfill \break
+
+    \( \rbr{ \text{Mixed Interpolation, Stationary-Point Interpolation} \centernot \implies \text{Minimizer Interpolation}} \)\\
     We construct a simple counter example.
-    Consider the finite-sum function
-    \[ f(\w) = f_1(\w) + f_2(\w) = 3\w^2 - \w^2. \]
-    The ``sub-functions'' are stationary at the global minimum of \( f(0) = 0 \), but \( f_2(\w) \) is maximized at this point.\\
+    Define the finite-sum function
+    \[ f(\w) = \half \rbr{f_1(\w) + f_2(\w)} = \frac{3}{2}\w^2 - \half\w^2, \]
+    and consider the standard mini-batch oracle \oracle{} which returns
+    \[ f(\w, \zk) = f_{\zk}(\w) \quad \quad \grad(\wk, \zk) = \grad_{\zk}(\w), \] 
+    where \( \zk \) is supported on \( \cbr{1,2} \).
+    The stochastic functions \( f_1 \) and \( f_2 \) are stationary at the global minimum \( f(0) = 0 \), but \( f_2 \) is maximized at this point.
+    So, both stationary-point and mixed interpolation hold, but minimizer interpolation does not.\hfill \break
 
-    \( (\autoref{def:interpolation_minima} \centernot \implies \autoref{def:interpolation_gradients}) \) This also follows from a simple finite-sum function.
+    \( \rbr{\text{Minimizer Interpolation} \centernot \implies \text{Gradient Interpolation}} \)\\
+    This also follows from a simple finite-sum function.
     Consider
-    \[ f(\w) = f_1(\w) + f_2(\w) = - \cos(\w) - \cos(\frac{\w}{2}). \]
+    \[ f(\w) = \half \rbr{f_1(\w) + f_2(\w)} = -\half \cos(\w) - \half \cos(\frac{\w}{2}), \]
+    and define the standard mini-batch oracle \oracle{} as above.
     The global minimizers of \( f \) are \(\calX_0 = \cbr{\rbr{-1}^{t} (4\pi) t : t \in \cbr{0,1, \dots }} \).
-    Furthermore, the sub-functions \( f_1(\w) \) and \( f_2(\w) \) are also globally minimized at every point in \( \calX_0 \).
-    However, \( f \) has infinitely many stationary points which are not stationary points of \( f_1 \) or \( f_2 \).\\
+    The stochastic functions \( f_1(\w) \) and \( f_2(\w) \) are also globally minimized at every point in \( \calX_0 \), so minimizer interpolation holds.
+    However, stationary-point interpolation does not hold as \( f \) has infinitely many stationary points which are not stationary points of \( f_1 \) or \( f_2 \). \hfill \break
 
-    Now, suppose \( f \) is invex. The equivalence of all three definitions follows immediately, since all stationary points of invex functions are global minima.
+    Finally, suppose \oracle{} is such that \( f(\cdot, \z) \) is invex for \( \z \in \calZ \).
+    The equivalence of all three definitions follows immediately, since all stationary points of invex functions are global minima.
 \end{proof}
 
 \boundedBelow*
 \begin{proof}
-    Since \( f(\w, \z ) \geq f(\wopt) \), the optimality gap \( f(\w,\z) - f(\wopt) \) must be non-negative for all \( \w \) and \( \z \).
-    Since the stochastic functions are unbiased,
+    Since \( f(\w, \z ) \geq f(\wopt) \), the optimality gap \( f(\w, \z) - f(\wopt) \) must be non-negative for all \( \w \) and \( \z \).
+    Using the fact that \oracle{} is unbiased, 
     \begin{align*}
-        \E \sbr{f(\wopt,\z) - f(\wopt)} = 0,
+        \Ek \sbr{f(\wopt, \z) - f(\wopt)} = f(\wopt) - f(\wopt) = 0,
     \end{align*}
-    and it must be that \( f(\wopt,\z) - f(\wopt) = 0 \) almost surely.
-    Moreover, \( f(\wopt) = f(\wopt,\z) \leq f(\w, \z) \) for all \( \w \in \R^d \) almost surely, which completes the proof.
+    and thus \( f(\wopt, \z) = f(\wopt) \) point-wise over \( \calZ \). 
+    We obtain \( f(\w, \z) \geq f(\wopt) = f(\wopt, \z) \) for all \( \w \in \R^d \), which implies \( \wopt \) is a global minimizer of \( f(\cdot, \z) \).
+    That is, \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation.
 \end{proof}
 
+\subsection{Growth Conditions}~\label{app:growth-conditions}
 
 \sgcRelationships*
 \begin{proof}
-    \( \rbr{\Longrightarrow} \) Assume that \autoref{eq:tseng_gc} holds.
+    Suppose that \( \rbr{f, \oracle{}} \) satisfy maximal strong growth with constant \( \rho_{\text{max}} \).
     Then,
     \begin{align*}
-        \E \sbr{\norm{\grad(\w,\z)}^2 } &\leq \E \sbr{\max_{\z \in \calZ} \norm{\grad(\w,\z)}^2 } \leq \rho \norm{\grad(\w)}^2,
+        \Ek \sbr{\norm{\grad(\w, \zk)}^2 } &\leq \Ek \sbr{\rho_{\text{max}} \norm{\grad(\w)}^2} \\
+                                           &= \rho_{\text{max}} \norm{\grad(\w)}^2,
     \end{align*}
-    which completes the forward direction.\\
-    \( \rbr{\Longleftarrow} \) Assume that SGC holds and \( \calZ \) is finite with probability mass function \( p(\z) \).
-    In this case, SGC is
+    which completes the forward direction. \hfill \break
+   
+    Now, let us show that there are function-oracle pairs which satisfy strong growth, but not maximal strong growth. 
+    Let \( f(w) = \half w^2 \) and consider \oracle{} such that \( \zk \sim \calN(1,1) \), 
+    \[ f(\w, \zk) =  \frac{\zk}{2} w^2 \; \text{and} \; \grad(\w, \zk) = \zk \cdot w, \]
+    for all \( k \).
+    A simple calculation shows that this oracle is unbiased, 
     \begin{align*}
-        \rho \norm{\grad(\w, \z)}^2 \geq
-        \E \sbr{\norm{\grad(\w,\z)}^2 } &= \sum_{\z_i \in \calZ} \norm{\grad(\w,\z_i)}^2 p(\z_i)\\
-        &\geq \norm{\grad(\w,\z_i)}^2 p(\z_i),
-        \intertext{for all \( \z_i \in \calZ \). Furthermore, for \( \z_i \) such that \( p(\z_i) > 0 \) }
-        \frac{\rho}{ p(\z_i)} \norm{\grad(\w, \z)}^2 &\geq \norm{\grad(\w,\z_i)}^2\\
-        \implies \max \cbr{\norm{\grad(\w,\z_i)}^2 : \z_i \in \calZ, p(\z_i) > 0 } &\leq \frac{\rho}{p_{\text{min}}} \norm{\grad(\w, \z)}^2,
-    \end{align*}
-    where \( p_{\text{min}} = \min \cbr{p(\z_i) : \z_i \in \calZ, p(\z_i) > 0 } \).
-    We conclude that \autoref{eq:tseng_gc} holds almost surely with \(\rho' = \sfrac{\rho}{p_{\text{min}}}\).
-    Now, consider when \( \calZ \) is allowed to be infinite.
-    Let \( f(w) = w \) and choose \( \calZ = \sbr{0,1} \) with probability density function \( p(\z) = \frac{\z}{2} \).
-    Finally, let
-    \[ f(\w, \z) = \frac{2 \w}{\z} \; \text{and} \; \grad(\w, \z) = \frac{2}{\z}. \]
-    A simple calculation shows that the stochastic function and gradient evaluations are unbiased,
-    \begin{align*}
-        \E \sbr{f(\w, \z)} &= \int_{0}^1 \frac{2\w}{\z} \frac{\z}{2} d\z = \int_{0}^1 \w d\z = w\\
-        \E \sbr{\grad(\w, \z)} &= \int_{0}^1 \frac{2}{\z} \frac{\z}{2} d\z = \int_{0}^1 1 d\z = 1.\\
-    \end{align*}
-    However, as \( \z \into 0 \), the norm \( \norm{\grad(\w, \z)}^2 \into \infty \) and so \autoref{eq:tseng_gc} does not hold almost surely for finite \( \rho \).
+        \Ek \sbr{f(\w, \zk)} &= \Ek\sbr{\frac{\zk}{2} w^2} = \half w^2 \\
+        \Ek \sbr{\grad(\w, \zk)} &= \Ek\sbr{\zk \cdot w} = w. 
+        \intertext{It is also trivial to verify that strong growth holds with \( \rho =2 \), }
+        \Ek \sbr{\norm{\grad(\w, \zk)}^2} &= \Ek\sbr{\zk^2 w^2} = 2 w^2. 
+    \end{align*}   
+    For maximal strong growth to hold, we require
+    \[ \zk^2 \cdot w^2 \leq c \cdot w^2 \implies \zk^2 \leq c, \] 
+    almost surely.
+    But, \( \zk^2 > c \) with non-zero probability for any \( c \in \R \) and so maximal strong growth does not hold for \( \rbr{f, \oracle{}} \).
 \end{proof}
 
+\sgcFiniteSupport*
+\begin{proof} 
+    We have
+    \begin{align*}
+        \rho \norm{\grad(\w)}^2 \geq \Ek \sbr{\norm{\grad(\w, \zk)}^2 } &= \sum_{\z \in \calZ} \norm{\grad(\w,\z)}^2 \, p_{k}(\z)\\
+                                                                            &\geq \norm{\grad(\w,\z)}^2 \, p_{k}(\z),
+    \intertext{ for all \( z \in \calZ \). For \( \tilde \z \in \calZ \) such that \( p_k(\tilde \z) > 0 \), }
+    \frac{\rho}{p_k(\tilde \z)} \norm{\grad(\w)}^2 &\geq \norm{\grad(\w,\tilde \z)}^2\\
+    \implies  \frac{\rho}{p_k^*} \norm{\grad(\w)}^2 &\geq \max \cbr{\norm{\grad(\w, \tilde \z)}^2 : p(\tilde z) > 0}, 
+\end{align*}
+where \( p_k^* = \min \cbr{p_k(\tilde \z) : p_k(\z) > 0 } \).
+We conclude that maximal strong growth holds with \(\rho' = \max_k \frac{\rho}{p^*_{k}}\).
+\end{proof}
 
 \interpToWGC*
 \begin{proof}
-    Starting from \( L_{\z} \)-smoothness of \( f(\cdot, \z) \),
+    Starting from \( \Lk \)-smoothness of \( f(\cdot, \zk) \),
     \begin{align*}
-        f(u, \z) &\leq f(\w, \z) + \abr{\grad(\w, \z), u - \w} + \frac{L_\z}{2}\norm{u - \w}^2\\
-        \intertext{Choosing \( u = \w - \frac{1}{L_\z}\grad(\w, \z) \),}
-        f(u, \z) &\leq f(\w, \z) - \frac{1}{L_{\z}}\abr{\grad(\w, \z), \grad(\w,\z)} + \frac{L_\z}{2L^2_\z}\norm{\grad(\w,\z)}^2\\
-        &= f(\w, \z) - \frac{1}{2L_{\z}}\norm{\grad(\w,\z)}^2.\\
-        \intertext{Letting \( L_{\text{max}} = \max \cbr{L_\z : \z \in \calZ} \) gives }
-        f(u, \z) &\leq f(\w, \z) - \frac{1}{2L_{{\text{max}}}}\norm{\grad(\w,\z)}^2.\\
-        \intertext{Noting that \( f(u,\z) \geq f(\wopt) \) by interpolation and then taking expectations w.r.t \( \z \) gives the following:}
-        f(\wopt, \z) &\leq f(\w, \z) - \frac{1}{2L_{{\text{max}}}}\norm{\grad(\w,\z)}^2.\\
-        \implies f(\wopt) &\leq f(\w) - \frac{1}{2L_{{\text{max}}}}\E \norm{\grad(\w,\z)}^2.\\
-        \implies \E \norm{\grad(\w,\z)}^2 &\leq 2 L_{\text{max}} \rbr{f(\wopt) - f(\w)}.
+        f(u, \zk) &\leq f(\w, \zk) + \abr{\grad(\w, \zk), u - \w} + \frac{\Lk}{2}\norm{u - \w}^2\\
+        \intertext{Choosing \( u = \w - \frac{1}{\Lk}\grad(\w, \zk) \),}
+        f(u, \zk) &\leq f(\w, \zk) - \frac{1}{\Lk}\abr{\grad(\w, \zk), \grad(\w,\zk)} + \frac{\Lk}{2L^2_\z}\norm{\grad(\w,\zk)}^2\\
+        &= f(\w, \zk) - \frac{1}{2\Lk}\norm{\grad(\w,\zk)}^2.\\
+        &\leq f(\w, \zk) - \frac{1}{2\Lmax}\norm{\grad(\w,\zk)}^2.\\
+        \intertext{Noting that \( f(u,\zk) \geq f(\wopt) \) by interpolation and then taking the expectation with respect to \( \zk \) gives the following:}
+        f(\wopt, \zk) &\leq f(\w, \zk) - \frac{1}{2\Lmax}\norm{\grad(\w,\zk)}^2.\\
+        \implies f(\wopt) &\leq f(\w) - \frac{1}{2\Lmax}\E \norm{\grad(\w,\zk)}^2.\\
+        \implies \E \norm{\grad(\w,\zk)}^2 &\leq 2 L_{\text{max}} \rbr{f(\wopt) - f(\w)}.
     \end{align*}
-    We conclude that WGC holds with \( \rho = \frac{L_{\text{max}}}{L} \).
+    We conclude that weak growth holds with \( \rho = \frac{\Lmax}{L} \).
 \end{proof}
 
 \interpToSGC*
 \begin{proof}
-    \autoref{thm:interp_to_wgc} implies that \( f \) satisfies WGC with parameter
+    \autoref{thm:interpolation-to-wgc} implies that \( f \) satisfies the weak growth condition with parameter
     \[ \rho' = \rho = \frac{L_{\text{max}}}{L}. \]
-    \citet[Proposition 1]{vaswani2019fast} implies that \( f \) satisfies the SGC with parameter
+    \citet[Proposition 1]{vaswani2019fast} now implies that \( f \) satisfies strong growth with parameter
     \[ \rho = \frac{\rho' L}{\mu} = \frac{L_{\text{max}}}{\mu}.  \]
     This concludes the proof.
 \end{proof}
