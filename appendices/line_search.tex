@@ -1,6 +1,6 @@
 %! TEX root = ../main.tex
 
-\section{Line Search: Proofs}~\label{app:line-search}
+\chapter{Line Search: Proofs}~\label{app:line-search}
 
 \stepSizeBound*
 \begin{proof}
@@ -33,13 +33,7 @@
     This completes the proof.
 \end{proof}
 
-\begin{restatable}{lemma}{lsIntermediate}~\label{lemma:ls-intermediate}
-    Let \( f \) be a convex, \( L \)-smooth function.
-    Moreover, suppose that the stochastic function \( f(\cdot, \z) \) is individually smooth. 
-    Then stochastic gradient descent using the Armijo line-search with \( c \geq \half \) satisfies the following
-    inequality:
-    \[ f(\wk)- f(\wopt) \leq \max\cbr{\frac{\Lmax}{2(1-c)},\inv{\etamax}} \rbr{\norm{\wk - \wopt}^2 - \E_{\zk}\sbr{\norm{\wkk - \wopt}^2}}. \]
-\end{restatable}
+\lsIntermediate*
 \begin{proof}
    \begin{align*}
        \norm{\wkk - \wopt}^2 &= \norm{\wk - \etak \grad(\wk, \zk) - \wopt}^2\\
@@ -49,7 +43,7 @@
                              &\leq \etak\rbr{\etak - \frac{1}{\Lk}}\norm{\grad(\wk, \zk)}^2 - 2 \etak \rbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2.
                              \intertext{Our analysis now proceeds in cases on \( \etak \).  }
                              \intertext{\textbf{Case 1}: \( \etak \leq \frac{1}{\Lk} \). Then \( \etak\rbr{\etak - \frac{1}{\Lk}}\norm{\grad(\wk, \zk)}^2 \leq 0 \), }
-       \implies \norm{\wkk - \wk}^2 &\leq - 2 \etak \rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2\\
+       \implies \norm{\wkk - \wk}^2 &\leq - 2 \etak \rbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2\\
                                     &\leq - 2 \min\cbr{\frac{2(1-c)}{\Lk}, \etamax} \rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2.
        \intertext{\textbf{Case 2}: \( \etak > \frac{1}{\Lk} \). Then \( \etak\rbr{\etak - \frac{1}{\Lk}}\norm{\grad(\wk, \zk)}^2 \geq 0 \) and we may apply \autoref{lemma:step-size-bound} to obtain} 
       \norm{\wkk - \wopt}^2 &\leq \rbr{\frac{\etak}{c} - \frac{1}{c \Lk}} \rbr{f(\wk, \zk) - f(\wopt, \zk)} - 2 \etak \rbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2\\
@@ -69,7 +63,7 @@
    \end{align*} 
 \end{proof}
 
-\subsection{Convergence for Strongly-Convex Functions}~\label{app:sc-line-search}
+\section{Convergence for Strongly-Convex Functions}~\label{app:sc-line-search}
 
 \scLineSearch*
 \begin{proof}
@@ -87,7 +81,7 @@
    \end{align*} 
 \end{proof}
 
-\subsection{Convergence for Convex Functions}~\label{app:convex-line-search}
+\section{Convergence for Convex Functions}~\label{app:convex-line-search}
 
 \convexLineSearch*
 \begin{proof}
@@ -103,7 +97,7 @@
     \end{align*}
 \end{proof}
 
-\subsection{Convergence for Non-Convex Functions}~\label{app:non-convex-line-search}
+\section{Convergence for Non-Convex Functions}~\label{app:non-convex-line-search}
 
 \nonConvexLineSearch*
 \begin{proof}

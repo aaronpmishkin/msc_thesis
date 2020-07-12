@@ -1,8 +1,8 @@
 %! TEX root = ../main.tex
 
-\section{SGD: Proofs}~\label{app:sgd}
+\chapter{SGD: Proofs}~\label{app:sgd}
 
-\subsection{Convergence for Strongly Convex Functions}~\label{app:sgd-sc}
+\section{Convergence for Strongly Convex Functions}~\label{app:sgd-sc}
 
 \begin{restatable}{lemma}{sgcDecreaseCondition}~\label{lemma:sgc-decrease-condition}
     Let \( f \) be an \( L \)-smooth function satisfying the strong growth condition with parameter \( \rho \).
@@ -33,9 +33,9 @@
        \implies \Ek \sbr{\norm{\wkk - \wopt}^2} &= \eta^2 \Ek \sbr{\norm{\grad(\wk, \zk)}^2} - 2 \eta \Ek \sbr{\abr{\grad(\wk, \zk), \wk - \wopt}} + \norm{\wk - \wopt}^2\\
                                       &= \eta^2 \Ek \sbr{\norm{\grad(\wk, \zk)}^2} - 2 \eta \abr{\grad(\wk), \wk - \wopt} + \norm{\wk - \wopt}^2.
                                       \intertext{Now we use the strong growth condition to control \( \Ek \sbr{\norm{\grad(\wk, \zk)}^2} \), which yields}
-       \Ek\sbr{\norm{\wkk - \wk}^2} &\leq \eta^2 \rho \norm{\grad(\wk)}^2 - 2 \eta \abr{\grad(\wk), \wk - \wopt} + \norm{\wk - \wopt}^2.
+       \Ek\sbr{\norm{\wkk - \wopt}^2} &\leq \eta^2 \rho \norm{\grad(\wk)}^2 - 2 \eta \abr{\grad(\wk), \wk - \wopt} + \norm{\wk - \wopt}^2.
                                       \intertext{Coercivity of the gradient (\autoref{lemma:coercivity}) implies}
-       \Ek\sbr{\norm{\wkk - \wk}^2} &\leq \eta^2 \rho \norm{\grad(\wk)}^2 - 2 \eta \rbr{\frac{\mu L }{\mu + L} \norm{\wk - \wopt}^2 + \frac{1}{\mu + L}\norm{\grad(\wk)}^2} + \norm{\wk - \wopt}^2\\
+       \Ek\sbr{\norm{\wkk - \wopt}^2} &\leq \eta^2 \rho \norm{\grad(\wk)}^2 - 2 \eta \rbr{\frac{\mu L }{\mu + L} \norm{\wk - \wopt}^2 + \frac{1}{\mu + L}\norm{\grad(\wk)}^2} + \norm{\wk - \wopt}^2\\
                                    &= \eta \rbr{\eta \rho  - \frac{2}{\mu + L}}\norm{\grad(\wk)}^2 + \rbr{1 - \frac{2 \eta \mu L}{\mu + L}}\norm{\wk - \wopt}^2.
                                    \intertext{If \( \eta \leq \frac{2}{\rho \rbr{\mu + L}} \) then \( \eta \rho - \frac{2}{\mu + L} \leq 0 \) and we obtain}
        \Ek \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \frac{2 \eta \mu L}{\mu + L}}\norm{\wk - \wopt}^2.
@@ -53,19 +53,20 @@
                              &= \norm{\wkk - \wk}^2 + 2 \abr{\wkk - \wk, \wk - \wopt} + \norm{\wk - \wopt}^2\\
                              &= \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \abr{\grad(\wk, \zk), \wk - \wopt} + \norm{\wk - \wopt}^2.
                             \intertext{Coercivity of the stochastic gradient (\autoref{lemma:coercivity}) implies}
-        \norm{\wkk - \wk}^2 &\leq \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \rbr{\frac{\mu_\z L_\z }{\mu_\z + L_\z} \norm{\wk - \wopt}^2 + \frac{1}{\mu_\z + L_\z}\norm{\grad(\wk, \zk)}^2} \\ & \hspace{2cm} + \norm{\wk - \wopt}^2\\
-                            &\leq \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \rbr{\frac{\mumin \Lmin }{\mumax + \Lmax} \norm{\wk - \wopt}^2 + \frac{1}{\mumax + \Lmax}\norm{\grad(\wk, \zk)}^2} \\ & \hspace{2cm} + \norm{\wk - \wopt}^2\\
-                                   &= \eta \rbr{\eta - \frac{2}{\mumax + \Lmax}}\norm{\grad(\wk, \zk)}^2 + \rbr{1 - \frac{2 \eta \mumin \Lmin}{\mumin + \Lmax}}\norm{\wk - \wopt}^2.
+        \norm{\wkk - \wopt}^2 &\leq \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \rbr{\frac{\mu_\z L_\z }{\mu_\z + L_\z} \norm{\wk - \wopt}^2 + \frac{1}{\mu_\z + L_\z}\norm{\grad(\wk, \zk)}^2} \\ & \hspace{2cm} + \norm{\wk - \wopt}^2\\
+        \intertext{Let \( \delta = \max_{z \in \calZ} \frac{\mu_z L_z}{\mu_z + L_\z} \). Then we have} 
+        \norm{\wkk - \wopt}^2 &\leq \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \rbr{\delta \, \norm{\wk - \wopt}^2 + \frac{1}{\mumax + \Lmax}\norm{\grad(\wk, \zk)}^2} \\ & \hspace{2cm} + \norm{\wk - \wopt}^2\\
+                                   &= \eta \rbr{\eta - \frac{2}{\mumax + \Lmax}}\norm{\grad(\wk, \zk)}^2 + \rbr{1 - 2 \eta \, \delta}\norm{\wk - \wopt}^2.
                                    \intertext{If \( \eta \leq \frac{2}{\rbr{\mumax + \Lmax}} \) then \( \eta - \frac{2}{\mumax + \Lmax} \leq 0 \) and we obtain}
-       \norm{\wkk - \wopt}^2 &\leq \rbr{1 - \frac{2 \eta \mumin \Lmin}{\mumax + \Lmax}}\norm{\wk - \wopt}^2.
+       \norm{\wkk - \wopt}^2 &\leq \rbr{1 - 2 \eta \, \delta}\norm{\wk - \wopt}^2.
        \intertext{Recursing on this inequality,}
-       \implies \norm{\wkk - \wopt}^2 &\leq \rbr{1 - \frac{2 \eta \mumin \Lmin}{\mumax + \Lmax}}^k \norm{\w_0 - \wopt}^2.
+       \implies \norm{\wkk - \wopt}^2 &\leq \rbr{1 - 2 \eta \, \delta}^k \norm{\w_0 - \wopt}^2.
        \intertext{Application of \autoref{lemma:iterate-bounds} completes the proof,}
-       \implies f(\wkk) - f(\wopt) &\leq \frac{L}{\mu} \rbr{1 - \frac{2 \eta \mumin \Lmin}{\mumax + \Lmax}}^k \rbr{f(\w_0) - f(\wopt)}.
+       \implies f(\wkk) - f(\wopt) &\leq \frac{L}{\mu} \rbr{1 - 2 \eta \, \delta}^k \rbr{f(\w_0) - f(\wopt)}.
     \end{align*}
 \end{proof}
 
-\subsection{Convergence for Convex Functions}~\label{app:sgd-convex}
+\section{Convergence for Convex Functions}~\label{app:sgd-convex}
 
 \begin{restatable}{lemma}{convexIntermediate}~\label{lemma:convex-intermediate}
     Let \( f \) be a convex, \( L \)-smooth function.
@@ -148,9 +149,8 @@ Note that this bound is tight with Case 1 since \( 1 + \rho L \rbr{\inv{\Lmax} -
 \end{align*}
 \end{proof}
 
-\todo{Can we prove a final iterate version of this using the strategy in Bubeck's ConvexOpt? If not, can we prove that SGD is not guaranteed to make progress at every iteration even when WGC holds?}
 
-\subsection{Almost Sure Convergence}~\label{app:almost-sure-convergence}
+\section{Almost Sure Convergence}~\label{app:almost-sure-convergence}
 
 \wgcAlmostSure*
 \begin{proof}

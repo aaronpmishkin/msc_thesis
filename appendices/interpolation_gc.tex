@@ -1,8 +1,8 @@
 %! TEX root = ../main.tex
 
-\section{Interpolation and Growth Conditions: Proofs}~\label{app:interpolation-gc}
+\chapter{Interpolation and Growth Conditions: Proofs}~\label{app:interpolation-gc}
 
-\subsection{Stochastic Oracles}~\label{app:stochastic-oracles}
+\section{Stochastic Oracles}~\label{app:stochastic-oracles}
 
 \indSmoothToSmooth*
 \begin{proof}
@@ -21,7 +21,7 @@ Let's do this now as follows:
 where the order of the gradient and expectation operators was exchanged by appealing to the dominated convergence theorem.
 \end{proof}
 
-\subsection{Interpolation}~\label{app:interpolation}
+\section{Interpolation}~\label{app:interpolation}
 
 \interpRelationships*
 \begin{proof}
@@ -69,7 +69,7 @@ where the order of the gradient and expectation operators was exchanged by appea
     That is, \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation.
 \end{proof}
 
-\subsection{Growth Conditions}~\label{app:growth-conditions}
+\section{Growth Conditions}~\label{app:growth-conditions}
 
 \sgcRelationships*
 \begin{proof}
@@ -131,7 +131,7 @@ We conclude that maximal strong growth holds with \(\rho' = \max_k \frac{\rho}{p
 
 \interpToSGC*
 \begin{proof}
-    \autoref{thm:interpolation-to-wgc} implies that \( f \) satisfies the weak growth condition with parameter
+    \autoref{lemma:interpolation-to-wgc} implies that \( f \) satisfies the weak growth condition with parameter
     \[ \rho' = \rho = \frac{L_{\text{max}}}{L}. \]
     \citet[Proposition 1]{vaswani2019fast} now implies that \( f \) satisfies strong growth with parameter
     \[ \rho = \frac{\rho' L}{\mu} = \frac{L_{\text{max}}}{\mu}.  \]

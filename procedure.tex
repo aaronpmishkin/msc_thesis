@@ -1,0 +1,33 @@
+%% Originally written by Frederik Kunstner <kunstner@cs.ubc.ca>
+%% Modified by Aaron Mishkin <amishkin@cs.ubc.ca>
+
+\usepackage{enumitem}
+\usepackage{mdframed}
+\mdfdefinestyle{mdframedprocedure}{%
+    linewidth=0.05em,
+    frametitlerulewidth=0.05em,
+	leftmargin=.1\textwidth,
+	rightmargin=.1\textwidth,
+    frametitlefont=\Large\bfseries,
+	frametitlerule=true,
+	frametitlealignment=\centering,
+	frametitleaboveskip=3ex,
+	frametitlebelowskip=3ex,
+	innertopmargin=\baselineskip,
+    innerbottommargin=\baselineskip,
+	innerleftmargin=.5em,
+	innerrightmargin=1.5em,
+}
+
+\newenvironment{procedure}[1]
+	{%
+        \begin{singlespace}%
+        \large%
+        \begin{mdframed}[style=mdframedprocedure, frametitle={#1}]%
+		\begin{enumerate}[label=\textbf{\arabic*.}, leftmargin=2em]%
+		\setcounter{enumi}{-1} 
+	}{% 
+		\end{enumerate}%
+		\end{mdframed}%
+        \end{singlespace}%
+	}

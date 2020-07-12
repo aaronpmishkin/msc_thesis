@@ -178,6 +178,10 @@
 \usepackage{amsthm}
 \usepackage{centernot}
 \usepackage{bbm}
+\usepackage{empheq}
+\usepackage{paralist}
+\usepackage{multirow}
+\usepackage{makecell}
 
 %% add numbers to align* environments.
 \newcommand{\addnumber}{\addtocounter{equation}{1}\tag{\theequation}}
@@ -315,6 +319,7 @@
 \input{macros}
 %% Include custom commands
 \input{defs}
+\input{procedure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
@@ -465,10 +470,6 @@
 %       Ethics Board's Certificates of Approval)
 %\include{reb-coa}	% pdfpages is useful here
 
-\chapter{Proofs}~\label{app:proofs}
-
-\include{appendices/useful_lemmas}
-
 \include{appendices/interpolation_gc}
 
 \include{appendices/sgd}
@@ -478,6 +479,8 @@
 \include{appendices/acceleration}
 
 \include{appendices/beyond_interpolation}
+
+\include{appendices/useful_lemmas}
 
 \end{singlespace}
 

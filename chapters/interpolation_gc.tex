@@ -32,10 +32,17 @@ This is equivalent to the existence of the following quadratic upper-bound on \(
     f(v) &\geq f(\w) + \abr{\grad(\w), v - \w} + \frac{\mu}{2}\norm{v - \w}^2 &\forall \, \w,v \in \R^d. \tag{\( \mu \)-Strong-Convexity}
 \end{align*}
 Convexity is satisfied for many optimization problems occurring in machine learning, including linear and logistic regression. 
+
 Convexity can be relaxed to a more limited property called invexity.
-Formally, we say \( f \) is invex if all stationary points of \( f \) are also global minimizers,
+Formally, we say \( f \) is invex if all stationary points of \( f \) are also global minimizers of \( f \), meaning
 \[ \grad(\w) = 0 \implies f(\w) \leq f(v) \quad \quad \forall \, v \in \R^d.  \]
-Invexity follows immediately from the definition of convexity given above.
+Invexity is formally weaker than convexity and follows immediately from the first-order conditions for convexity given above.
+The analogue of strong-convexity for invex functions is the Polyak-Łojasiewicz (PL) condition~\citep{karimi2016linear}.
+A function is said to be \( \mu \)-PL if
+\[ \frac{1}{2 \mu} \norm{\grad(\w)}^2 \leq f(\w) - f(\wopt), \]
+holds for all \( \w \in \R^d \).
+The Polyak-Łojasiewicz condition is weaker than strong convexity; a \( \mu \)-strongly-convex function is \( \mu \)-PL, but the converse does not hold.
+
 
 %% Oracle Model
 \subsection{Stochastic Oracles}~\label{sec:stochastic-oracles}
@@ -63,7 +70,6 @@ We will make use of this less cumbersome notation.
 
 Some results will further require that the stochastic function \( f(\cdot, \zk) \) is Lipschitz-smooth in the first argument for all outcomes in \( \calZ \).
 In this case, we say the \oracle{} satisfies \emph{individual smoothness} with parameter \( \Lmax \).
-This is formalized in the following definition.
 \begin{restatable}[Individual Smoothness]{definition}{individuallySmooth}~\label{def:individually-smooth}
     A SFO \oracle{} is called \( \Lmax \) individually-smooth if the stochastic gradient mapping \( \w \mapsto \grad(\w, \z) \) is \( L_{\z} \)-Lipschitz with \( L_{\z} \leq \Lmax \) for all \( \z \in \calZ \).
 \end{restatable}
@@ -76,7 +82,11 @@ Note that the existence of an \( \Lmax \) individually-smooth, unbiased SFO for 
     If there exists an unbiased, \( \Lmax \) individually-smooth SFO \oracle{} for \( f \), then \( f \) is \( L \)-smooth with \( L \leq \Lmax \).
     Alternatively, if \( \oracle{} \) is biased but \( \calZ \) is finite, then \( \Ek \sbr{f(\cdot, \zk)} \) is \( \Lmax \)-smooth for all \( k \). 
 \end{restatable}
-See \autoref{app:stochastic-oracles} for proof. \hfill \break
+See \autoref{app:stochastic-oracles} for proof. 
+In one case, we will also make use of individual strong-convexity.
+\begin{restatable}[Individual Strong-Convexity]{definition}{individuallySC}~\label{def:individually-sc}
+    A SFO \oracle{} is called \( \mumax \) individually-strongly-convex if the stochastic function \( f(\w, \z) \) is \( \mu_{\z} \)-strongly-convex with \( \mu_{\z} \leq \max \) for all \( \z \in \calZ \).
+\end{restatable}
 
 Individually-smooth SFO oracles are wide-spread throughout machine learning in the form of finite-sum functions. 
 Finite-sum functions are a particular class of structured optimization problem where the objective \( f \) is the sum of \( n \) sub-functions. 
@@ -135,6 +145,7 @@ This is stated in the following lemma.
 \end{restatable}
 This result follows immediately from first-order optimality conditions and the equivalence of stationary points and global minimizers for invex functions.
 For completeness, a short proof with counter-examples for the implications which do not hold is given in \autoref{app:interpolation-gc}.
+
 
 \begin{figure}[]
     \centering
@@ -230,12 +241,10 @@ The reverse implications are more involved; we establish them formally in the fo
 
 \begin{restatable}[Interpolation and Strong Growth]{lemma}{interpToSGC}~\label{lemma:interpolation_to_sgc}
     Let \( f \) be an \( L \)-smooth function and \oracle{} an \( \Lmax \) individually-smooth SFO.
-    Furthermore, assume that \( \rbr{f, \oracle{}} \) satisfies interpolation.
+    Furthermore, assume that \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation.
     If \( f \) also satisfies the Polyak-Łojasiewicz condition with parameter \( \mu \), then \( \rbr{f, \oracle{}} \) satisfies the strong growth condition with parameter
     \[ \rho = \frac{L_{\text{max}}}{\mu}. \]
 \end{restatable}
-Note that the Polyak-Łojasiewicz implies \( f \) is invex and thus minimizer, stationary-point, and mixed interpolation are equivalent conditions, which we simply refer to as interpolation.
-This convention will be continued in the following chapters.
 
-
+\todo{Strong and weak growth seems sufficient for almost-sure convergence when support-set is finite? That's weird}
 \todo{Define the PL condition in the preliminaries.}

@@ -31,6 +31,7 @@ The following lemma formalizes these observations into a version of weak growth 
 \end{restatable}
 See \autoref{app:beyond-interpolation} for proof.
 
+\section{Convergence for \( L_2 \)-Regularized Convex Functions}~\label{sec:regularized-convex}
 
 \begin{restatable}{theorem}{sgdReguarlizedWGC}\label{thm:sgd-regularized-wgc}
     Let \( f \) be a \( \mu \)-strongly-convex (with \( \mu = 0 \) in the convex case), \( L \)-smooth function with at least one finite minimizer \( \wbar \) and \( \oracle{} \) a SFO such that the pair \( \rbr{f, \oracle{}} \) satisfies the weak growth condition with constant \( \rho \).
@@ -38,4 +39,4 @@ See \autoref{app:beyond-interpolation} for proof.
     \[  \E\sbr{\norm{\wkk - \wopt}^2} \leq \rbr{1 - \frac{2 \eta (\mu + \lambda)(L + \lambda)}{(\mu + \lambda) + (L + \lambda)}}^k \norm{\w_0 - \wopt}^2 + \frac{\gamma}{2}\rbr{\lambda \norm{\wbar}^2 - \rbr{\lambda + \mu}\norm{\wopt - \wbar}^2}, \]
     where \( \gamma = \frac{\eta \max\cbr{\rho L, \lambda} \sbr{(\mu + \lambda) + (L + \lambda)}}{(\mu + \lambda)(L + \lambda)}. \)  
 \end{restatable}
-
+See \autoref{app:regularized-convex} for proof.

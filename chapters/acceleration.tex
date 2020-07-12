@@ -2,10 +2,72 @@
 
 \chapter{Acceleration}~\label{ch:acceleration}
 
+The focus in Chapters~\ref{ch:sgd} and~\ref{ch:line-search} was on relatively simple first-order methods: SGD with a fixed step-size and with a stochastic line-search, respectively.
+Now, we move on to a more complicated algorithm which is guaranteed faster rates of convergence in the deterministic setting.
+The last first-order method which is analyzed in this work is Nesterov's famous accelerated gradient method (AGD)~\cite[Eq. 2.2.20]{nesterov2004lectures}.
+First, a small degree of background for accelerated methods is developed, with a particular focus on why stochastic acceleration is an interesting question for oracles satisfying interpolation.
+Then, the following convergence results are established for stochastic AGD:
+\begin{enumerate}
+    \item \( O\rbr{\exp\cbr{- \sqrt{\frac{\mu}{\rho L}} \, K}} \) convergence for strongly convex \( f \) when \( \rbr{f, \oracle{}} \) satisfies strong growth; this rate is tight with the deterministic analysis when \( \rho = 1 \).
+    \item \( O(\frac{1}{K^2}) \)  convergence for convex \( f \) when \( \rbr{f, \oracle{}} \) satisfies strong growth; again, this rate is tight with AGD for deterministic oracles when \( \rho = 1 \).
+\end{enumerate}
+The chapter ends with a brief discussion of acceleration under the weak growth condition, which is an open question.
+
+Recall that Theorems~\ref{thm:sgc-convex} and~\ref{thm:wgc-convex} established fast linear and sub-linear convergence rates for SGD that were comparable with analyses for deterministic problems (e.g. gradient descent).
+Unfortunately, the classic work by \citet{nemirovsky1983problem} in 1983 shows that the convergence of gradient descent is not tight with lower-bounds for convex, Lipschitz-smooth functions with deterministic oracles. 
+Subsequent by developments by Nesterov~\citep{nesterov1983method, nemirovskii1985optimal, nesterov1988approach} defined a series of first-order methods (terminating with AGD) achieving optimal \( O(\frac{1}{K^2}) \) convergence in the setting analyzed by Nemirovsky and Yudin. 
+Algorithms with this optimal rate are called \emph{accelerated} and subsequent research has generated a large number of accelerated algorithms for deterministic problems.
+That acceleration literature firmly places gradient descent as a sub-optimal algorithm and also casts the analyses in \autoref{ch:sgd} in a new light.
+In particular, the close relationship between SGD under interpolation and deterministic gradient descent indicates that stochastic AGD may be a faster algorithm than SGD in restricted settings. 
+
+In fact, restricting the SFO is necessary for any hope of proving an accelerated rate for AGD.
+Black-box accelerated methods which do not leverage structural information about \( f \) rapidly accumulate errors when used with general stochastic oracles \( \oracle{} \)~\citep{devolder2014first, schmidt2011convergence}. 
+Such error accumulation prevents convergence. 
+The key question now is whether or not the interpolation setting is restricted enough to permit acceleration;
+The remainder of this chapter extends the estimating sequences framework~\citep{nesterov2004lectures} to show that stochastic AGD does in fact achieve an accelerated convergence rate when the strong growth condition holds.
+
+\begin{figure}[t]
+    \centering
+    \begin{procedure}{Stochastic AGD}
+        \item Choose an initial point \( \w_0 = y_0 \in \R^d \).
+        \item For each iteration \( k \geq 0 \):
+            \begin{enumerate}
+                \item Query \oracle{} for \( f(\wk, \zk), \: \grad(\wk, \zk) \). 
+                \item Update input as\vspace{-1ex}%
+                \[ \wkk = \wk - \eta \grad(\yk, \zk). \]
+                \item Compute 
+                    \( \alpha_{k+1}^2 = (1 - \alpha_k)\alpha_k^2 + \frac{\mu}{L} \alpha_{k+1} \).
+                \item Set \( \beta_{k} = \frac{\alpha_k (1-\alpha_k)}{\alpha_k^2 + \alpha_{k+1}} \) and extrapolate as
+                    \[ \ykk = \wkk + \beta_k (\wkk - \wk).  \] 
+            \end{enumerate}
+    \end{procedure}
+     \caption{Nesterov's accelerated gradient method with stochastic gradients.}%
+    \label{procedure:accelerated-sgd}
+\end{figure}
+
+\begin{table}[t]
+    \centering
+    \begin{tabular}{c c c  }\toprule
+        \multirow{2}{*}{Assumptions} & \multicolumn{2}{c}{Convergence Rate}\\%
+        \cmidrule(lr){2-3} 
+                 & \multicolumn{1}{c}{Ours} & \multicolumn{1}{c}{\citet{vaswani2019painless}}\\ \midrule
+        \( \mu \)-SC & \( O\rbr{\exp\cbr{- \frac{\mu}{\Lmax} \, K}} \)% 
+                     & \( O\rbr{\exp\cbr{- \frac{\bar \mu}{\Lmax} \, K}} \) \\ \addlinespace
+    Convex       & \( O\rbr{\frac{\Lmax}{2 \, K}} \)%
+                 & \( O\rbr{\frac{3 \Lmax}{K}} \)\\ \addlinespace 
+        \end{tabular}
+        \caption{Comparison of convergence rates for stochastic acceleration schemes.}%
+    \label{table:ls-comparison}
+\end{table}
 
 
 
-\section{Estimating Sequences}
+\section{Estimating Sequences}\label{sec:estimating-sequences}
+
+\section{Convergence for Strongly-Convex Functions}\label{sec:agd-sc}
+
+\section{Convergence for Convex Functions}\label{sec:agd-convex}
+
 
 Suppose that we are trying to minimize a convex function \( f : \R^n \rightarrow \R \) using a deterministic gradient method of the form
 \[ \wkk = \wk - \etak \grad(\wk). \]
