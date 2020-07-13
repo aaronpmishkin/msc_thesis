@@ -18,7 +18,7 @@
         \intertext{Taking expectations with respect to \( \zk \):}
         \implies \Ek[f(\wkk)] &\leq f(\wk) - \eta \norm{\grad(\wk)}^2 + \frac{L \eta^2}{2}\Ek \sbr{\norm{\grad(\wk, \zk)}^2}.
         \intertext{Using the strong growth condition,}
-        \implies f(\wkk) - f(\wk) &\leq f(\wk) - \eta \norm{\grad(\wk)}^2 + \frac{\rho L \eta^2}{2} \norm{\grad(\wk)}^2\\
+        \implies \Ek\sbr{f(\wkk) - f(\wk)} &\leq f(\wk) - \eta \norm{\grad(\wk)}^2 + \frac{\rho L \eta^2}{2} \norm{\grad(\wk)}^2\\
         &\leq f(\wk) - \eta \rbr{1 - \frac{\rho L \eta}{2}}\norm{\grad(\wk)}^2.
     \end{align*}
 \end{proof}
