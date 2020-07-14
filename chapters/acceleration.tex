@@ -84,10 +84,10 @@ This intuition is formalized by the notion of estimating sequences~\citep{nester
 If \( \phi_0 \) is chosen so that \( \phi_0(\w) \approx f(\w) \) for all \( \w \), then \( \seq{\phi_k}_{k=0}^\infty \) matches our intuition of sequence of improving, local approximations to \( f \).
 This is particularly since the conditions on \( \lambda_k \) guarantee \( \lim_{k \rightarrow \infty} \phi_k = f \) point-wise.
 Finally, and most importantly, if \( f(\wk)~\leq~\inf_x \phi_k(x) \) for all \( k \), then we obtain
-\begin{align}
-    f(\wk) \leq \phi_k(\wopt) &\leq (1 - \lambda_k) f(\wopt) + \phi_0(\wopt) \nonumber\\
-    \implies f(\wk) - \fopt &\leq \lambda_k \rbr{f(\wopt) + \phi_0(\wopt)},~\label{eq:lambda-bound}
-\end{align}
+\begin{align*}
+    f(\wk) \leq \phi_k(\wopt) &\leq (1 - \lambda_k) f(\wopt) + \phi_0(\wopt)\\
+    \implies f(\wk) - f(\wopt) &\leq \lambda_k \rbr{\phi_0(\wopt) - f(\wopt)},
+\end{align*}
 and the convergence rate of \( \lambda_k \) controls convergence of \( \wk \) to \( \wopt \).
 Establishing this last property will be the core of our stochastic AGD analysis.
 
@@ -150,7 +150,7 @@ We will show this second property shortly, but first we formally state the equiv
     Then the R-SAGD and SAGD algorithms are equivalent.
 \end{restatable}
 
-Now we establish the main result of this section; convergence for convex and \( \mu \)-strongly-convex functions will follow almost immediately in the next two sections.
+Now we establish the main result of this section; convergence for convex and \( \mu \)-strongly-convex functions will follow almost immediately in Sections~\ref{sec:agd-sc} and~\ref{sec:agd-convex}.
 The proof relies on the expected decrease condition given by \autoref{lemma:sgc-decrease-condition}, which holds for \( L \)-smooth \( f \) when \( \rbr{f, \oracle{}} \) satisfy strong growth.
 Intuitively, this condition shows that SGD obtains similar per-iteration improvement (in expectation) to deterministic gradient descent if strong growth holds. 
 Finally, note that the expectations in the lemma below are taken with respect to the entire sequence of random variables \( \seq{\z_t}_{t=0}^k \).
@@ -165,6 +165,12 @@ Finally, note that the expectations in the lemma below are taken with respect to
 
 \section{Convergence for Strongly-Convex Functions}\label{sec:agd-sc}
 
+It is now straightforward to prove R-SAGD converges at an accelerated rate. 
+Earlier, we showed that \autoref{lemma:estimating-sequence-bound} and the fact that \( \seq{\lambda_k} \), and \( \seq{\phi_k} \) are estimates sequences for \( f \) together imply
+\[ f(\wk) - f(\wopt) \leq \lambda_k \rbr{\phi_0(\wopt) - f(\wopt)} = \lambda_k \rbr{f(\w_0) - f(\wopt) + \frac{\gamma_0}{2} \norm{\w_0 - \wopt}^2}. \]
+This is \emph{almost} an explicit convergence rate. 
+The last step of the analysis is to select an appropriate value for \( \gamma_0 \) and analyze convergence of the \( \lambda_k \) sequence, which is done in the following theorem.
+
 \begin{restatable}{theorem}{scAGD}~\label{thm:sc-agd}
     Let \( f \) be a \( \mu \)-strongly-convex function with \( \mu > 0 \) and \oracle{} a SFO such that \( \rbr{f, \oracle{}} \) satisfies strong growth with parameter \( \rho \).
     Moreover, choose \( \gamma_0 = \mu \), \( v_0 = \w_0 \), and \( \phi_0^* = f(\w_0) \).
@@ -172,16 +178,45 @@ Finally, note that the expectations in the lemma below are taken with respect to
     \[ \E\sbr{f(\wk)} - f(\wopt) \leq \rbr{1 - \sqrt{\frac{\mu}{\rho L}}}^{k} \rbr{ f(w_0) - f(\wopt) + \frac{\mu}{2} \norm{\wopt - \w_0}^2 }.  \]
 \end{restatable}
 
-The following corollary follows immediately from the equivalence of R-SAGD and SAGD (\autoref{lemma:agdEquivalence}).
-Note that the choice of \( \alpha_0 = \sqrt{\mu / (\rho L)} \) for SAGD is identical to the choice of \( \gamma_0 = \mu \) in R-SAGD since \( \alpha_0^2 = \rbr{(1 - \alpha_0)\gamma_0 + \alpha_0 \mu} / (\rho L) \).
+Accelerated convergence of SAGD is an immediate corollary of the equivalence of R-SAGD and SAGD (\autoref{lemma:agdEquivalence}) and \autoref{thm:sc-agd}.
+The only catch here is that \( \alpha_0 \) must be selected to correspond to \( \gamma_0 = \mu \).
+It is easy to see that choosing \( \alpha_0 = \sqrt{\frac{\mu}{\rho L}} \) for SAGD is identical to \( \gamma_0 = \mu \) in R-SAGD since \( \alpha_0^2 = \rbr{(1 - \alpha_0)\gamma_0 + \alpha_0 \mu} / (\rho L) \).
 
-\begin{corollary}
+\begin{corollary}~\label{cor:sc-agd}
     Let \( f \) be a \( \mu \)-strongly-convex function with \( \mu > 0 \) and \oracle{} a SFO such that \( \rbr{f, \oracle{}} \) satisfies strong growth with parameter \( \rho \).
-    Moreover, choose \( \alpha_0 = \sqrt{\mu / (\rho L)} \). 
+    Moreover, choose \( \alpha_0 = \sqrt{\frac{\mu}{\rho L}} \). 
     Then SAGD converges as  
     \[ \E\sbr{f(\wk)} - f(\wopt) \leq \rbr{1 - \sqrt{\frac{\mu}{\rho L}}}^{k} \rbr{ f(w_0) - f(\wopt) + \frac{\mu}{2} \norm{\wopt - \w_0}^2 }.  \]
 \end{corollary}
 
+\autoref{cor:sc-agd} looks like a potential positive answer to our original question of whether or not acceleration is possible in the interpolation setting.
+The \( O\rbr{ \exp \cbr{- \sqrt{\mu / \rho L} \, K}} \) convergence of SAGD certainly improves on that of constant step-size SGD, which converges as \( O\rbr{ \exp \cbr{- \frac{\mu}{\rho L} \, K}} \).
+Moreover, the form of improvement --- taking the square-root of the condition number --- is identical to that obtained by AGD over deterministic gradient descent~\citep{nesterov2004lectures}.
+In this sense, SAGD is a true accelerated algorithm.
+
+However, SAGD is, in general, not optimal for \( L \)-smooth, strongly-convex functions. 
+For example, when \( \oracle{} \) is \( \Lmax \) individually-smooth, we have \( \rho \leq \frac{\Lmax}{\mu} \) and a worst-case rate of \( O\rbr{ \exp \cbr{- \sqrt{\mu^2 / \Lmax L} \, K}}\).
+That is, a convergence rate which is roughly equivalent to gradient descent!
+SAGD is not an accelerate algorithm from this perspective.
+Overall, we must conclude SAGD is accelerated, but only relative to the complexity of other stochastic algorithms under interpolation.
+
+\autoref{table:agd-comparison} compares the convergence for S-AGD 
+
+
+\begin{table}[t]
+    \centering
+    \begin{tabular}{c c c  }\toprule
+        \multirow{2}{*}{Assumptions} & \multicolumn{2}{c}{Convergence Rate}\\%
+        \cmidrule(lr){2-3} 
+                 & \multicolumn{1}{c}{Ours} & \multicolumn{1}{c}{\citet{vaswani2019painless}}\\ \midrule
+        \( \mu \)-SC & \( O\rbr{\exp\cbr{- \sqrt{\frac{\mu}{\rho L}} \, K}} \)% 
+                     & \( O\rbr{\exp\cbr{- \sqrt{\frac{\mu}{\rho^2 L}} \, K}} \) \\ \addlinespace
+        Convex       & \( O\rbr{\frac{\rho L}{K^2}} \)%
+                 & \( O\rbr{\frac{\rho^2 L}{K^2}} \)\\ \addlinespace 
+        \end{tabular}
+        \caption{Comparison of convergence rates for stochastic acceleration schemes.}%
+    \label{table:agd-comparison}
+\end{table}
 
 \section{Convergence for Convex Functions}\label{sec:agd-convex}
 
@@ -201,22 +236,5 @@ Note that the choice of \( \alpha_0 = \sqrt{2} - 1 \) for SAGD is identical to t
     Then R-SAGD converges as  
     \[ \E\sbr{f(\wk)} - f(\wopt) \leq \frac{2}{\rbr{k+1}^2}\rbr{f(\w_0) - f(\wopt) + \rho L \norm{\w_0 - \wopt}^2 }. \]
 \end{corollary}
-
-\newpage
-
-\begin{table}[t]
-    \centering
-    \begin{tabular}{c c c  }\toprule
-        \multirow{2}{*}{Assumptions} & \multicolumn{2}{c}{Convergence Rate}\\%
-        \cmidrule(lr){2-3} 
-                 & \multicolumn{1}{c}{Ours} & \multicolumn{1}{c}{\citet{vaswani2019painless}}\\ \midrule
-        \( \mu \)-SC & \( O\rbr{\exp\cbr{- \frac{\mu}{\Lmax} \, K}} \)% 
-                     & \( O\rbr{\exp\cbr{- \frac{\bar \mu}{\Lmax} \, K}} \) \\ \addlinespace
-    Convex       & \( O\rbr{\frac{\Lmax}{2 \, K}} \)%
-                 & \( O\rbr{\frac{3 \Lmax}{K}} \)\\ \addlinespace 
-        \end{tabular}
-        \caption{Comparison of convergence rates for stochastic acceleration schemes.}%
-    \label{table:ls-comparison}
-\end{table}
 
 
