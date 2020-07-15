@@ -41,10 +41,10 @@
                               \intertext{Taking expectations with respect to \( \Ek \),}
         \implies \Ek\sbr{\norm{\wkk - \wopt}^2} &= \eta^2 \Ek \sbr{\norm{\nabla F(\wk, \zk)}^2} - 2 \eta \Ek\sbr{\abr{\nabla F(\wk, \zk), \wk - \wopt}} + \norm{\wk - \wopt}^2\\
                                                 &= \eta^2 \Ek\sbr{\norm{\nabla F(\wk, \zk)}^2} - 2 \eta \abr{\nabla F(\wk), \wk - \wopt} + \norm{\wk - \wopt}^2.
-                                                \intertext{Let \( C = 4 \eta^2 \max\cbr{\rho L, \lambda} \rbr{ \frac{\lambda}{2} \norm{\wbar}^2 - \frac{\lambda + \mu}{2} \norm{\wopt - \wbar}^2} \). Then \autoref{lemma:regularized-wgc} implies}
-        \Ek\sbr{\norm{\wkk - \wopt}^2} &\leq 4 \eta^2 \max\cbr{\rho L, \lambda} \rbr{F(\wk) - F(\wopt)} - 2 \eta \abr{\nabla F(\wk), \wk - \wopt} + \norm{\wk - \wopt}^2 + C\\
+                                                \intertext{Let \( C = 2 \eta^2 \max\cbr{\rho L, \lambda} \rbr{ \lambda \norm{\wbar}^2 - \rbr{\lambda + \mu} \norm{\wopt - \wbar}^2} \). Then \autoref{lemma:regularized-wgc} implies}
+        \Ek\sbr{\norm{\wkk - \wopt}^2} &\leq 4 \eta^2 \max\cbr{\rho L, \lambda} \rbr{F(\wk) - F(\wopt)} - 2 \eta \abr{\nabla F(\wk), \wk - \wopt}  \\ & \hspace{5em} + \norm{\wk - \wopt}^2 + C\\
         \intertext{Using \( (\mu + \lambda) \)-strong-convexity of \( f \),}
-        \implies  \Ek\sbr{\norm{\wkk - \wopt}^2} &\leq \frac{2 \eta^2 \max\cbr{\rho L, \lambda}}{\mu + \lambda} \norm{\nabla F(\wk)}^2 - 2 \eta \abr{\nabla F(\wk), \wk - \wopt} + \norm{\wk - \wopt}^2 \\ & \hspace{4em} + C.
+        \implies  \Ek\sbr{\norm{\wkk - \wopt}^2} &\leq \frac{2 \eta^2 \max\cbr{\rho L, \lambda}}{\mu + \lambda} \norm{\nabla F(\wk)}^2 - 2 \eta \abr{\nabla F(\wk), \wk - \wopt} + \norm{\wk - \wopt}^2 + C.
         \intertext{Coercivity of the gradient (\autoref{lemma:coercivity}) now implies} 
         \Ek\sbr{\norm{\wkk - \wopt}^2} &\leq \frac{2 \eta^2 \max\cbr{\rho L, \lambda}}{\mu + \lambda} \norm{\nabla F(\wk)}^2 - 2 \eta \bigg( \frac{(\mu + \lambda)(L + \lambda)}{(\mu + \lambda) + (L + \lambda)} \norm{\wk - \wopt}^2 \\ & \hspace{5em} + \frac{1}{(\mu + \lambda) + (L + \lambda)} \norm{\nabla F(\wk)}^2 \bigg) + C\\
                                        &= 2 \eta \rbr{\frac{\eta \max\cbr{\rho L, \lambda}}{\mu + \lambda} - \frac{1}{(\mu + \lambda) + (L + \lambda)}} \norm{\nabla F(\wk)}^2 \\ & \hspace{5em} + \rbr{1 - \frac{2 \eta (\mu + \lambda)(L + \lambda)}{(\mu + \lambda) + (L + \lambda)}} \norm{\wk - \wopt}^2 + C.  
@@ -54,7 +54,7 @@
         \implies \E\sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \delta}^k \norm{\w_0 - \wopt}^2 + C \sum_{l=0}^{k-1}  \rbr{1 - \delta}^l\\
                                                & = \rbr{1 - \delta}^k \norm{\w_0 - \wopt}^2 + C \rbr{\frac{1 - {(1 - \delta)}^k}{\delta}}\\
                                                &\leq  \rbr{1 - \delta}^k \norm{\w_0 - \wopt}^2 + \frac{C}{\delta}.
-                                               \intertext{Letting \( \gamma = \frac{C}{\delta} =  \frac{\eta \max\cbr{\rho L, \lambda} \sbr{(\mu + \lambda) + (L + \lambda)}}{(\mu + \lambda)(L + \lambda)}\) and subsituting in the value of \( \delta \) gives the final result:}
-        \implies \E\sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \frac{2 \eta (\mu + \lambda)(L + \lambda)}{(\mu + \lambda) + (L + \lambda)}}^k \norm{\w_0 - \wopt}^2 + \frac{\gamma}{2}\rbr{\lambda \norm{\wbar}^2 - \rbr{\lambda + \mu}\norm{\wopt - \wbar}^2}.
+                                               \intertext{Letting \( \gamma = \frac{\eta \max\cbr{\rho L, \lambda} \sbr{(\mu + \lambda) + (L + \lambda)}}{(\mu + \lambda)(L + \lambda)}\) and subsituting in the value of \( \delta \) gives the final result:}
+        \implies \E\sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \frac{2 \eta (\mu + \lambda)(L + \lambda)}{(\mu + \lambda) + (L + \lambda)}}^k \norm{\w_0 - \wopt}^2 + \gamma\rbr{\lambda \norm{\wbar}^2 - \rbr{\lambda + \mu}\norm{\wopt - \wbar}^2}.
     \end{align*}
 \end{proof}

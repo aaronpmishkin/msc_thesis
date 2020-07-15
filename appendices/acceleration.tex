@@ -118,16 +118,9 @@
 
 
 %% Only included in long version. 
-\iflong
-\section{Additional Lemmas}
+\section{Additional Lemmas}\label{app:additional-lemmas}
 
-\begin{restatable}{lemma}{wgcDecreaseCondition}~\label{lemma:wgc-decrease-condition}
-    Let \( f \) be an \( L \)-smooth, convex function satisfying the weak growth condition with parameter \( \rho \). 
-    Moreover, suppose that the stochastic functions \( f(\cdot, \z) \) are \( L_\z \)-smooth.
-    Then the following decrease condition holds for stochastic gradient descent with step-size \( \eta \leq \frac{1}{\Lmax} \):
-    \[ \E_{\zk} \sbr{f(\wkk) + \rho L^2 \eta \norm{\wkk - \wopt}^2} \leq f(\wk) + \rho L^2 \eta \norm{\wk - \wopt}^2 - \eta \norm{\grad(\wk)}^2. \]
-\end{restatable}
-
+\wgcDecreaseCondition*
 \begin{proof}
     By \( L \)-smoothness of \( f \) we obtain
     \begin{align*}
@@ -143,4 +136,3 @@
         \implies \E_{\zk} \sbr{f(\wkk) + \rho L^2 \eta \norm{\wkk - \wopt}^2} &\leq f(\wk) + \rho L^2 \eta \norm{\wk - \wopt}^2 - \eta \norm{\grad(\wk)}^2.
     \end{align*}
 \end{proof}
-\fi
