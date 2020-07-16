@@ -9,11 +9,6 @@ The focus is on establishing non-asymptotic convergence rates for stochastic, fi
 The analysis covers stochastic gradient descent with a fixed step-size and with an Armijo-type line-search, as well as Nesterov's accelerated gradient method with stochastic gradients.
 These theoretical results are developed for general stochastic first-order oracles and cover finite-sum functions with sub-sampled gradients as a special case. 
 
-%% Actually, it's not obvious how to extend interpolation-type results to projected/proximal-gradient methods, since the minimizer no longer satisfies interpolation.
-
-\iffalse
-It is straightforward to extend many of the results in this work to constrained or composite smooth/non-smooth optimization using projected or proximal-gradient methods, but such analyses are beyond the scope of his work.
-\fi
 
 %% Basic Assumptions
 It is necessary to make some basic assumptions about the function \( f \) in order to establish convergence rates for first-order algorithms.
@@ -48,7 +43,7 @@ The Polyak-Łojasiewicz condition is weaker than strong convexity; a \( \mu \)-s
 \subsection{Stochastic Oracles}~\label{sec:stochastic-oracles}
 As stated above, this work is primarily concerned with the analysis of iterative methods for stochastic optimization.
 The defining feature of stochastic optimization algorithms is that they cannot directly access the value or gradient of \( f \).
-Instead, they obtain noisy function and gradient evaluations through a stochastic, first-order oracle (SFO) \oracle. 
+Instead, they obtain noisy function and gradient evaluations through a \ac{SFO}  \oracle. 
 At each iteration \( k \), \oracle{} outputs a stochastic function and gradient \( f(v, \zk) \) and \( \grad(v, \zk) \) at query point \( v \), where \( \zk \) is a random variable with distribution \( \mu_k \) supported on \( \calZ_k \subseteq \R^m \), \( m > 0 \).%%
 \footnote{It will be sufficient to treat the measure \( \mu_k \) as a prob.\ density function \( p_k \) for nearly all of our purposes.}
 We assume that \( f(v, \cdot) \) is a deterministic Borel function, meaning the randomness in \( f(v, \zk) \) stems only from the random variable \( \zk \).
@@ -69,26 +64,26 @@ Indeed, these two requirements are equivalent, since (by definition) every \( \z
 We will make use of this less cumbersome notation. 
 
 Some results will further require that the stochastic function \( f(\cdot, \zk) \) is Lipschitz-smooth in the first argument for all outcomes in \( \calZ \).
-In this case, we say the \oracle{} satisfies \emph{individual smoothness} with parameter \( \Lmax \).
+In this case, we say \oracle{} satisfies \emph{individual smoothness} with parameter \( \Lmax \).
 \begin{restatable}[Individual Smoothness]{definition}{individuallySmooth}~\label{def:individually-smooth}
-    A SFO \oracle{} is called \( \Lmax \) individually-smooth if the stochastic gradient mapping \( \w \mapsto \grad(\w, \z) \) is \( L_{\z} \)-Lipschitz with \( L_{\z} \leq \Lmax \) for all \( \z \in \calZ \).
+    A \ac{SFO} \oracle{} is called \( \Lmax \) individually-smooth if the stochastic gradient mapping \( \w \mapsto \grad(\w, \z) \) is \( L_{\z} \)-Lipschitz with \( L_{\z} \leq \Lmax \) for all \( \z \in \calZ \).
 \end{restatable}
 Individual smoothness implies the quadratic upper bound
 \[ f(v, \z) \leq f(\w, \z) + \abr{\grad(\w, \z), v - \w} + \frac{\Lmax}{2}\norm{v - \w}^2 \quad \forall v, \w \in \R^d, \]
 holds point-wise over \( \calZ \) and thus almost-surely for each \( \zk \).
-Note that the existence of an \( \Lmax \) individually-smooth, unbiased SFO for \( f \) implies that \( f \) is \( L \)-smooth with \( L \leq \Lmax \) as an immediately corollary.
+Note that the existence of an \( \Lmax \) individually-smooth, unbiased \ac{SFO} for \( f \) implies that \( f \) is \( L \)-smooth with \( L \leq \Lmax \) as an immediately corollary.
 \begin{restatable}{corollary}{indSmoothToSmooth}~\label{cor:ind-smooth-to-smooth}
     Let \( f : \R^d \rightarrow \R \) be a differentiable function.  
-    If there exists an unbiased, \( \Lmax \) individually-smooth SFO \oracle{} for \( f \), then \( f \) is \( L \)-smooth with \( L \leq \Lmax \).
+    If there exists an unbiased, \( \Lmax \) individually-smooth \ac{SFO} \oracle{} for \( f \), then \( f \) is \( L \)-smooth with \( L \leq \Lmax \).
     Alternatively, if \( \oracle{} \) is biased but \( \calZ \) is finite, then \( \Ek \sbr{f(\cdot, \zk)} \) is \( \Lmax \)-smooth for all \( k \). 
 \end{restatable}
 See \autoref{app:stochastic-oracles} for proof. 
 In one case, we will also make use of individual strong-convexity.
 \begin{restatable}[Individual Strong-Convexity]{definition}{individuallySC}~\label{def:individually-sc}
-    A SFO \oracle{} is called \( \mumax \) individually-strongly-convex if the stochastic function \( f(\w, \z) \) is \( \mu_{\z} \)-strongly-convex with \( \mu_{\z} \leq \max \) for all \( \z \in \calZ \).
+    A \ac{SFO} \oracle{} is called \( \mumax \) individually-strongly-convex if the stochastic function \( f(\w, \z) \) is \( \mu_{\z} \)-strongly-convex with \( \mu_{\z} \leq \max \) for all \( \z \in \calZ \).
 \end{restatable}
 
-Individually-smooth SFO oracles are wide-spread throughout machine learning in the form of finite-sum functions. 
+Individually-smooth oracles are wide-spread throughout machine learning in the form of finite-sum functions. 
 Finite-sum functions are a particular class of structured optimization problem where the objective \( f \) is the sum of \( n \) sub-functions. 
 This is written as
 \begin{align*}
@@ -99,18 +94,18 @@ Such objective functions arise naturally in empirical risk minimization (ERM), w
 For example, the classic least-squares regression problem 
 \[ \wopt = \argmin \frac{1}{n} \sum_{i=1}^n \rbr{\abr{w, x_i} - y_i}^2, \]
 has a finite-sum structure with \( f_i(\w) =  \rbr{\abr{w, x_i} - y_i}^2\).
-A simple SFO can be obtained in this setting by uniformly sub-sampling \( m < n \) examples from the finite-sum; this yields the following gradient and function estimates:
+A simple \ac{SFO} can be obtained in this setting by uniformly sub-sampling \( m < n \) examples from the finite-sum; this yields the following gradient and function estimates:
 \[ f(\w, \zk) = \frac{1}{|\zk|} \sum_{i \in \zk} f_i(\w) \; \text{ and } \grad(\w, \zk) = \frac{1}{|\zk|} \sum_{i \in \zk} \grad_i(\w). \]
 The support set of \oracle{} is then \( \calZ = \cbr{ A \subseteq \cbr{1, \dots, n} : |A| = m } \).
 It is straightforward to show that these \emph{mini-batch} function and gradient estimators are unbiased.
-Moreover, if the individual functions \( f_i \) are individually \( L_i \)-smooth, then the mini-batch SFO satisfies individual-smoothness with \( \Lmax = \max_{i\in [n]} L_i \).
-We call general SFOs \oracle{} individually-smooth specifically to invite comparison with this natural property in the finite-sum setting. 
+Moreover, if the individual functions \( f_i \) are individually \( L_i \)-smooth, then the mini-batch \ac{SFO} satisfies individual-smoothness with \( \Lmax = \max_{i\in [n]} L_i \).
+We call general \acp{SFO} \oracle{} individually-smooth specifically to invite comparison with this natural property in the finite-sum setting. 
 
 
 \section{Interpolation}~\label{sec:interpolation}
 
 In this section, we formalize what it means for an optimization problem to satisfy interpolation.
-Specifically, we develop several notions of interpolation as a property of an objective-SFO pair in a similar fashion as was done for individual-smoothness.
+Specifically, we develop several notions of interpolation as a property of an objective-\ac{SFO} pair in a similar fashion as was done for individual-smoothness.
 As with individual smoothness, interpolation will be shown to have a interpretation for finite-sum functions that satisfies the standard intuition for the meaning of interpolation in function approximation and machine learning. 
 
 Interpolation can be formalized in the following three ways:
@@ -127,14 +122,14 @@ Interpolation can be formalized in the following three ways:
     \[ f(\wopt) \leq f(\w) \; \forall \w \in \R^d \implies \grad(\wopt, \z) = 0. \]
 \end{definition}
 The axis of variation in these definitions is whether the interpolation requirement is placed on minimizers or stationary points of the function \( f \).
-In words, \autoref{def:interpolation-minima} states that global minimizers of the objective \( f \) must be global minimizers of the stochastic functions given by the SFO almost surely at every iteration \( k \).
+In words, \autoref{def:interpolation-minima} states that global minimizers of the objective \( f \) must be global minimizers of the stochastic functions given by the \ac{SFO} almost surely at every iteration \( k \).
 In contrast, \autoref{def:interpolation-gradients} puts the same requirement on stationary points of \( f \), while \autoref{def:interpolation-mixed} merely demands that minimizers of \( f \) are stationary points of \( f(\cdot, \z) \) for all outcomes \( \z \).
 
-For general functions and SFOs, the relationship between these models of interpolation is limited to the following: minimizer interpolation and stationary-point interpolation are stronger than mixed interpolation. 
+For general functions and \acp{SFO}, the relationship between these models of interpolation is limited to the following: minimizer interpolation and stationary-point interpolation are stronger than mixed interpolation. 
 However, when \( f \) is invex, all three definitions are equivalent.
 This is stated in the following lemma.
 \begin{restatable}{lemma}{interpRelationships}~\label{thm:interp-relationships}
-    Let \( \rbr{f, \oracle{}} \) be an arbitrary function-SFO pair. 
+    Let \( \rbr{f, \oracle{}} \) be an arbitrary function-\ac{SFO} pair. 
     Then only the following relationships hold between models of interpolation:
     \begin{align*}
         \text{Minimizer Interpolation} \; (\autoref{def:interpolation-minima}) &\implies \; \text{Mixed Interpolation} \; (\autoref{def:interpolation-mixed})\\
@@ -168,7 +163,7 @@ Thus, \autoref{def:interpolation-minima} exactly fits the intuition for interpol
 There are several natural ways to establish interpolation.
 Linear regression problems satisfy interpolation when \( d \geq n \).
 Separable binary classification also trivially satisfies interpolation.
-In the general setting of SFOs, the follow lemma establishes simple conditions for a \( \rbr{f, \oracle{}} \) to satisfy minimizer interpolation.
+In the general setting of \acp{SFO}, the follow lemma establishes simple conditions for a \( \rbr{f, \oracle{}} \) to satisfy minimizer interpolation.
 \begin{restatable}{lemma}{boundedBelow}~\label{thm:bounded-below}
     A function-oracle pair \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation (\autoref{def:interpolation-minima}) if \oracle{} is unbiased and 
     \[ f(\w, \z ) \geq f(\wopt) \; \forall \w \in \R^d,  \quad \forall \z \in \calZ. \]
@@ -185,6 +180,7 @@ For example, the following condition was used as early as the classical analysis
 \[ \Ek \sbr{\norm{\grad(v, \zk)}^2} \leq \rho \norm{\grad(v)}^2 + \sigma^2,  \]
 where \( \rho, \sigma \geq 0 \).
 \citet{tseng1998incremental} and \citet{solodov1998incremental} strengthened this condition to require the maximum stochastic gradient norm to be almost surely bounded by the true gradient.
+\todo{Note that this was in the context of deterministic incremental gradient methods.}
 Following~\citet{khaled2020better}, we call this condition maximal strong growth.
 \begin{definition}[Maximal Strong Growth]~\label{def:maximal-sg}
     A function-oracle pair \( \rbr{f, \oracle{}} \) satisfies maximal strong growth if  
@@ -211,7 +207,7 @@ It is straightforward to show that strong growth is indeed a weaker condition th
 The proof of the above lemma is given in \autoref{app:growth-conditions} and illustrates the impracticality of maximal strong growth, which is not even satisfied for multiplicative Gaussian noise.
 A simple sufficient condition for the equivalence of maximal strong and strong growth is that \( \calZ \) is finite.
 \begin{restatable}{lemma}{sgcFiniteSupport}\label{lemma:sgc-finite-support}
-    Let \( \rbr{f, \oracle{}} \) be a function-SFO pair satisfying the strong growth condition with constant \( \rho \).
+    Let \( \rbr{f, \oracle{}} \) be a function-\ac{SFO} pair satisfying the strong growth condition with constant \( \rho \).
     Moreover, assume that the support \( \calZ \) of \oracle{} is finite and each \( \zk \) admits probability mass function \( p_k \). 
     Then \( \rbr{f, \oracle{}} \) also satisfies maximal strong growth.
 \end{restatable}
@@ -233,14 +229,14 @@ for all \( k \), after which non-negativity of the Euclidean norm guarantees tha
 Replicating this last argument under weak growth shows that the weak growth condition implies mixed interpolation.
 The reverse implications are more involved; we establish them formally in the follow two lemmas. 
 \begin{restatable}[Interpolation and Weak Growth]{lemma}{interpToWGC}~\label{lemma:interpolation-to-wgc}
-    Let \( f \) be an \( L \)-smooth function and \oracle{} an \( \Lmax \) individually-smooth SFO.
+    Let \( f \) be an \( L \)-smooth function and \oracle{} an \( \Lmax \) individually-smooth \ac{SFO}.
     Furthermore, assume that \( \rbr{f, \oracle{}} \) satisfy minimizer interpolation (\autoref{def:interpolation-minima}).
     Then \( \rbr{f, \oracle{}} \) satisfies the weak growth condition with parameter
     \[ \rho = \frac{L_{\text{max}}}{L}. \]
 \end{restatable}
 
 \begin{restatable}[Interpolation and Strong Growth]{lemma}{interpToSGC}~\label{lemma:interpolation_to_sgc}
-    Let \( f \) be an \( L \)-smooth function and \oracle{} an \( \Lmax \) individually-smooth SFO.
+    Let \( f \) be an \( L \)-smooth function and \oracle{} an \( \Lmax \) individually-smooth \ac{SFO}.
     Furthermore, assume that \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation.
     If \( f \) also satisfies the Polyak-Łojasiewicz condition with parameter \( \mu \), then \( \rbr{f, \oracle{}} \) satisfies the strong growth condition with parameter
     \[ \rho = \frac{L_{\text{max}}}{\mu}. \]

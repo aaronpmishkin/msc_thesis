@@ -2,33 +2,33 @@
 
 \chapter{Acceleration}~\label{ch:acceleration}
 
-The focus in Chapters~\ref{ch:sgd} and~\ref{ch:line-search} was on relatively simple first-order methods: SGD with a fixed step-size and with a stochastic line-search, respectively.
+The focus in Chapters~\ref{ch:sgd} and~\ref{ch:line-search} was on relatively simple first-order methods: \ac{SGD} with a fixed step-size and with a stochastic line-search, respectively.
 Now, we move on to a more complicated algorithm which is guaranteed faster rates of convergence in the deterministic setting.
-The last first-order method which is analyzed in this work is Nesterov's famous accelerated gradient method (AGD)~\cite[Eq. 2.2.20]{nesterov2004lectures}.
+The last first-order method which is analyzed in this work is Nesterov's famous \ac{AGD}~\cite[Eq. 2.2.20]{nesterov2004lectures}.
 First, a small degree of background for accelerated methods is developed, with a particular focus on why stochastic acceleration is an interesting question for oracles satisfying interpolation.
-Then, the following convergence results are established for stochastic AGD:
+Then, the following convergence results are established for \ac{SAGD}:
 \begin{enumerate}
     \item \( O\rbr{\exp\cbr{- \sqrt{\frac{\mu}{\rho L}} \, K}} \) convergence for strongly convex \( f \) when \( \rbr{f, \oracle{}} \) satisfies strong growth; this rate is tight with the deterministic analysis when \( \rho = 1 \).
-    \item \( O(\frac{1}{K^2}) \)  convergence for convex \( f \) when \( \rbr{f, \oracle{}} \) satisfies strong growth; again, this rate is tight with AGD for deterministic oracles when \( \rho = 1 \).
+    \item \( O(\frac{1}{K^2}) \)  convergence for convex \( f \) when \( \rbr{f, \oracle{}} \) satisfies strong growth; again, this rate is tight with \ac{AGD} for deterministic oracles when \( \rho = 1 \).
 \end{enumerate}
 The chapter ends with a brief discussion of acceleration under the weak growth condition, which is an open question.
 
-Recall that Theorems~\ref{thm:sgc-convex} and~\ref{thm:wgc-convex} establish fast linear and sub-linear convergence rates for SGD that are comparable with analyses for deterministic problems (e.g. gradient descent).
+Recall that Theorems~\ref{thm:sgc-convex} and~\ref{thm:wgc-convex} establish fast linear and sub-linear convergence rates for \ac{SGD} that are comparable with analyses for deterministic problems (e.g. gradient descent).
 Unfortunately, the classic work by \citet{nemirovsky1983problem} in 1983 shows that the convergence of gradient descent is not tight with lower-bounds for convex, Lipschitz-smooth functions with deterministic oracles. 
-Subsequent by developments by Nesterov~\citep{nesterov1983method, nemirovskii1985optimal, nesterov1988approach} defined a series of first-order methods (terminating with AGD) achieving optimal \( O(\frac{1}{K^2}) \) convergence in the setting analyzed by Nemirovsky and Yudin. 
+Subsequent by developments by Nesterov~\citep{nesterov1983method, nemirovskii1985optimal, nesterov1988approach} define a series of first-order methods (terminating with \ac{AGD}) achieving optimal \( O(\frac{1}{K^2}) \) convergence in the setting analyzed by Nemirovsky and Yudin. 
 Algorithms with this optimal rate are called \emph{accelerated} and subsequent research has generated a large number of accelerated algorithms for deterministic problems.
 That acceleration literature firmly places gradient descent as a sub-optimal algorithm and also casts the analyses in \autoref{ch:sgd} in a new light.
-In particular, the close relationship between SGD under interpolation and deterministic gradient descent indicates that stochastic AGD may be a faster algorithm than SGD in restricted settings. 
+In particular, the close relationship between \ac{SGD} under interpolation and deterministic gradient descent indicates that \ac{SAGD} may be a faster algorithm than \ac{SGD} in restricted settings. 
 
-In fact, restricting the SFO is necessary for any hope of proving an accelerated rate for AGD.
+In fact, restricting the \ac{SFO} is necessary for any hope of proving an accelerated rate for \ac{SAGD}.
 Black-box accelerated methods which do not leverage structural information about \( f \) rapidly accumulate errors when used with general stochastic oracles \( \oracle{} \)~\citep{devolder2014first, schmidt2011convergence}. 
 Such error accumulation prevents convergence. 
 The key question now is whether or not the interpolation setting is restricted enough to permit acceleration;
-The goal of this chapter is to extend the estimating sequences framework~\citep{nesterov2004lectures} to show that stochastic AGD does in fact achieve an accelerated convergence rate when the strong growth condition holds.
+the goal of this chapter is to extend the estimating sequences framework~\citep{nesterov2004lectures} to show that \ac{SAGD} does in fact achieve an accelerated convergence rate when the strong growth condition holds.
 
 \begin{figure}[t]
     \centering
-    \begin{procedure}{Stochastic AGD (SAGD)}
+    \begin{procedure}{Stochastic \ac{AGD} (\ac{SAGD})}
     \item Choose an initial point \( \w_0 = y_0 \in \R^d \) and \( \alpha_0 \in \rbr{0,1} \).
         \item For each iteration \( k \geq 0 \):
             \begin{enumerate}
@@ -45,27 +45,27 @@ The goal of this chapter is to extend the estimating sequences framework~\citep{
     \label{procedure:accelerated-sgd}
 \end{figure} 
 
-We now introduce AGD in greater detail before discussing its analysis using estimating sequences. 
-\autoref{procedure:accelerated-sgd} presents the classic procedural definition for AGD with stochastic gradients; the major differences to SGD are
+We now introduce \ac{AGD} in greater detail before discussing its analysis using estimating sequences. 
+\autoref{procedure:accelerated-sgd} presents the classic procedural definition for \ac{AGD} with stochastic gradients; the major differences to \ac{SGD} are
 \begin{inparaenum}[i)]
-\item AGD introduces a secondary sequence of points \( \seq{\yk} \) that are calculated by extrapolating from the primary sequence \( \seq{\wk} \),
+\item \ac{AGD} introduces a secondary sequence of points \( \seq{\yk} \) that are calculated by extrapolating from the primary sequence \( \seq{\wk} \),
 \item the primary sequence is updated using stochastic gradient steps from the extrapolation points \( \yk \), rather than the proceeding iterate \( \wk \), and 
 \item the extrapolation step-size is computed from a quadratic equation which depends on \( \mu \) and \( L \), where \( \mu = 0 \) for convex functions. 
 \end{inparaenum}
-The procedure for selecting the \( \betak \) step-sizes is particularly unintuitive and has lead some authors to describe the fast convergence of AGD as an ``algebraic trick''~\citep{allen2014linear}.
-Partly for this reason, we shall re-express AGD as alternating steps of gradient descent on \( f \) and a new function \( \phi : \R^d \rightarrow \R \).
+The procedure for selecting the \( \betak \) step-sizes is particularly unintuitive and has lead some authors to describe the fast convergence of \ac{AGD} as an ``algebraic trick''~\citep{allen2014linear}.
+Partly for this reason, we shall re-express \ac{AGD} as alternating steps of gradient descent on \( f \) and a new function \( \phi : \R^d \rightarrow \R \).
 
 
 \section{Estimating Sequences}\label{sec:estimating-sequences}
 
 
 Suppose that we are trying to minimize convex \( f \).
-Let \( \seq{\wk} \) be the sequence of iterates produced by SGD.\@
+Let \( \seq{\wk} \) be the sequence of iterates produced by \ac{SGD}.\@
 \autoref{lemma:sgc-decrease-condition} shows that the following descent condition holds if \( f \) is \( L \)-smooth and \( \rbr{f, \oracle{}} \) satisfies strong growth:
 \[ \Ek\sbr{f(\wkk)} \leq f(\wk) - \eta \rbr{1 - \frac{\rho L \eta}{2}}\norm{\grad(\wk)}^2. \]
-Choosing \( \eta = \frac{1}{\rho L} \) minimizes the right-hand-side, in which case SGD can be viewed as iterative minimization of the quadratic upper-bound on \( f \) given by smoothness and strong growth. 
+Choosing \( \eta = \frac{1}{\rho L} \) minimizes the right-hand-side, in which case \ac{SGD} can be viewed as iterative minimization of the quadratic upper-bound on \( f \) given by smoothness and strong growth. 
 This procedure decreases \( f \) at each iteration by assuming \emph{worst-case} curvature and noise at every iterate \( \wk \). 
-Inuitively, SGD is sub-optimal exactly because it employs global worst-case bounds regardless of past knowledge --- e.g.\ the \( \seq{f(\wk, \zk)} \) and \( \seq{\grad(\wk, \zk)} \) sequences. 
+Inuitively, \ac{SGD} is sub-optimal exactly because it employs global worst-case bounds regardless of past knowledge --- e.g.\ the \( \seq{f(\wk, \zk)} \) and \( \seq{\grad(\wk, \zk)} \) sequences. 
 
 We can instead consider an algorithm which builds local approximations to \( f \) based on all past information accumulated by the procedure.
 Sufficiently accurate approximations can replace or augment the worst-case curvature assumption and allow for faster convergence. 
@@ -89,7 +89,7 @@ Finally, and most importantly, if \( f(\wk)~\leq~\inf_x \phi_k(x) \) for all \( 
     \implies f(\wk) - f(\wopt) &\leq \lambda_k \rbr{\phi_0(\wopt) - f(\wopt)},
 \end{align*}
 and the convergence rate of \( \lambda_k \) controls convergence of \( \wk \) to \( \wopt \).
-Establishing this last property will be the core of our stochastic AGD analysis.
+Establishing this last property will be the core of our analysis.
 
 Let us now fix a choice of estimating sequences following~\citet[Lemma 2.2.2]{nesterov2004lectures}. 
 \begin{restatable}{lemma}{estimatingSequence}\label{lemma:estimating-sequence}
@@ -113,12 +113,12 @@ An important property of the update is that it preserves the canonical form
 where \( \gamma_{k+1} = \rbr{1 - \alphak}\gamma_k + \alphak \mu \), \( \vk = \inv{\gamma_{k+1}} \rbr{(1-\alphak)\vk + \alphak \mu \, y_k - \alphak \grad(\yk)}, \) and 
 \[ \phi^*_{k+1} = (1 - \alphak) \phi^*_k + \alphak\rbr{f(\yk) - \frac{\alphak}{2 \gamma_{k+1}} \norm{\grad(\yk)}^2 + \frac{(1 - \alphak)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2}\norm{\yk - \vk}^2 + \abr{\grad(\yk), \vk - \yk}}}. \]
 See~\citet[Lemma 2.2.3]{nesterov2004lectures} for proof.
-While cumbersome, the canonical form for \( \phi_k \) allows AGD to be reformulated as alternating descent steps on \( \phi_k \) and \( f \).
+While cumbersome, the canonical form for \( \phi_k \) allows \ac{AGD} to be reformulated as alternating descent steps on \( \phi_k \) and \( f \).
 We do this now.
 
 \begin{figure}[t]
     \centering
-    \begin{procedure}{Reformulated SAGD (R-SAGD)}
+    \begin{procedure}{\textsc{Reformulated} \ac{SAGD} (\acs{RSAGD})}
         \item Choose an initial point \( \w_0 = y_0 \in \R^d \) and \( \gamma_0 \geq 0 \).
         \item For each iteration \( k \geq 0 \):
             \begin{enumerate}
@@ -132,32 +132,33 @@ We do this now.
                     \[ \wkk = \wk - \frac{1}{\rho L} \grad(\yk, \zk). \]
             \end{enumerate}
     \end{procedure}
-    \caption{Reformulation of Nesterov's accelerated gradient descent (AGD) as alternating steps of gradient gradient on \( \phi \) and SGD on \( f \).}%
+    \caption{Reformulation of Nesterov's accelerated gradient descent (AGD) as alternating steps of gradient gradient on \( \phi \) and \ac{SGD} on \( f \).}%
     \label{procedure:reformulated-agd}
 \end{figure}
 
-\autoref{procedure:reformulated-agd} re-expresses stochastic AGD in the notation of estimating sequences. 
+\autoref{procedure:reformulated-agd} re-expresses \ac{SAGD} in the notation of estimating sequences.
+We call the resulting algorithm \acs{RSAGD}: reformulated stochastic accelerated gradient descent.\acused{RSAGD}
 Note that the order of the \( \seq{\yk} \) and \( \seq{\wk} \) sequences has been reversed for convenience; this does not affect the algorithm.
-Formulating AGD as an estimating sequence procedure is particularly nice for two reasons:
+Formulating \ac{SAGD} as an estimating sequence procedure is particularly nice for two reasons:
 \begin{inparaenum}[(1)]
 \item the extrapolation step \[ \ykk = \wkk + \beta_k (\wkk - \wk), \] takes on an intuitive interpretation as gradient descent on \( \phi_{k+1} \), and 
-\item if \[  \E [\inf \phi_k(x)] \geq \E [f(\wk)], \] holds for all \( k \), then convergence of stochastic AGD is determined entirely by convergence of \( \seq{\lambda_k} \).
+\item if \[  \E [\inf \phi_k(x)] \geq \E [f(\wk)], \] holds for all \( k \), then convergence of \ac{SAGD} is determined entirely by convergence of \( \seq{\lambda_k} \).
 \end{inparaenum}
-We will show this second property shortly, but first we formally state the equivalence of R-SAGD and SAGD, with proof given in \autoref{app:estimating-sequences}.
+We will show this second property shortly, but first we formally state the equivalence of \ac{RSAGD} and \ac{SAGD}, with proof given in \autoref{app:estimating-sequences}.
 
 \begin{restatable}{lemma}{agdEquivalence}\label{lemma:agdEquivalence}
     Let \( \seq{\lambda_k} \) and \( \seq{\phi_k} \) be as defined in \autoref{lemma:estimating-sequence}.
-    Then the R-SAGD and SAGD algorithms are equivalent.
+    Then the \ac{RSAGD} and \ac{SAGD} algorithms are equivalent.
 \end{restatable}
 
 Now we establish the main result of this section; convergence for convex and \( \mu \)-strongly-convex functions will follow almost immediately in Sections~\ref{sec:agd-sc} and~\ref{sec:agd-convex}.
 The proof relies on the expected decrease condition given by \autoref{lemma:sgc-decrease-condition}, which holds for \( L \)-smooth \( f \) when \( \rbr{f, \oracle{}} \) satisfy strong growth.
-Intuitively, this condition shows that SGD obtains similar per-iteration improvement (in expectation) to deterministic gradient descent if strong growth holds. 
+Intuitively, this condition shows that \ac{SGD} obtains similar per-iteration improvement (in expectation) to deterministic gradient descent if strong growth holds. 
 Finally, note that the expectations in the lemma below are taken with respect to the entire sequence of random variables \( \seq{\z_t}_{t=0}^k \).
 
 \begin{restatable}{lemma}{estimatingSequenceBound}~\label{lemma:estimating-sequence-bound}
-    Let \( f \) be a \( \mu \)-strongly-convex function (with \( \mu = 0 \) in the convex case) and \oracle{} a SFO such that \( \rbr{f, \oracle{}} \) satisfies strong growth with parameter \( \rho \).
-    If \( \phi_0^* = f(\w_0) \) and \( \gamma_0 \geq 0 \) is independent of the random process \( \seq{\zk} \), then the iterates generated by R-SAGD satisfy 
+    Let \( f \) be a \( \mu \)-strongly-convex function (with \( \mu = 0 \) in the convex case) and \oracle{} a \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies strong growth with parameter \( \rho \).
+    If \( \phi_0^* = f(\w_0) \) and \( \gamma_0 \geq 0 \) is independent of the random process \( \seq{\zk} \), then the iterates generated by \ac{RSAGD} satisfy 
     \[ \E [\inf_{w} \phi_k(\w)] = \E \sbr{\phi_k^*} \geq \E [f(\wk)], \]
     for all \( k \geq 0 \).
 \end{restatable}
@@ -165,44 +166,44 @@ Finally, note that the expectations in the lemma below are taken with respect to
 
 \section{Convergence for Strongly-Convex Functions}\label{sec:agd-sc}
 
-It is now straightforward to prove R-SAGD converges at an accelerated rate. 
+It is now straightforward to prove \ac{RSAGD} converges at an accelerated rate. 
 Earlier, we showed that \autoref{lemma:estimating-sequence-bound} and the fact that \( \seq{\lambda_k} \), and \( \seq{\phi_k} \) are estimates sequences for \( f \) together imply
 \[ f(\wk) - f(\wopt) \leq \lambda_k \rbr{\phi_0(\wopt) - f(\wopt)} = \lambda_k \rbr{f(\w_0) - f(\wopt) + \frac{\gamma_0}{2} \norm{\w_0 - \wopt}^2}. \]
 This is \emph{almost} an explicit convergence rate. 
 The last step of the analysis is to select an appropriate value for \( \gamma_0 \) and analyze convergence of the \( \lambda_k \) sequence, which is done in the following theorem.
 
 \begin{restatable}{theorem}{scAGD}~\label{thm:sc-agd}
-    Let \( f \) be a \( \mu \)-strongly-convex function with \( \mu > 0 \) and \oracle{} a SFO such that \( \rbr{f, \oracle{}} \) satisfies strong growth with parameter \( \rho \).
+    Let \( f \) be a \( \mu \)-strongly-convex function with \( \mu > 0 \) and \oracle{} a \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies strong growth with parameter \( \rho \).
     Moreover, choose \( \gamma_0 = \mu \), \( v_0 = \w_0 \), and \( \phi_0^* = f(\w_0) \).
-    Then R-SAGD converges as  
+    Then \ac{RSAGD} converges as  
     \[ \E\sbr{f(\wk)} - f(\wopt) \leq \rbr{1 - \sqrt{\frac{\mu}{\rho L}}}^{k} \rbr{ f(w_0) - f(\wopt) + \frac{\mu}{2} \norm{\wopt - \w_0}^2 }.  \]
 \end{restatable}
 
-Accelerated convergence of SAGD is an immediate corollary of the equivalence of R-SAGD and SAGD (\autoref{lemma:agdEquivalence}) and \autoref{thm:sc-agd}.
+Accelerated convergence of \ac{SAGD} is an immediate corollary of the equivalence of \ac{RSAGD} and \ac{SAGD} (\autoref{lemma:agdEquivalence}) and \autoref{thm:sc-agd}.
 The only catch here is that \( \alpha_0 \) must be selected to correspond to \( \gamma_0 = \mu \).
-It is easy to see that choosing \( \alpha_0 = \sqrt{\frac{\mu}{\rho L}} \) for SAGD is identical to \( \gamma_0 = \mu \) in R-SAGD since \( \alpha_0^2 = \rbr{(1 - \alpha_0)\gamma_0 + \alpha_0 \mu} / (\rho L) \).
+It is easy to see that choosing \( \alpha_0 = \sqrt{\frac{\mu}{\rho L}} \) for \ac{SAGD} is identical to \( \gamma_0 = \mu \) in \ac{RSAGD} since \( \alpha_0^2 = \rbr{(1 - \alpha_0)\gamma_0 + \alpha_0 \mu} / (\rho L) \).
 
 \begin{corollary}~\label{cor:sc-agd}
-    Let \( f \) be a \( \mu \)-strongly-convex function with \( \mu > 0 \) and \oracle{} a SFO such that \( \rbr{f, \oracle{}} \) satisfies strong growth with parameter \( \rho \).
+    Let \( f \) be a \( \mu \)-strongly-convex function with \( \mu > 0 \) and \oracle{} a \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies strong growth with parameter \( \rho \).
     Moreover, choose \( \alpha_0 = \sqrt{\frac{\mu}{\rho L}} \). 
-    Then SAGD converges as  
+    Then \ac{SAGD} converges as  
     \[ \E\sbr{f(\wk)} - f(\wopt) \leq \rbr{1 - \sqrt{\frac{\mu}{\rho L}}}^{k} \rbr{ f(w_0) - f(\wopt) + \frac{\mu}{2} \norm{\wopt - \w_0}^2 }.  \]
 \end{corollary}
 
 \autoref{cor:sc-agd} looks like a potential positive answer to the problem of whether or not acceleration is possible in the interpolation setting.
-SAGD's \( O\rbr{ \exp \cbr{- \sqrt{\frac{\mu}{\rho L}} \, K}} \) convergence certainly improves on that of constant step-size SGD.
-Moreover, the form of improvement --- taking the square-root of the condition number --- is identical to that obtained by AGD over deterministic gradient descent~\citep{nesterov2004lectures}.
-In this sense, SAGD is a true accelerated algorithm.
+\ac{SAGD}'s \( O\rbr{ \exp \cbr{- \sqrt{\frac{\mu}{\rho L}} \, K}} \) convergence certainly improves on that of constant step-size \ac{SGD}.
+Moreover, the form of improvement --- taking the square-root of the condition number --- is identical to that obtained by \ac{AGD} over deterministic gradient descent~\citep{nesterov2004lectures}.
+In this sense, \ac{SAGD} is a true accelerated algorithm.
 
-However, SAGD is, in general, not optimal for \( L \)-smooth, strongly-convex functions. 
+However, \ac{SAGD} is, in general, not optimal for \( L \)-smooth, strongly-convex functions. 
 For example, if \( \oracle{} \) is \( \Lmax \) individually-smooth, then \( \rho \leq \frac{\Lmax}{\mu} \) and the worst-case complexity is \( O\rbr{ \exp \cbr{- \sqrt{\mu^2 / \Lmax L} \, K}}\).
-This is roughly equivalent to gradient descent, implying SAGD is not accelerated. 
-Overall, we conclude SAGD is an accelerated method only relative to the complexity of other stochastic algorithms under interpolation.
+This is roughly equivalent to gradient descent, implying \ac{SAGD} is not accelerated. 
+Overall, we conclude \ac{SAGD} is an accelerated method only relative to the complexity of other stochastic algorithms under interpolation.
 
-The analysis of SAGD for strongly-convex functions presented here is strictly tighter than prior work by \citet[Theorem 1]{vaswani2019fast}, who also studied convergence under strong growth.
+The analysis of \ac{SAGD} for strongly-convex functions presented here is strictly tighter than prior work by \citet[Theorem 1]{vaswani2019fast}, who also studied convergence under strong growth.
 \autoref{table:agd-comparison} compares the two complexities; their major difference is that \( \rho \) is squared in the rate obtain by Vaswani et al. 
 Recalling \( \rho = \sfrac{\Lmax}{\mu} \) in the worst-case implies that our result is faster by a multiple of the condition number for individually-smooth \( \oracle{} \) satisfying interpolation.
-This significant improvement addresses the criticism of~\citet{Liu2020Accelerating}, who showed that the rate obtained by Vaswani et al.\ could be slower than SGD in some circumstances. 
+This significant improvement addresses the criticism of~\citet{Liu2020Accelerating}, who showed that the rate obtained by Vaswani et al.\ could be slower than \ac{SGD} in some circumstances. 
 
 \begin{table}[t]
     \centering
@@ -221,26 +222,26 @@ This significant improvement addresses the criticism of~\citet{Liu2020Accelerati
 
 \section{Convergence for Convex Functions}\label{sec:agd-convex}
 
-Our final result for SAGD addresses convergence for convex functions under the strong growth condition. 
-The following theorem shows that R-SAGD obtains an accelerated \( O\rbr{\frac{\rho L}{K^2}} \) complexity.
-Invoking the correspondence between R-SAGD and SAGD leads an identical result for the latter algorithm as a corollary.
+Our final result for \ac{SAGD} addresses convergence for convex functions under the strong growth condition. 
+The following theorem shows that \ac{RSAGD} obtains an accelerated \( O\rbr{\frac{\rho L}{K^2}} \) complexity.
+Invoking the correspondence between \ac{RSAGD} and \ac{SAGD} leads an identical result for the latter algorithm as a corollary.
 This improves on the analysis prior work by a factor of \( \rho \)~\citep[Theorem 2]{vaswani2019fast}. 
 See~\autoref{table:agd-comparison} for additional details.
 
 \begin{restatable}{theorem}{convexAGD}~\label{thm:convex-agd}
-    Let \( f \) be a convex function and \oracle{} a SFO such that \( \rbr{f, \oracle{}} \) satisfies strong growth with parameter \( \rho \).
+    Let \( f \) be a convex function and \oracle{} a \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies strong growth with parameter \( \rho \).
     Moreover, choose \( \gamma_0 = 2 \rho L \), \( v_0 = \w_0 \), and \( \phi_0^* = f(\w_0) \).
-    Then R-SAGD converges as  
+    Then \ac{RSAGD} converges as  
     \[ \E\sbr{f(\wk)} - f(\wopt) \leq \frac{2}{\rbr{k+1}^2}\rbr{f(\w_0) - f(\wopt) + \rho L \norm{\w_0 - \wopt}^2 }. \]
 \end{restatable}
 
-Again, we have the following corollary from the equivalence of R-SAGD and SAGD. 
-Note that the choice of \( \alpha_0 = \sqrt{2} - 1 \) for SAGD is identical to the choice of \( \gamma_0 = 2 \rho L \) in R-SAGD, since \( \alpha_0^2 = (1 - \alpha_0) \gamma_0 / (\rho L) \).
+Again, we have the following corollary from the equivalence of \ac{RSAGD} and \ac{SAGD}. 
+Note that the choice of \( \alpha_0 = \sqrt{2} - 1 \) for \ac{SAGD} is identical to the choice of \( \gamma_0 = 2 \rho L \) in \ac{RSAGD}, since \( \alpha_0^2 = (1 - \alpha_0) \gamma_0 / (\rho L) \).
 
 \begin{corollary}
-    Let \( f \) be a convex function and \oracle{} a SFO such that \( \rbr{f, \oracle{}} \) satisfies strong growth with parameter \( \rho \).
+    Let \( f \) be a convex function and \oracle{} a \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies strong growth with parameter \( \rho \).
     Moreover, choose \( \alpha_0 = \sqrt{2} - 1 \).
-    Then R-SAGD converges as  
+    Then \ac{RSAGD} converges as  
     \[ \E\sbr{f(\wk)} - f(\wopt) \leq \frac{2}{\rbr{k+1}^2}\rbr{f(\w_0) - f(\wopt) + \rho L \norm{\w_0 - \wopt}^2 }. \]
 \end{corollary}
 
@@ -252,7 +253,7 @@ This is quite disappointing, but it is not obvious that the assumption can be re
 The natural condition for convex functions used throughout this work is the weak growth condition.
 The main issue using weak growth in \autoref{thm:convex-agd} is that we lose access to the progress condition 
 \[ \Ek \sbr{f(\wkk)} \leq f(\wk) - \etak \rbr{1 - \frac{\rho L \eta}{2}} \norm{\grad(\wk)}^2, \]
-from \autoref{lemma:sgc-decrease-condition}, which was a critical piece of our analysis for SAGD. 
+from \autoref{lemma:sgc-decrease-condition}, which was a critical piece of our analysis for \ac{SAGD}. 
 The direct proof using estimating sequences collapses without obvious recourse.
 An alternative, which shows progress in terms of the optimality gap and distance to the minimizer can be derived, which we state now.
 

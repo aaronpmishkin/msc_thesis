@@ -171,7 +171,7 @@ Note that this bound is tight with Case 1 since \( 1 + \rho L \rbr{\inv{\Lmax} -
     Let us extend this convergence to the sequence of iterates \( \seq{\wk} \).
     The weak growth condition implies 
     \begin{align*}
-        \E\sbr{\sum_{k=0}^{K} \norm{\wkk - \wk}^2} &= \E\sbr{\sum_{k=0}^{K} \eta^2 \norm{\grad(wk, \zk)}^2}\\
+        \E\sbr{\sum_{k=0}^{K} \norm{\wkk - \wk}^2} &= \E\sbr{\sum_{k=0}^{K} \eta^2 \norm{\grad(\wk, \zk)}^2}\\
                                                    &\leq \sum_{k=0}^{K} \rho \eta^2 \E\sbr{f(\wk) - f(\wopt)}\\
         \implies \lim_{K\rightarrow \infty} \E \sbr{\sum_{k=0}^{K} \norm{\wkk - \wk}^2} &\leq \lim_{K\rightarrow\infty} \E \sbr{\sum_{k=0}^{K} \rho \eta^2 \rbr{f(\wk) - f(\wopt)}}\\
         \intertext{The partial sums are increasing \( K \), so we may apply the monotone convergence theorem (MCT) to obtain} 
@@ -211,11 +211,11 @@ Note that this bound is tight with Case 1 since \( 1 + \rho L \rbr{\inv{\Lmax} -
     Let us extend this convergence to the sequence of iterates \( \seq{\wk} \).
     The strong growth condition implies 
     \begin{align*}
-        \E\sbr{\sum_{k=0}^{K} \norm{\wkk - \wk}^2} &= \E\sbr{\sum_{k=0}^{K} \eta^2 \norm{\grad(wk, \zk)}^2}\\
-                                                   &\leq \sum_{k=0}^{K} \rho \eta^2 \E\sbr{\norm{\grad(wk, \zk)}^2}\\
-        \implies \lim_{K\rightarrow \infty} \E \sbr{\sum_{k=0}^{K} \norm{\wkk - \wk}^2} &\leq \lim_{K\rightarrow\infty} \E \sbr{\sum_{k=0}^{K} \rho \eta^2 \norm{\grad(wk, \zk)}^2}\\
+        \E\sbr{\sum_{k=0}^{K} \norm{\wkk - \wk}^2} &= \E\sbr{\sum_{k=0}^{K} \eta^2 \norm{\grad(\wk, \zk)}^2}\\
+                                                   &\leq \sum_{k=0}^{K} \rho \eta^2 \E\sbr{\norm{\grad(\wk, \zk)}^2}\\
+        \implies \lim_{K\rightarrow \infty} \E \sbr{\sum_{k=0}^{K} \norm{\wkk - \wk}^2} &\leq \lim_{K\rightarrow\infty} \E \sbr{\sum_{k=0}^{K} \rho \eta^2 \norm{\grad(\wk, \zk)}^2}\\
         \intertext{The partial sums are increasing \( K \), so we may apply the monotone convergence theorem (MCT) to obtain} 
-        \E \sbr{\sum_{k=0}^{\infty} \norm{\wkk - \wk}^2} &\leq  \E \sbr{\sum_{k=0}^{\infty} \rho \eta^2 \norm{\grad(wk, \zk)}^2}\\
+        \E \sbr{\sum_{k=0}^{\infty} \norm{\wkk - \wk}^2} &\leq  \E \sbr{\sum_{k=0}^{\infty} \rho \eta^2 \norm{\grad(\wk, \zk)}^2}\\
                                                                   &< \infty. \tag{by \autoref{eq:stationary-convergence}}
     \end{align*}
     The series \(  \sum_{k=0}^{\infty} \norm{\wkk - \wk}^2 \) is a non-negative random variable with finite expectation and so converges almost surely: 

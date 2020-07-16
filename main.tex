@@ -116,20 +116,8 @@
 \usepackage{listings}
 \lstset{basicstyle=\sffamily\scriptsize,showstringspaces=false,fontadjust}
 
-%% The acronym package provides support for defining acronyms, providing
-%% their expansion when first used, and building glossaries.  See the
-%% example in glossary.tex and the example usage throughout the example
-%% document.
-%% NOTE: to use \MakeTextLowercase in the \acsfont command below,
-%%   we *must* use the `nohyperlinks' option -- it causes errors with
-%%   hyperref otherwise.  See Section 5.2 in the ``LaTeX 2e for Class
-%%   and Package Writers Guide'' (clsguide.pdf) for details.
-\usepackage[printonlyused,nohyperlinks]{acronym}
-%% The ubcdiss.cls loads the `textcase' package which provides commands
-%% for upper-casing and lower-casing text.  The following causes
-%% the acronym package to typeset acronyms in small-caps
-%% as recommended by Bringhurst.
-\renewcommand{\acsfont}[1]{{\scshape \MakeTextLowercase{#1}}}
+\usepackage[printonlyused,nohyperlinks, smaller]{acronym}
+
 
 %% color: add support for expressing colour models.  Grey can be used
 %% to great effect to emphasize other parts of a graphic or text.
@@ -444,7 +432,7 @@
 % Body of Thesis (not all sections may apply)
 \mainmatter
 
-\acresetall	% reset all acronyms used so far
+% \acresetall	% reset all acronyms used so far
 
 
 

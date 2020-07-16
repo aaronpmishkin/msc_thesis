@@ -1,8 +1,46 @@
 %% The following is a directive for TeXShop to indicate the main file
 %!TEX root = ../main.tex
 
-\chapter{Introduction}
-\label{ch:Introduction}
+\chapter{Introduction}\label{ch:Introduction}
 
+%% Dump from Painless SGD %%
+
+Stochastic first-order methods are the most popular optimization algorithms in modern machine learning.
+In particular, \ac{SGD}~\citep{robbins1951sgd} and its adaptive variants~\citep{duchi2011adagrad, tieleman2012rmsprop, zeiler2012adadelta, kingma2015adam} are widely used for large-scale supervised learning, where they are frequently referred to as fundamental ``workhorse algorithms''~\citep{qian2019improvedrates, assran2019sgpush, grosse2015scaling}. 
+The main advantage of these methods for supervised learning is that they only use the gradient of a single or small sub-sample of training examples to update the model parameters at each iteration.
+The computational cost of \ac{SGD} (and variants) is thus independent of the training set and scales to very large datasets and models.
+Despite their success, stochastic first-order methods suffer from two well known problems. 
+Firstly, their hyper-parameters, such as step-size, must be tuned carefully to obtain good performance~\citep{bengio2012practical, schaul2013no, li2019convergence}; and
+secondly, even when well tuned, they converge slowly compared to deterministic or variance-reduced algorithms~\citep{leroux2012sag, schmidt2017sag, johnson2013svrg, defazio2014saga}.
+  
+Anecdotal evidence has long indicated that these problems are mitigated when training highly over-parameterized models.
+For example, stochastic first-order methods have been especially successful for expressive models, such as deep neural networks~\citep{zhang2013gradient, bengio2012practical} and non-parametric regression~\citep{liang2018just, belkin2019datainterp}.
+Moreover, stochastic gradient methods with variance-reduction typically do not outperform \ac{SGD} in this setting~\citep{defazio2019effectiveness}.
+
+
+% Theoretical results on Over-parameterized optimization
+    % constant step-size SGD
+    % growth conditions
+    % acceleration
+    % line-search
+
+% Basic Idea 
+
+% Content 
+
+\section{Related Work}
+
+\section{
+
+\newpage
+
+Stochastic gradient descent (SGD) and its variants~\cite{duchi2011adagrad,zeiler2012adadelta,kingma2015adam,tieleman2012rmsprop,schmidt2017sag,johnson2013svrg,defazio2014saga} are the preferred optimization methods in modern machine learning. They only require the gradient for one training example (or a small ``mini-batch'' of examples) in each iteration and thus can be used with large datasets. These first-order methods have been particularly successful for training highly-expressive, over-parameterized models such as non-parametric regression~\cite{liang2018just,belkin2019does} and deep neural networks~\cite{bengio2012practical,zhang2016understanding}. However, the practical efficiency of stochastic gradient methods is adversely affected by two challenges: (i) their performance heavily relies on the choice of the step-size (``learning rate'')~\cite{bengio2012practical, schaul2013no} and (ii) their slow convergence compared to methods that compute the full gradient (over all training examples) in each iteration~\cite{nesterov2013introductory}. 
+
+% second problem with stochastic methods
+Variance-reduction (VR) methods~\cite{schmidt2017minimizing,johnson2013accelerating,defazio2014saga} are relatively new variants of SGD that improve its slow convergence rate. These methods exploit the finite-sum structure of typical loss functions arising in machine learning, achieving both the low iteration cost of SGD and the fast convergence rate of deterministic methods that compute the full-gradient in each iteration. Moreover, VR makes setting the learning rate easier and there has been work exploring the use of line-search techniques for automatically setting the step-size for these methods~\cite{schmidt2017minimizing,schmidt2015non,tan2016barzilai,shang2018guaranteed}. These methods have resulted in impressive performance on a variety of problems. However, the improved performance comes at the cost of additional memory~\cite{schmidt2017minimizing} or computational~\cite{johnson2013accelerating, defazio2014saga} overheads, making these methods less appealing when training high-dimensional models on large datasets. Moreover, in practice VR methods do not tend to converge faster than SGD on over-parameterized models~\cite{defazio2018ineffectiveness}. 
+
+Indeed, recent works~\cite{vaswani2019fast,ma2018power,bassily2018exponential,liu2018mass, cevher2018linear, jain2017accelerating, schmidt2013fast} have shown that when training over-parameterized models, classic SGD with a constant step-size and \emph{without VR} can achieve the convergence rates of full-batch gradient descent. These works assume that the model is expressive enough to \emph{interpolate} the data. The interpolation condition is satisfied for models such as non-parametric regression~\cite{liang2018just,belkin2019does}, over-parametrized deep neural networks~\cite{zhang2016understanding}, boosting~\cite{schapire1998boosting}, and for linear classifiers on separable data. However, the good performance of SGD in this setting relies on using the proposed constant step-size, which depends on problem-specific quantities not known in practice. On the other hand, there has been a long line of research on techniques to automatically set the step-size for classic SGD. These techniques include using meta-learning procedures to modify the main stochastic algorithm~\cite{baydin2017online,yu2006fast,schraudolph1999local,almeida1998parameter,plagianakos2001learning,yu2006fast,shao2000rates}, heuristics to adjust the learning rate on the fly~\cite{kushner1995stochastic, deylon1993accelerated, schaul2013no, schoenauer2017stochastic}, and recent adaptive methods inspired by online learning~\cite{duchi2011adaptive,zeiler2012adadelta,kingma2014adam,reddi2019convergence, orabona2017training,rolinek2018l4, luo2019adaptive}. However, none of these techniques have been proved to achieve the fast convergence rates that we now know are possible in the over-parametrized setting.
+
+In this work, we use classical line-search methods~\cite{nocedal2006numerical} to automatically set the step-size for SGD when training over-parametrized models. Line-search is a standard technique to adaptively set the step-size for deterministic methods that evaluate the full gradient in each iteration. These methods make use of additional function/gradient evaluations to characterize the function around the current iterate and adjust the magnitude of the descent step. The additional noise in SGD complicates the use of line-searches in the general stochastic setting and there have only been a few attempts to address this. Mahsereci et al.~\cite{mahsereci2017probabilistic} define a Gaussian process model over probabilistic Wolfe conditions and use it to derive a termination criterion for the line-search. The convergence rate of this procedure is not known, and experimentally we found that our proposed line-search technique is simpler to implement and more robust. Other authors~\cite{friedlander2012hybrid,byrd2012sample, de2016big, paquette2018stochastic,krejic2013line} use a line-search termination criteria that requires function/gradient evaluations averaged over multiple samples. However, in order to achieve convergence, the number of samples required per iteration (the ``batch-size'') increases progressively, losing the low per iteration cost of SGD. Other work~\cite{blanchet2019convergence,gratton2017complexity} exploring trust-region methods assume that the model is sufficiently accurate, which is not guaranteed in the general stochastic setting. In contrast to these works, our line-search procedure does not consider the general stochastic setting and is designed for models that satisfy interpolation; it achieves fast rates in the over-parameterized regime without the need to manually choose a step-size or increase the batch size.
 
 \endinput
