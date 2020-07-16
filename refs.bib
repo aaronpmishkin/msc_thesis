@@ -71,6 +71,13 @@
   year      = {2019},
 }
 
+@article{choi2019empirical,
+  title     = {On empirical comparisons of optimizers for deep learning},
+  author    = {Choi, Dami and Shallue, Christopher J and Nado, Zachary and Lee, Jaehoon and Maddison, Chris J and Dahl, George E},
+  journal   = {arXiv preprint arXiv:1910.05446},
+  year      = {2019}
+}
+
 # Generalization Properties of SGD #
 
 @inproceedings{zhang2017understanding,
@@ -103,12 +110,25 @@
 }
 
 @article{liang2018just,
-  title     = {Just interpolate: {K}ernel" ridgeless" regression can generalize},
+  title     = {Just interpolate: {K}ernel ``ridgeless'' regression can generalize},
   author    = {Liang, Tengyuan and Rakhlin, Alexander},
   journal   = {arXiv preprint arXiv:1808.00387},
   year      = {2018}
 }
 
+%% empirical evidence SGD is efficient for over-parameterized models
+@inproceedings{bottou2010largescale,
+  author    = {L{\'{e}}on Bottou},
+  _editor    = {Yves Lechevallier and
+               Gilbert Saporta},
+  title     = {Large-Scale Machine Learning with Stochastic Gradient Descent},
+  booktitle = {19th International Conference on Computational Statistics, {COMPSTAT}
+               2010},
+  pages     = {177--186},
+  publisher = {Physica-Verlag},
+  year      = {2010},
+}
+ 
  # workhorse quotes #
 
  @inproceedings{qian2019improvedrates,
@@ -386,7 +406,7 @@
   year={2019}
 }
 
-    ### Step-size Selection ###
+    ### Step-Size Selection ###
 
 # Armijo Line-Search #
 
@@ -429,6 +449,22 @@
   year      = {2019},
 }
 
+@inproceedings{orabona2017coin,
+  author    = {Francesco Orabona and
+               Tatiana Tommasi},
+  _editor    = {Isabelle Guyon and
+               Ulrike von Luxburg and
+               Samy Bengio and
+               Hanna M. Wallach and
+               Rob Fergus and
+               S. V. N. Vishwanathan and
+               Roman Garnett},
+  title     = {Training Deep Networks without Learning Rates Through Coin Betting},
+  booktitle = {Advances in Neural Information Processing Systems 30: {NeurIPS} 2017},
+  pages     = {2160--2170},
+  year      = {2017},
+}
+
 @inproceedings{schaul2013no,
   author    = {Tom Schaul and
                Sixin Zhang and
@@ -442,6 +478,99 @@
   publisher = {JMLR.org},
   year      = {2013},
 }
+
+    # hyper-gradient a meta-descent algorithms #
+
+@inproceedings{baydin2018hypergradient,
+  author    = {Atilim Gunes Baydin and
+               Robert Cornish and
+               David Mart{\'{\i}}nez{-}Rubio and
+               Mark Schmidt and
+               Frank Wood},
+  title     = {Online Learning Rate Adaptation with Hypergradient Descent},
+  booktitle = {6th International Conference on Learning Representations, {ICLR} 2018},
+  publisher = {OpenReview.net},
+  year      = {2018},
+}
+
+@article{schraudolph1999local,
+  title     = {Local gain adaptation in stochastic gradient descent},
+  author    = {Schraudolph, Nicol N},
+  year      = {1999},
+  publisher = {IET}
+}
+
+@inproceedings{sutton1992gain,
+  title     = {Gain adaptation beats least squares},
+  author    = {Sutton, Richard S},
+  booktitle = {Proceedings of the 7th Yale workshop on adaptive and learning systems},
+  volume    = {161168},
+  year      = {1992}
+}
+
+@article{almeida1998parameter,
+  title     = {Parameter adaptation in stochastic optimization},
+  author    = {Almeida, Lu{\'\i}s B and Langlois, Thibault and Amaral, Jos{\'e} D and Plakhov, Alexander},
+  journal   = {On-Line Learning in Neural Networks, Publications of the Newton Institute},
+  pages     = {111--134},
+  year      = {1998}
+}
+
+@incollection{plagianakos2001learning,
+  title     = {Learning rate adaptation in stochastic gradient descent},
+  author    = {Plagianakos, VP and Magoulas, GD and Vrahatis, MN},
+  booktitle = {Advances in convex analysis and global optimization},
+  pages     = {433--444},
+  year      = {2001},
+  publisher = {Springer}
+}
+
+@article{shao2000rates,
+  title     = {Rates of convergence of adaptive step-size of stochastic approximation algorithms},
+  author    = {Shao, S and Yip, Percy PC},
+  journal   = {Journal of mathematical analysis and applications},
+  volume    = {244},
+  number    = {2},
+  pages     = {333--347},
+  year      = {2000},
+  publisher = {Elsevier}
+} 
+ 
+
+    # heuristics #
+
+@inproceedings{rolinek2018l4,
+  author    = {Michal Rolinek and
+               Georg Martius},
+  _editor    = {Samy Bengio and
+               Hanna M. Wallach and
+               Hugo Larochelle and
+               Kristen Grauman and
+               Nicol{\`{o}} Cesa{-}Bianchi and
+               Roman Garnett},
+  title     = {{L4:} Practical loss-based step-size adaptation for deep learning},
+  booktitle = {Advances in Neural Information Processing Systems 31: {NeurIPS} 2018},
+  pages     = {6434--6444},
+  year      = {2018},
+}
+
+%% Stochastic Barzilai Borwein step-sizes 
+@inproceedings{tan2016bb,
+  author    = {Conghui Tan and
+               Shiqian Ma and
+               Yu{-}Hong Dai and
+               Yuqiu Qian},
+  _editor    = {Daniel D. Lee and
+               Masashi Sugiyama and
+               Ulrike von Luxburg and
+               Isabelle Guyon and
+               Roman Garnett},
+  title     = {Barzilai-Borwein Step Size for Stochastic Gradient Descent},
+  booktitle = {Advances in Neural Information Processing Systems 29: {NeurIPS} 2016},
+  pages     = {685--693},
+  year      = {2016},
+}
+
 
     ### Almost Sure Convergence of SGD ###
 
@@ -663,11 +792,45 @@
 
     ### Lower Bounds ###
 
+    # deterministic setting #
+
 @book{nemirovsky1983problem,
   title     = {Problem complexity and method efficiency in optimization},
   author    = {Nemirovsky, Arkadi{\u\i} Semenovich and Yudin, David Borisovich},
   year      = {1983},
   publisher = {Wiley-Interscience Series in Discrete Mathematics}
+}
+
+@inproceedings{arjevani2016iteration,
+  author    = {Yossi Arjevani and
+               Ohad Shamir},
+ _editor    = {Maria{-}Florina Balcan and
+               Kilian Q. Weinberger},
+  title     = {On the Iteration Complexity of Oblivious First-Order Optimization
+               Algorithms},
+  booktitle = {Proceedings of the 33nd International Conference on Machine Learning,
+               {ICML} 2016},
+  series    = {{JMLR} Workshop and Conference Proceedings},
+  volume    = {48},
+  pages     = {908--916},
+  publisher = {JMLR.org},
+  year      = {2016},
+}
+
+    # stochastic setting #
+
+@article{drori2019complexity,
+  title     = {The complexity of finding stationary points with stochastic gradient descent},
+  author    = {Drori, Yoel and Shamir, Ohad},
+  journal   = {arXiv preprint arXiv:1910.01845},
+  year      = {2019}
+}
+
+@article{arjevani2019lower,
+  title     = {Lower bounds for non-convex stochastic optimization},
+  author    = {Arjevani, Yossi and Carmon, Yair and Duchi, John C and Foster, Dylan J and Srebro, Nathan and Woodworth, Blake},
+  journal   = {arXiv preprint arXiv:1912.02365},
+  year      = {2019}
 }
 
     ### Acceleration ###

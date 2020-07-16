@@ -6,17 +6,22 @@
 %% Dump from Painless SGD %%
 
 Stochastic first-order methods are the most popular optimization algorithms in modern machine learning.
-In particular, \ac{SGD}~\citep{robbins1951sgd} and its adaptive variants~\citep{duchi2011adagrad, tieleman2012rmsprop, zeiler2012adadelta, kingma2015adam} are widely used for large-scale supervised learning, where they are frequently referred to as fundamental ``workhorse algorithms''~\citep{qian2019improvedrates, assran2019sgpush, grosse2015scaling}. 
+In particular, \ac{SGD}~\citep{robbins1951sgd} and its adaptive variants~\citep{duchi2011adagrad, tieleman2012rmsprop, zeiler2012adadelta, kingma2015adam} are widely used in large-scale supervised learning, where they are frequently referred to as fundamental, ``workhorse'' algorithms~\citep{qian2019improvedrates, assran2019sgpush, grosse2015scaling}. 
 The main advantage of these methods for supervised learning is that they only use the gradient of a single or small sub-sample of training examples to update the model parameters at each iteration.
 The computational cost of \ac{SGD} (and variants) is thus independent of the training set and scales to very large datasets and models.
-Despite their success, stochastic first-order methods suffer from two well known problems. 
-Firstly, their hyper-parameters, such as step-size, must be tuned carefully to obtain good performance~\citep{bengio2012practical, schaul2013no, li2019convergence}; and
-secondly, even when well tuned, they converge slowly compared to deterministic or variance-reduced algorithms~\citep{leroux2012sag, schmidt2017sag, johnson2013svrg, defazio2014saga}.
-  
-Anecdotal evidence has long indicated that these problems are mitigated when training highly over-parameterized models.
-For example, stochastic first-order methods have been especially successful for expressive models, such as deep neural networks~\citep{zhang2013gradient, bengio2012practical} and non-parametric regression~\citep{liang2018just, belkin2019datainterp}.
-Moreover, stochastic gradient methods with variance-reduction typically do not outperform \ac{SGD} in this setting~\citep{defazio2019effectiveness}.
+This property has also led to the dominance of stochastic first-order algorithms for training over-parametrized models, such as deep neural networks~\citep{zhang2017understanding, bengio2012practical} and non-parametric kernel methods~\citep{liang2018just, belkin2019datainterp}.
 
+Despite their successes, stochastic first-order methods suffer from two well known problems. 
+The step-size, momentum term, and other algorithmic hyper-parameters must be tuned carefully to obtain good performance~\citep{bengio2012practical, schaul2013no, li2019convergence, choi2019empirical}; and
+they converge slowly compared to deterministic~\citep{nesterov2004lectures} or variance-reduced algorithms~\citep{schmidt2017sag, johnson2013svrg, defazio2014saga} even when tuned.
+The issue of hyper-parameter tuning for \ac{SGD} is the focus of intense research, with approaches ranging from adaptive step-sizes inspired by online learning~\citep{luo2019adabound, li2019convergence, orabona2017coin} to meta-learning procedures~\citep{baydin2018hypergradient, schraudolph1999local, sutton1992gain, almeida1998parameter, plagianakos2001learning, shao2000rates} and heuristics for online estimation~\citep{schaul2013no, rolinek2018l4, tan2016bb}.
+In contrast, the slow convergence of first-order methods in the general stochastic setting cannot be improved, with lower-bounds showing \( \Omega(\epsilon^{-4}) \) complexity for convergence to a stationary point~\citep{drori2019complexity, arjevani2019lower}.
+This compares poorly to deterministic methods, which obtain \( \Omega(\epsilon^{-2}) \)~\citep{arjevani2016iteration}.
+
+
+Experimental evidence has long shown that the slow optimization speed of stochastic first-order methods is mitigated when training highly over-parameterized models~\citep{bottou2010largescale, }.
+\ac{SGD} and variants have been especially successful for expressive problems, such as neural networks learning~\citep{zhang2013gradient, bengio2012practical} and non-parametric regression~\citep{liang2018just, belkin2019datainterp}.
+In contrast, variance-reduced algorithms typically do not outperform \ac{SGD} in this setting~\citep{defazio2019effectiveness}. 
 
 % Theoretical results on Over-parameterized optimization
     % constant step-size SGD
@@ -30,7 +35,6 @@ Moreover, stochastic gradient methods with variance-reduction typically do not o
 
 \section{Related Work}
 
-\section{
 
 \newpage
 
