@@ -142,6 +142,36 @@
   year      = {1997},
 }
 
+    ## Hybrid deterministic-stochastic methods ##
+@article{friedlander2012hybrid,
+  author    = {Michael P. Friedlander and
+               Mark Schmidt},
+  title     = {Hybrid Deterministic-Stochastic Methods for Data Fitting},
+  journal   = {{SIAM} J. Scientific Computing},
+  volume    = {34},
+  number    = {3},
+  year      = {2012},
+}
+
+@article{byrd2012sample,
+  author    = {Richard H. Byrd and
+               Gillian M. Chin and
+               Jorge Nocedal and
+               Yuchen Wu},
+  title     = {Sample size selection in optimization methods for machine learning},
+  journal   = {Math. Program.},
+  volume    = {134},
+  number    = {1},
+  pages     = {127--155},
+  year      = {2012},
+}
+
+@article{de2016big,
+  title     = {Big batch {SGD}: Automated inference using adaptive batch sizes},
+  author    = {De, Soham and Yadav, Abhay and Jacobs, David and Goldstein, Tom},
+  journal   = {arXiv preprint arXiv:1610.05792},
+  year      = {2016}
+}
 %% SGD for large-scale learning 
 @inproceedings{bottou2007large,
   author    = {L{\'{e}}on Bottou and
@@ -308,7 +338,7 @@
 %% Strong Growth 
 @article{schmidt2013fast,
   title     = {Fast convergence of stochastic gradient descent under a strong growth condition},
-  author    = {Schmidt, Mark and Roux, Nicolas Le},
+  author    = {Schmidt, Mark and {Le Roux}, Nicolas},
   journal   = {arXiv preprint arXiv:1308.6370},
   year      = {2013}
 }
@@ -482,6 +512,18 @@
     year        = {1966}
 }
 
+%% golden-section search
+@article{avriel1968golden,
+  title     = {Golden block search for the maximum of unimodal functions},
+  author    = {Avriel, Mordecai and Wilde, Douglass J},
+  journal   = {Management Science},
+  volume    = {14},
+  number    = {5},
+  pages     = {307--319},
+  year      = {1968},
+  publisher = {INFORMS}
+}
+
 @article{krejic2013line,
   author    = {Natasa Krejic and
                Natasa Krklec},
@@ -490,6 +532,34 @@
   volume    = {245},
   pages     = {213--231},
   year      = {2013},
+}
+
+@article{paquette2020stochastic,
+  author    = {Courtney Paquette and
+               Katya Scheinberg},
+  title     = {A Stochastic Line Search Method with Expected Complexity Analysis},
+  journal   = {{SIAM} J. Optim.},
+  volume    = {30},
+  number    = {1},
+  pages     = {349--376},
+  year      = {2020},
+}
+
+@inproceedings{fridovich2019choosing,
+  title     = {Choosing the Step Size: Intuitive Line Search Algorithms with Efficient Convergence},
+  author    = {Fridovich-Keil, Sara and Recht, Benjamin},
+  booktitle = {The 11th Workshop on Optimization for Machine Learning ({OPT} 2019)},
+  year      = {2019},
+}
+
+@article{mahsereci2017pls,
+  author    = {Maren Mahsereci and
+               Philipp Hennig},
+  title     = {Probabilistic Line Searches for Stochastic Optimization},
+  journal   = {J. Mach. Learn. Res.},
+  volume    = {18},
+  pages     = {119:1--119:59},
+  year      = {2017},
 }
 
 # Adaptive Step-Sizes #
@@ -658,12 +728,26 @@
   publisher = {MIT press}
 }
 
+@article{lei2019stochastic,
+  title     = {Stochastic gradient descent for nonconvex learning without bounded gradient assumptions},
+  author    = {Lei, Yunwen and Hu, Ting and Li, Guiying and Tang, Ke},
+  journal   = {IEEE Transactions on Neural Networks and Learning Systems},
+  year      = {2019},
+  publisher = {IEEE}
+}
+
 # almost sure convergence of SGD with diminishing step size; larger bound on step-size than previous work.
 @article{nguyen2018sgd,
   title     = {S{GD} and {H}ogwild! convergence without the bounded gradients assumption},
   author    = {Nguyen, Lam M. and Nguyen, Phuong Ha and van Dijk, Marten and Richt{\'a}rik, Peter and Scheinberg, Katya and Tak{\'a}{\v{c}}, Martin},
   journal   = {arXiv preprint arXiv:1802.03801},
   year      = {2018}
+}
+
+@phdthesis{bottou1991approche,
+  title     = {Une approche théorique de l'apprentissage connexionniste et applications à la reconnaissance de la parole},
+  author    = {Bottou, L{\'e}on},
+  year      = {1991}
 }
 
 @book{ccinlar2011probability,
@@ -687,7 +771,7 @@
 
 %% Original SAG Paper
 @inproceedings{leroux2012sag,
-  author    = {Nicolas {Le~Roux} and
+  author    = {Nicolas {Le Roux} and
                Mark Schmidt and
                Francis R. Bach},
   _editor    = {Peter L. Bartlett and
@@ -705,7 +789,7 @@
 %% SAG Journal Version
 @article{schmidt2017sag,
   author    = {Mark Schmidt and
-               Nicolas Le Roux and
+               Nicolas {Le Roux} and
                Francis R. Bach},
   title     = {Minimizing finite sums with the stochastic average gradient},
   journal   = {Math. Program.},
@@ -959,7 +1043,7 @@
 
 @inproceedings{schmidt2011convergence,
   author    = {Mark Schmidt and
-               Nicolas Le Roux and
+               Nicolas {Le Roux} and
                Francis R. Bach},
   _editor    = {John Shawe{-}Taylor and
                Richard S. Zemel and
@@ -983,6 +1067,67 @@
   url       = {http://jmlr.org/papers/v18/16-410.html},
 }
 
+@inproceedings{allen-zhou2018katyushax,
+  author    = {Zeyuan Allen{-}Zhu},
+  _editor    = {Jennifer G. Dy and
+               Andreas Krause},
+  title     = {Katyusha {X:} Practical Momentum Method for Stochastic Sum-of-Nonconvex
+               Optimization},
+  booktitle = {Proceedings of the 35th International Conference on Machine Learning,
+               {ICML} 2018},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {80},
+  pages     = {179--185},
+  publisher = {{PMLR}},
+  year      = {2018},
+}
+
+@inproceedings{tang2018restkatyusha,
+  author    = {Junqi Tang and
+               Mohammad Golbabaee and
+               Francis Bach and
+               Mike E. Davies},
+  _editor    = {Samy Bengio and
+               Hanna M. Wallach and
+               Hugo Larochelle and
+               Kristen Grauman and
+               Nicol{\`{o}} Cesa{-}Bianchi and
+               Roman Garnett},
+  title     = {Rest-{K}atyusha: {E}xploiting the Solution's Structure via Scheduled Restart
+               Schemes},
+  booktitle = {Advances in Neural Information Processing Systems 31: {NeurIPS} 2018},
+  pages     = {427--438},
+  year      = {2018},
+}
+%% loopless SVRG and Katyusha.
+@inproceedings{kovalev2020loopless,
+  author    = {Dmitry Kovalev and
+               Samuel Horv{\'{a}}th and
+               Peter Richt{\'{a}}rik},
+  _editor    = {Aryeh Kontorovich and
+               Gergely Neu},
+  title     = {Don't Jump Through Hoops and Remove Those Loops: {SVRG} and {K}atyusha
+               are Better Without the Outer Loop},
+  booktitle = {Algorithmic Learning Theory, {ALT} 2020},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {117},
+  pages     = {451--467},
+  publisher = {{PMLR}},
+  year      = {2020},
+}
+
+% acceleration with errors
+@article{aspremont2008approximate,
+  author    = {Alexandre d'Aspremont},
+  title     = {Smooth Optimization with Approximate Gradient},
+  journal   = {{SIAM} J. Optim.},
+  volume    = {19},
+  number    = {3},
+  pages     = {1171--1183},
+  year      = {2008},
+  url       = {https://doi.org/10.1137/060676386},
+}
+
 @article{devolder2014first,
   title     = {First-order methods of smooth convex optimization with inexact oracle},
   author    = {Devolder, Olivier and Glineur, Fran{\c{c}}ois and Nesterov, Yurii},
@@ -994,6 +1139,7 @@
   publisher={Springer}
 }
 
+%% acceleration with additive noise
 @inproceedings{cohen2018acceleration,
   author    = {Michael Cohen and
                Jelena Diakonikolas and
@@ -1010,6 +1156,50 @@
   year      = {2018},
 }
 
+%% catalyst: generic acceleration via proximal-point.
+@article{lin2017catalyst,
+  author    = {Hongzhou Lin and
+               Julien Mairal and
+               Za{\"{\i}}d Harchaoui},
+  title     = {Catalyst Acceleration for First-order Convex Optimization: from Theory
+               to Practice},
+  journal   = {J. Mach. Learn. Res.},
+  volume    = {18},
+  pages     = {212:1--212:54},
+  year      = {2017},
+}
+
+@inproceedings{frostig2015unregularizing,
+  author    = {Roy Frostig and
+               Rong Ge and
+               Sham M. Kakade and
+               Aaron Sidford},
+  _editor    = {Francis R. Bach and
+               David M. Blei},
+  title     = {Un-regularizing: approximate proximal point and faster stochastic
+               algorithms for empirical risk minimization},
+  booktitle = {Proceedings of the 32nd International Conference on Machine Learning,
+               {ICML} 2015},
+  series    = {{JMLR} Workshop and Conference Proceedings},
+  volume    = {37},
+  pages     = {2540--2548},
+  publisher = {JMLR.org},
+  year      = {2015},
+}
+
+@article{assran2020convergence,
+  title     = {On the Convergence of Nesterov's Accelerated Gradient Method in Stochastic Settings},
+  author    = {Assran, Mahmoud and Rabbat, Michael},
+  journal   = {arXiv preprint arXiv:2002.12414},
+  year      = {2020}
+}
+
+@article{chen2020understanding,
+  title     = {Understanding Accelerated Stochastic Gradient Descent via the Growth Condition},
+  author    = {Chen, You-Lin and Kolar, Mladen},
+  journal   = {arXiv preprint arXiv:2006.06782},
+  year      = {2020}
+}
 
 @inproceedings{jain2018accelerating,
   author    = {Prateek Jain and

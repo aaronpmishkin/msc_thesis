@@ -15,7 +15,7 @@ The chapter ends with a brief discussion of acceleration under the weak growth c
 
 Recall that Theorems~\ref{thm:sgc-convex} and~\ref{thm:wgc-convex} establish fast linear and sub-linear convergence rates for \ac{SGD} that are comparable with analyses for deterministic problems (e.g. gradient descent).
 Unfortunately, the classic work by \citet{nemirovsky1983problem} in 1983 shows that the convergence of gradient descent is not tight with lower-bounds for convex, Lipschitz-smooth functions with deterministic oracles. 
-Subsequent by developments by Nesterov~\citep{nesterov1983method, nemirovskii1985optimal, nesterov1988approach} define a series of first-order methods (terminating with \ac{AGD}) achieving optimal \( O(\frac{1}{K^2}) \) convergence in the setting analyzed by Nemirovsky and Yudin. 
+Subsequent by developments by Nesterov~\citep{nesterov1983method, nemirovsky1985optimal, nesterov1988approach} define a series of first-order methods (terminating with \ac{AGD}) achieving optimal \( O(\frac{1}{K^2}) \) convergence in the setting analyzed by Nemirovsky and Yudin. 
 Algorithms with this optimal rate are called \emph{accelerated} and subsequent research has generated a large number of accelerated algorithms for deterministic problems.
 That acceleration literature firmly places gradient descent as a sub-optimal algorithm and also casts the analyses in \autoref{ch:sgd} in a new light.
 In particular, the close relationship between \ac{SGD} under interpolation and deterministic gradient descent indicates that \ac{SAGD} may be a faster algorithm than \ac{SGD} in restricted settings. 
@@ -203,7 +203,7 @@ Overall, we conclude \ac{SAGD} is an accelerated method only relative to the com
 The analysis of \ac{SAGD} for strongly-convex functions presented here is strictly tighter than prior work by \citet[Theorem 1]{vaswani2019fast}, who also studied convergence under strong growth.
 \autoref{table:agd-comparison} compares the two complexities; their major difference is that \( \rho \) is squared in the rate obtain by Vaswani et al. 
 Recalling \( \rho = \sfrac{\Lmax}{\mu} \) in the worst-case implies that our result is faster by a multiple of the condition number for individually-smooth \( \oracle{} \) satisfying interpolation.
-This significant improvement addresses the criticism of~\citet{Liu2020Accelerating}, who showed that the rate obtained by Vaswani et al.\ could be slower than \ac{SGD} in some circumstances. 
+This significant improvement addresses the criticism of~\citet{liu2020accelerating}, who showed that the rate obtained by Vaswani et al.\ could be slower than \ac{SGD} in some circumstances. 
 
 \begin{table}[t]
     \centering

@@ -78,32 +78,57 @@ Convergence to an explicit neighborhood is derived for \( L_2 \)-regularized pro
 
 \section{Related Work}
 
+
 \noindent \textbf{Interpolation}:
-\citet{bassily2018exponential} define interpolation directly in terms of the iterates produced by an optimizer; in the finite-sum setting, an objective-optimizer pair satisfies interpolation if the individual loss functions approach the same minimal value in the iteration limit. 
-Also for finite-sum functions, \citet{berrada2019training} propose an \( \epsilon \)-interpolation definition which requires the values of the sub-functions lower-bounded and within \( \epsilon  \) of that bound at the true minimizer. 
-A larger body of work defines interpolation as holding when the global minimizers of the overall objective are either global minimizers or stationary points of the sub-functions~\cite{vaswani2019fast, vaswani2019painless, vaswani2020adaptive, meng2020fastandfurious, loizou2020sps}.\\
+Existing work focuses on interpolation in the context of finite-sum objectives. 
+In this setting, \citet{bassily2018exponential} say an objective-optimizer pair satisfies interpolation if the evaluations of the sub-functions approach the same minimal value in the iteration limit. 
+\citet{berrada2019training} propose an \( \epsilon \)-interpolation definition which requires the values of the sub-functions to be lower-bounded and within \( \epsilon  \) of that bound at the minimizer of the overall objective. 
+A larger body of work considers interpolation to hold when the global minimizers of the overall objective are either global minimizers or stationary points of the sub-functions~\cite{vaswani2019fast, vaswani2019painless, vaswani2020adaptive, meng2020fastandfurious, loizou2020sps}.\\
 
 \noindent \textbf{Growth Conditions}:
-The strong growth condition was first proposed in the context of incremental gradient methods by \citet{solodov1998incremental} and \citet{tseng1998incremental} as an almost-sure bound on the norm of the stochastic gradients. 
+The strong growth condition was first proposed in the context of incremental gradient methods by \citet{solodov1998incremental} and \citet{tseng1998incremental} as an almost-sure bound on the squared-norm of the stochastic gradients. 
 This definition was later used by~\citet{schmidt2013fast} to derive linear convergence rates for \ac{SGD} with a constant step-size. 
-\citet{vaswani2019fast} propose a modified version of strong growth which holds in expectation over the stochastic gradients rather than almost-surely. 
+\citet{vaswani2019fast} propose a modified version of strong growth which holds in expectation rather than almost-surely. 
 We call this latter condition strong growth and refer to the earlier definition as maximal strong growth.
-\citet{vaswani2019fast} also propose the weak growth condition as a natural relaxation of strong growth. 
+\citet{vaswani2019fast} also propose what we call the weak growth condition as a natural relaxation of strong growth. 
 
 \citet{cevher2018linear} refer to strong growth simply as the ``growth condition'' and suggest strong growth with an additive noise parameter as an alternative relaxation, which they also call weak growth.
-This condition is equivalent to assuming a bound on the variance of the stochastic gradients~\citep{khaled2020better, ghadimi2012optimal1}.
+For unbiased oracles, this condition is equivalent to assuming a bound on the variance of the stochastic gradients~\citep{khaled2020better, ghadimi2012optimal1}.
 \citet{cevher2018linear} study the convergence of proximal-gradient methods under this condition and also prove that strong growth is both sufficient \emph{and necessary} for \ac{SGD} to converge linearly.\\
 
 
 \noindent \textbf{Stochastic Acceleration}: 
 Many authors have considered accelerating stochastic gradient methods.
-\citet{schmidt2011convergence} provide sufficient conditions on the gradient noise for acceleration of proximal-gradient methods.
-\citet{nesterov2007proximalgradient} also investigates proximal-gradient methods, but under the assumption of fixed errors in the gradients, and derives rates for error accumulation (and thus divergence) in this setting. 
-An alternative approach to stochastic acceleration was initiated by \citet{allen-zhu2017katyusha}, who leverages the structure of finite-sum functions to achieve provable acceleration.\\
+\citet{schmidt2011convergence} provide sufficient conditions on (potentially adversarial) gradient noise for acceleration of proximal-gradient methods.
+\citet{aspremont2008approximate} and \citet{devolder2014first} investigate accelerated gradient methods under the assumption of approximate oracles with deterministic, bounded errors and derive rates for convergence and error accumulation in this setting.
+In contrast, \citet{cohen2018acceleration} consider stochastic oracles with additive gradient noise and propose a noise-resistant acceleration scheme.
+Very recently, \citet{chen2020understanding} analyze accelerated methods for strongly-convex functions under strong growth plus an additive noise term. 
 
+An alternative approach to stochastic acceleration was initiated by \citet{allen-zhu2017katyusha}, who leverage the structure of finite-sum functions to achieve provable acceleration.
+Multiple algorithms of this type have been since proposed~\citep{allen-zhou2018katyushax, tang2018restkatyusha, kovalev2020loopless}.
+Alternative approaches also leveraging finite-sum structure have been shown to achieve acceleration via approximate proximal-point algorithms; such methods include Catalyst~\citep{lin2017catalyst} and accelerated APPA~\citep{frostig2015unregularizing}.
 
+Several authors have considered acceleration under interpolation.
+The most similar work to this one is that of \citet{vaswani2019fast}, who analyze a version of Nesterov's accelerated gradient descent under the strong growth condition. 
+\citet{liu2020accelerating} propose another modification, called MaSS, and analyze its convergence for convex quadratics as well as strongly-convex functions with additional assumptions. 
+These assumptions imply strong growth, but yield hard-to-compare rates. 
+\citet{jain2018accelerating} prove accelerated rates for squared-losses under interpolation using a tail-averaging scheme. 
+Finally, \citet{assran2020convergence} study the stochastic approximation setting and prove that accelerated gradient descent may fail to accelerate or even diverge when interpolation is satisfied.\\
 
 \noindent \textbf{Line Search}:
+Line-search is a classic technique to set the step-size in deterministic optimization (see \citet{nocedal1999numerical}), but extensions to stochastic optimization are non-obvious. 
+\citet{mahsereci2017pls} use a Gaussian process model to define probabilistic Wolfe conditions, however the convergence of this procedure is not known.
+\citet{fridovich2019choosing} propose line-search conditions based on golden-section search~\citep{avriel1968golden}, but only provide empirical evidence for \ac{SGD}. 
+Other authors consider approaches based on multiple function and/or gradient evaluations at each iteration~\citep{friedlander2012hybrid, byrd2012sample, de2016big, krejic2013line, paquette2020stochastic}.
+Such approaches typically require growing batch-sizes to ensure convergence.
+The work in the thesis follows \citet{vaswani2019painless}, who investigated stochastic versions of the Armijo line-search under interpolation; we provide tighter analyses in a more general setting.\\ 
+
+
+\noindent \textbf{Asymptotic Convergence}:
+The original paper by \citet{robbins1951sgd} establishes asymptotic, almost-sure convergence for \ac{SGD} to the zero of a convex function if the stochastic gradients are bounded and a decreasing step-size is used.
+Highly general analyses have since shown almost-sure convergence for general non-convex functions when a strong growth with additive noise condition is satisfied~\citep{bertsekas2000gradient, bottou1991approche}.
+These conditions have been also directly derived for strongly-convex and non-convex functions and used to establish almost-sure convergence~\citep{nguyen2018sgd, lei2019stochastic}.
+Finally, recent work has left decreasing step-size schedules behind and instead showed asymptotic convergence with Adagrad-style step-sizes~\citep{li2019convergence}.
 
 \newpage
 
