@@ -240,7 +240,8 @@
 %%   rather than the entry text.
 \usepackage[bookmarks,bookmarksnumbered,%
     allbordercolors={0.8 0.8 0.8},%
-    pagebackref,linktocpage%
+    %pagebackref,%
+    linktocpage%
     ]{hyperref}
 %% The following change how the the back-references text is typeset in a
 %% bibliography when `backref' or `pagebackref' are used
@@ -251,6 +252,7 @@
 %%\newcommand{\nocitations}{No citations}
 %%
 %\renewcommand*{\backref}[1]{}% necessary for backref < 1.33
+\iffalse
 \renewcommand*{\backrefsep}{,~}%
 \renewcommand*{\backreftwosep}{,~}% ', and~'
 \renewcommand*{\backreflastsep}{,~}% ' and~'
@@ -262,7 +264,7 @@
 \else
 \(\rightarrow\) pages #2%
 \fi}}
-
+\fi
 
 %% The following uses most defaults, which causes hyperlinks to be
 %% surrounded by colourful boxes; the colours are only visible in
@@ -458,7 +460,7 @@
 
 %    5. Bibliography
 \begin{singlespace}
-\raggedright
+%\raggedright
 \bibliographystyle{abbrvnat}
 \bibliography{refs}
 

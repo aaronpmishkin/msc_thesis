@@ -116,19 +116,79 @@
   year      = {2018}
 }
 
-%% empirical evidence SGD is efficient for over-parameterized models
-@inproceedings{bottou2010largescale,
-  author    = {L{\'{e}}on Bottou},
-  _editor    = {Yves Lechevallier and
-               Gilbert Saporta},
-  title     = {Large-Scale Machine Learning with Stochastic Gradient Descent},
-  booktitle = {19th International Conference on Computational Statistics, {COMPSTAT}
-               2010},
-  pages     = {177--186},
-  publisher = {Physica-Verlag},
-  year      = {2010},
+@article{belkin2019reconciling,
+  title={Reconciling modern machine-learning practice and the classical bias--variance trade-off},
+  author={Belkin, Mikhail and Hsu, Daniel and Ma, Siyuan and Mandal, Soumik},
+  journal={Proceedings of the National Academy of Sciences},
+  volume={116},
+  number={32},
+  pages={15849--15854},
+  year={2019},
+  publisher={National Acad Sciences}
 }
- 
+
+@inproceedings{schapire1997boosting,
+  author    = {Robert E. Schapire and
+               Yoav Freund and
+               Peter Barlett and
+               Wee Sun Lee},
+  _editor    = {Douglas H. Fisher},
+  title     = {Boosting the margin: {A} new explanation for the effectiveness of
+               voting methods},
+  booktitle = {Proceedings of the Fourteenth International Conference on Machine
+               Learning ({ICML} 1997)},
+  pages     = {322--330},
+  publisher = {Morgan Kaufmann},
+  year      = {1997},
+}
+
+%% SGD for large-scale learning 
+@inproceedings{bottou2007large,
+  author    = {L{\'{e}}on Bottou and
+               Olivier Bousquet},
+  _editor    = {John C. Platt and
+               Daphne Koller and
+               Yoram Singer and
+               Sam T. Roweis},
+  title     = {The Tradeoffs of Large Scale Learning},
+  booktitle = {Advances in Neural Information Processing Systems 20: {NeurIPS} 2007},
+  pages     = {161--168},
+  publisher = {Curran Associates, Inc.},
+  year      = {2007},
+}
+
+%% SGD for over-parameterized models
+@inproceedings{arora2018overparameterization,
+  author    = {Sanjeev Arora and
+               Nadav Cohen and
+               Elad Hazan},
+  _editor    = {Jennifer G. Dy and
+               Andreas Krause},
+  title     = {On the Optimization of Deep Networks: Implicit Acceleration by Overparameterization},
+  booktitle = {Proceedings of the 35th International Conference on Machine Learning,
+               {ICML} 2018},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {80},
+  pages     = {244--253},
+  publisher = {{PMLR}},
+  year      = {2018},
+}
+
+@inproceedings{zhou2019analysis,
+  author    = {Difan Zou and
+               Quanquan Gu},
+  _editor    = {Hanna M. Wallach and
+               Hugo Larochelle and
+               Alina Beygelzimer and
+               Florence d'Alch{\'{e}}{-}Buc and
+               Emily B. Fox and
+               Roman Garnett},
+  title     = {An Improved Analysis of Training Over-parameterized Deep Neural Networks},
+  booktitle = {Advances in Neural Information Processing Systems 32: {NeurIPS} 2019},
+  pages     = {2053--2062},
+  year      = {2019},
+}
+
  # workhorse quotes #
 
  @inproceedings{qian2019improvedrates,
@@ -627,7 +687,7 @@
 
 %% Original SAG Paper
 @inproceedings{leroux2012sag,
-  author    = {Nicolas Le Roux and
+  author    = {Nicolas {Le~Roux} and
                Mark Schmidt and
                Francis R. Bach},
   _editor    = {Peter L. Bartlett and
@@ -801,6 +861,7 @@
   publisher = {Wiley-Interscience Series in Discrete Mathematics}
 }
 
+%% \epsilon-optimality for (strongly-) convex functions
 @inproceedings{arjevani2016iteration,
   author    = {Yossi Arjevani and
                Ohad Shamir},
@@ -815,6 +876,15 @@
   pages     = {908--916},
   publisher = {JMLR.org},
   year      = {2016},
+}
+
+@article{carmon2019lower,
+  title     = {Lower bounds for finding stationary points I},
+  author    = {Carmon, Yair and Duchi, John C and Hinder, Oliver and Sidford, Aaron},
+  journal   = {Mathematical Programming},
+  pages     = {1--50},
+  year      = {2019},
+  publisher = {Springer}
 }
 
     # stochastic setting #
@@ -847,9 +917,9 @@
   year      = {1983}
 } 
 
-@article{nemirovskii1985optimal,
+@article{nemirovsky1985optimal,
   title     = {Optimal methods of smooth convex minimization},
-  author    = {Nemirovskii, Arkadi S and Nesterov, Yu E},
+  author    = {Nemirovsky, Arkadi S and Nesterov, Yu E},
   journal   = {USSR Computational Mathematics and Mathematical Physics},
   volume    = {25},
   number    = {2},
