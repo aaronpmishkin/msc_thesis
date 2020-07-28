@@ -25,11 +25,11 @@
     First we establish a few preliminaries.
     The condition that \( \gamma_0 \ind \seq{\zk} \) implies the \( \seq{\gamma_k}_{k=0}^\infty \), \( \seq{\alpha_k}_{k=0}^\infty \), and \( \seq{\lambda_k}_{k=0}^\infty \) sequences evolve \emph{independently} of the stochastic processes \( \seq{\yk}_{k=0}^\infty \), \( \seq{\wk}_{k=0}^\infty \), and \( \seq{v_k}_{k=0}^\infty \).
     This will be necessary in later in the proof.
-    Next, instantiating \autoref{lemma:sgc-decrease-condition} with \( \eta = \frac{1}{\rho L} \) yields
+    Next, instantiating \autoref{lemma:sgc-decrease-condition} with \( \eta = \frac{1}{\sgc L} \) yields
     \begin{align}
-        \Ek \sbr{f(\wkk)} &\leq f(\wk) - \frac{1}{2 \rho L} \norm{\grad(\wk)}^2.\nonumber\\
+        \Ek \sbr{f(\wkk)} &\leq f(\wk) - \frac{1}{2 \sgc L} \norm{\grad(\wk)}^2.\nonumber\\
             \intertext{Taking expectations with respect to \( z_0, \ldots, z_{k-1} \),}
-        \implies \E \sbr{f(\wkk)} &\leq \E\sbr{f(\wk)} - \frac{1}{2 \rho L} \E \sbr{\norm{\grad(\wk)}^2}.\label{eq:expected-decrease}
+        \implies \E \sbr{f(\wkk)} &\leq \E\sbr{f(\wk)} - \frac{1}{2 \sgc L} \E \sbr{\norm{\grad(\wk)}^2}.\label{eq:expected-decrease}
     \end{align}
     Now we move on to the main argument, which proceeds by induction.\hfill \break
 
@@ -44,14 +44,14 @@
         \intertext{Taking expectations with respect to \( \z_{0}, \ldots, \z_k \), using \( \gamma_0 \ind \seq{\zk} \), and linearity of expectation: }
         \E[\phi_{k+1}^*] &= (1- \alpha_k) \E[\phi^*_k] + \E\sbr{\alpha_k f(\yk) - \frac{\alpha_k^2}{2\gamma_{k+1}}\norm{\grad(\yk)}^2} \\ & \hspace{5em} + \E\sbr{\frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
                          &\geq (1- \alpha_k) \E\sbr{f(\wk)} + \E\sbr{\alpha_k f(\yk) - \frac{\alpha_k^2}{2\gamma_{k+1}}\norm{\grad(\yk)}^2} \\ & \hspace{5em} + \E\sbr{\frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}}
-        &= (1- \alpha_k) f(\wk) + \alpha_k f(\yk) - \frac{1}{2\rho L}\norm{\grad(\yk)}^2 + \frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}, \\
+        &= (1- \alpha_k) f(\wk) + \alpha_k f(\yk) - \frac{1}{2\sgc L}\norm{\grad(\yk)}^2 + \frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}, \\
         \intertext{where the inequality follows from the inductive assumption. 
         Convexity of \( f \) implies \( f(\wk) - \abr{ \grad(\yk), \wk - \yk } \geq f(\yk) \). 
         This inequality holds in expectation, allowing us to obtain }
-        \E[\phi_{k+1}^*] &\geq (1- \alpha_k) \E[\rbr{f(\wk) - \abr{\grad(\yk), \wk - \yk}}] + \E\bigg[(1-\alpha_k) \abr{\grad(\yk), \wk - \yk} + \alpha_k f(\yk) \\ & \hspace{5em} - \frac{1}{2\rho L}\norm{\grad(\yk)}^2 \bigg] + \E\sbr{\frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
-        &\geq  (1-\alpha_k) \E[f(\yk)] + \E\sbr{\alpha_k f(\yk) - \frac{1}{2\rho L} \norm{\grad(\yk)}^2} \\
+        \E[\phi_{k+1}^*] &\geq (1- \alpha_k) \E[\rbr{f(\wk) - \abr{\grad(\yk), \wk - \yk}}] + \E\bigg[(1-\alpha_k) \abr{\grad(\yk), \wk - \yk} + \alpha_k f(\yk) \\ & \hspace{5em} - \frac{1}{2\sgc L}\norm{\grad(\yk)}^2 \bigg] + \E\sbr{\frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
+        &\geq  (1-\alpha_k) \E[f(\yk)] + \E\sbr{\alpha_k f(\yk) - \frac{1}{2\sgc L} \norm{\grad(\yk)}^2} \\
         & \hspace{5em} + (1-\alpha_k) \E\sbr{\abr{\grad(\yk), \wk - \yk} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
-        &=  \E\sbr{f(\yk) - \frac{1}{2\rho L} \norm{\grad(\yk)}^2} + (1-\alpha_k) \E\bigg[\abr{\grad(\yk), \wk - \yk} \\ & \hspace{5em} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}\bigg] \\
+        &=  \E\sbr{f(\yk) - \frac{1}{2\sgc L} \norm{\grad(\yk)}^2} + (1-\alpha_k) \E\bigg[\abr{\grad(\yk), \wk - \yk} \\ & \hspace{5em} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}\bigg] \\
         \intertext{\autoref{eq:expected-decrease} now implies}
         \E[\phi_{k+1}^*] &\geq \E\sbr{f(\wkk)} + (1-\alpha_k) \E\sbr{\abr{\grad(\yk), \wk - \yk} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
         \intertext{The remainder of the proof is largely unchanged from the determnistic case:}
@@ -82,11 +82,11 @@
     The choice of \( \gamma_0 = \mu \) implies
     \begin{itemize}
         \item \(  \gamma_{k}  = (1 - \alpha_{k-1}) \gamma_{k-1} + \alpha_{k-1} \mu = \mu \);
-        \item \( \alpha_{k} = \sqrt{\frac{\gamma_{k+1}}{\rho L}} = \sqrt{\frac{\mu}{\rho L}} \);
-        \item \( \lambda_{k} = (1 - \alpha_{k-1}) \lambda_{k-1} = \rbr{1 - \sqrt{\frac{\mu}{\rho L}}}^{k} \).
+        \item \( \alpha_{k} = \sqrt{\frac{\gamma_{k+1}}{\sgc L}} = \sqrt{\frac{\mu}{\sgc L}} \);
+        \item \( \lambda_{k} = (1 - \alpha_{k-1}) \lambda_{k-1} = \rbr{1 - \sqrt{\frac{\mu}{\sgc L}}}^{k} \).
     \end{itemize}
     Altogether, we obtain
-    \[ \E\sbr{f(\wk)} - f(\wopt) \leq \rbr{1 - \sqrt{\frac{\mu}{\rho L}}}^{k} \rbr{ f(w_0) - f(\wopt) + \frac{\mu}{2} \norm{\wopt - \w_0}^2 }. \]
+    \[ \E\sbr{f(\wk)} - f(\wopt) \leq \rbr{1 - \sqrt{\frac{\mu}{\sgc L}}}^{k} \rbr{ f(w_0) - f(\wopt) + \frac{\mu}{2} \norm{\wopt - \w_0}^2 }. \]
 \end{proof}
 
 
@@ -100,9 +100,9 @@
         &\leq \E[\phi_k(\wopt)] \\
         &\leq \rbr{1 - \lambda_k} f(\wopt) + \lambda_k \phi_0(\wopt) \tag{by Definition~\ref{def:estimating_sequences}}\\
         \implies \E\sbr{f(\wk)} - f(\wopt) &\leq \lambda_k (\phi_0(\wopt) - f(\wopt))\\
-                                           &= \lambda_k \rbr{f(\w_0) - f(\wopt) + \rho L \norm{\w_0 - \wopt}^2 }.
+                                           &= \lambda_k \rbr{f(\w_0) - f(\wopt) + \sgc L \norm{\w_0 - \wopt}^2 }.
     \end{align*}
-    Let \( \tilde L = \rho L \). 
+    Let \( \tilde L = \sgc L \). 
     Now we must upper-bound \( \lambda_k \), given that \( \lambda_0 = 2 \tilde L \).
     Noting \( \mu = 0 \) since \( f \) is only convex gives the following concrete expression for the different parameter sequences: 
     \begin{itemize}
@@ -113,12 +113,12 @@
     Lemma 2.2.4 from \citet{nesterov2004lectures} now implies 
     \[ \lambda_k \leq \frac{4 \tilde L}{\gamma_0 \rbr{k + 1}^2} = \frac{2}{\rbr{k + 1}^2}. \]
     The convergence rate of R-SAGD is thus 
-    \[  \E\sbr{f(\wk)} - f(\wopt) \leq \frac{2}{\rbr{k+1}^2}\rbr{f(\w_0) - f(\wopt) + \rho L \norm{\w_0 - \wopt}^2 }. \]
+    \[  \E\sbr{f(\wk)} - f(\wopt) \leq \frac{2}{\rbr{k+1}^2}\rbr{f(\w_0) - f(\wopt) + \sgc L \norm{\w_0 - \wopt}^2 }. \]
 \end{proof}
 
 
 %% Only included in long version. 
-\section{Additional Lemmas}\label{app:additional-lemmas}
+\section{Additional Lemmas}\label{app:agd-additional-lemmas}
 
 \wgcDecreaseCondition*
 \begin{proof}
@@ -130,9 +130,9 @@
         \E_{\zk} \sbr{f(\wkk)} &\leq f(\wk) - \eta \E_{\zk} \sbr{\abr{\grad(\wk), \grad(\wk, \zk)}} + \frac{L \eta^2}{2} \E_{\zk} \sbr{\norm{\grad(\wk, \zk)}}^2\\
                              &= f(\wk) - \eta \norm{\grad(\wk)}^2 + \frac{L \eta^2}{2} \E_{\zk} \sbr{\norm{\grad(\wk, \zk)}}^2.
                              \intertext{The weak growth condition implies}
-        \E_{\zk} \sbr{f(\wkk)} &\leq f(\wk) - \eta \norm{\grad(\wk)}^2 + 2 \rho L^2 \eta^2 \rbr{f(\wk) - f(\wopt)}.
+        \E_{\zk} \sbr{f(\wkk)} &\leq f(\wk) - \eta \norm{\grad(\wk)}^2 + 2 \wgc L^2 \eta^2 \rbr{f(\wk) - f(\wopt)}.
         \intertext{Using \autoref{lemma:convex-intermediate} and the fact that \( \eta \leq \frac{1}{\Lmax} \), }
-        \E_{\zk} \sbr{f(\wkk)} &\leq f(\wk) - \eta \norm{\grad(\wk)}^2 + \rho L^2 \eta \rbr{\norm{\wk - \wopt}^2 - \E_{\zk} \sbr{\norm{\wkk - \wopt}^2}}\\
-        \implies \E_{\zk} \sbr{f(\wkk) + \rho L^2 \eta \norm{\wkk - \wopt}^2} &\leq f(\wk) + \rho L^2 \eta \norm{\wk - \wopt}^2 - \eta \norm{\grad(\wk)}^2.
+        \E_{\zk} \sbr{f(\wkk)} &\leq f(\wk) - \eta \norm{\grad(\wk)}^2 + \wgc L^2 \eta \rbr{\norm{\wk - \wopt}^2 - \E_{\zk} \sbr{\norm{\wkk - \wopt}^2}}\\
+        \implies \E_{\zk} \sbr{f(\wkk) + \wgc L^2 \eta \norm{\wkk - \wopt}^2} &\leq f(\wk) + \wgc L^2 \eta \norm{\wk - \wopt}^2 - \eta \norm{\grad(\wk)}^2.
     \end{align*}
 \end{proof}

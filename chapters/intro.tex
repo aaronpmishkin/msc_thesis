@@ -33,17 +33,17 @@ For instance, \citet{loizou2020sps} and \citet{berrada2019training} consider a s
 Stochastic line-searches using the classic Armijo condition~\citep{armijo1966ls} have also been proposed and shown to obtain fast convergence under interpolation~\citep{vaswani2019painless}.
 Very recently, adaptive variants of \ac{SGD} without momentum have analyzed both with and without the Armijo line-search~\citep{vaswani2020adaptive}.
 
-This thesis analyzes a small, but core group of methods in stochastic optimization with interpolation-type conditions.
+This thesis analyzes a small, but core group of methods in stochastic optimization under interpolation-type conditions.
 The focus is uniformly on first-order algorithms; we consider constant step-size \ac{SGD}, \ac{SGD} with a stochastic Armijo line-search, and a version of Nesterov's accelerated gradient descent with stochastic gradients~\citep{nesterov2004lectures}. 
 In nearly all cases, we show that existing analyses can be tightened to yield faster convergence rates with a larger range of parameters. 
 For strongly-convex functions, these improved rates are asymptotically faster than those previous obtained.
 Our theorems for convex functions improve over current results by constant factors.
-In the case of acceleration, the improvement is comparable to taking the square-root of the condition number and addresses criticisms that previous analyses could yield inferior rates to those of \ac{SGD}~\cite{liu2020accelerating}. 
+In the case of acceleration, the improvement is comparable to taking the square-root of the condition number and addresses criticisms that previous analyses yield inferior rates to those of \ac{SGD} in some circumstances~\cite{liu2020accelerating}. 
 
 The thesis is organized as follows: 
 In \autoref{ch:interpolation-gc}, we formalize interpolation and the strong/weak growth conditions in the context of general stochastic oracles. 
 Connections between interpolation, smoothness properties of the stochastic oracle, and growth of the stochastic gradients are derived.
-\autoref{ch:sgd} analyzes the complexity of \ac{SGD} with a fixed step-size, drawing comparisons with previous work by \citet{vaswani2019fast} and convergence rates in the deterministic setting. 
+\autoref{ch:sgd} analyzes the complexity of \ac{SGD} with a fixed step-size, drawing comparisons with previous work by \citet{vaswani2019fast} as well as convergence rates in the deterministic setting. 
 Asymptotic convergence of SGD with a constant step-size to
 \begin{inparaenum}[(i)]
 \item stationary points of general non-convex functions, and
@@ -54,30 +54,7 @@ Chapters~\ref{ch:line-search} and~\ref{ch:acceleration} then address the converg
 Finally, \autoref{ch:beyond-interpolation} leaves the basic interpolation setting behind and considers structural minimization with interpolating functions as components. 
 Convergence to an explicit neighborhood is derived for \( L_2 \)-regularized problems as a special case of this problem. 
 
-
-
-
-
-
- 
-
-%% Hyper-parameter selection %%
-
-%% Summary of Thesis %%
-
-
-% Theoretical results on Over-parameterized optimization
-    % constant step-size SGD
-    % growth conditions
-    % acceleration
-    % line-search
-
-% Basic Idea 
-
-% Content 
-
-\section{Related Work}
-
+\section{Related Work}~\label{sec:related-work}
 
 \noindent \textbf{Interpolation}:
 Existing work focuses on interpolation in the context of finite-sum objectives. 
@@ -88,37 +65,38 @@ A larger body of work considers interpolation to hold when the global minimizers
 \noindent \textbf{Growth Conditions}:
 The strong growth condition was first proposed in the context of incremental gradient methods by \citet{solodov1998incremental} and \citet{tseng1998incremental} as an almost-sure bound on the squared-norm of the stochastic gradients. 
 This definition was later used by~\citet{schmidt2013fast} to derive linear convergence rates for \ac{SGD} with a constant step-size. 
-\citet{vaswani2019fast} propose a modified version of strong growth which holds in expectation rather than almost-surely. 
+\citet{vaswani2019fast} propose a modified version of strong growth which holds in expectation, rather than almost-surely. 
 We call this latter condition strong growth and refer to the earlier definition as maximal strong growth.
-\citet{vaswani2019fast} also propose what we call the weak growth condition as a natural relaxation of strong growth. 
+\citet{vaswani2019fast} also propose the weak growth condition as a natural relaxation of strong growth. 
 
 \citet{cevher2018linear} refer to strong growth simply as the ``growth condition'' and suggest strong growth with an additive noise parameter as an alternative relaxation, which they also call weak growth.
-For unbiased oracles, this condition is equivalent to assuming a bound on the variance of the stochastic gradients~\citep{khaled2020better, ghadimi2012optimal1}.
+For clarity, we refer to this assumption as strong growth with additive noise.
+For unbiased stochastic oracles, this condition is equivalent to assuming a bound on the variance of the stochastic gradients~\citep{khaled2020better, ghadimi2012optimal1}.
 \citet{cevher2018linear} study the convergence of proximal-gradient methods under this condition and also prove that strong growth is both sufficient \emph{and necessary} for \ac{SGD} to converge linearly.\\
 
 
 \noindent \textbf{Stochastic Acceleration}: 
 Many authors have considered accelerating stochastic gradient methods.
-\citet{schmidt2011convergence} provide sufficient conditions on (potentially adversarial) gradient noise for acceleration of proximal-gradient methods.
+\citet{schmidt2011convergence} provide sufficient conditions on gradient noise for acceleration of proximal-gradient methods.
 \citet{aspremont2008approximate} and \citet{devolder2014first} investigate accelerated gradient methods under the assumption of approximate oracles with deterministic, bounded errors and derive rates for convergence and error accumulation in this setting.
 In contrast, \citet{cohen2018acceleration} consider stochastic oracles with additive gradient noise and propose a noise-resistant acceleration scheme.
-Very recently, \citet{chen2020understanding} analyze accelerated methods for strongly-convex functions under strong growth plus an additive noise term. 
+Very recently, \citet{chen2020understanding} analyze accelerated methods for strongly-convex functions under strong growth with additive noise. 
 
-An alternative approach to stochastic acceleration was initiated by \citet{allen-zhu2017katyusha}, who leverage the structure of finite-sum functions to achieve provable acceleration.
+An alternative approach to provable stochastic acceleration that variance reduction for finite-sum functions was initiated by \citet{allen-zhu2017katyusha}.
 Multiple algorithms of this type have been since proposed~\citep{allen-zhou2018katyushax, tang2018restkatyusha, kovalev2020loopless}.
-Alternative approaches also leveraging finite-sum structure have been shown to achieve acceleration via approximate proximal-point algorithms; such methods include Catalyst~\citep{lin2017catalyst} and accelerated APPA~\citep{frostig2015unregularizing}.
+Alternative approaches also leveraging finite-sum structure and based on approximate proximal-point algorithms have been proposed; such methods include Catalyst~\citep{lin2017catalyst} and accelerated APPA~\citep{frostig2015unregularizing}.
 
 Several authors have considered acceleration under interpolation.
 The most similar work to this one is that of \citet{vaswani2019fast}, who analyze a version of Nesterov's accelerated gradient descent under the strong growth condition. 
-\citet{liu2020accelerating} propose another modification, called MaSS, and analyze its convergence for convex quadratics as well as strongly-convex functions with additional assumptions. 
+\citet{liu2020accelerating} propose a different modification, called MaSS, and analyze its convergence for convex quadratics as well as strongly-convex functions with additional assumptions. 
 These assumptions imply strong growth, but yield hard-to-compare rates. 
 \citet{jain2018accelerating} prove accelerated rates for squared-losses under interpolation using a tail-averaging scheme. 
-Finally, \citet{assran2020convergence} study the stochastic approximation setting and prove that accelerated gradient descent may fail to accelerate or even diverge when interpolation is satisfied.\\
+Finally, \citet{assran2020convergence} study the stochastic approximation setting and prove that accelerated gradient descent may fail to accelerate even when interpolation is satisfied.\\
 
 \noindent \textbf{Line Search}:
 Line-search is a classic technique to set the step-size in deterministic optimization (see \citet{nocedal1999numerical}), but extensions to stochastic optimization are non-obvious. 
-\citet{mahsereci2017pls} use a Gaussian process model to define probabilistic Wolfe conditions, however the convergence of this procedure is not known.
-\citet{fridovich2019choosing} propose line-search conditions based on golden-section search~\citep{avriel1968golden}, but only provide empirical evidence for \ac{SGD}. 
+\citet{mahsereci2017pls} use a Gaussian process model to define probabilistic Wolfe conditions; however, the convergence of this \ac{SGD} with this procedure is not known.
+\citet{fridovich2019choosing} propose line-search conditions based on golden-section search~\citep{avriel1968golden}, but again only provide empirical evidence for \ac{SGD}. 
 Other authors consider approaches based on multiple function and/or gradient evaluations at each iteration~\citep{friedlander2012hybrid, byrd2012sample, de2016big, krejic2013line, paquette2020stochastic}.
 Such approaches typically require growing batch-sizes to ensure convergence.
 The work in the thesis follows \citet{vaswani2019painless}, who investigated stochastic versions of the Armijo line-search under interpolation; we provide tighter analyses in a more general setting.\\ 
@@ -126,22 +104,40 @@ The work in the thesis follows \citet{vaswani2019painless}, who investigated sto
 
 \noindent \textbf{Asymptotic Convergence}:
 The original paper by \citet{robbins1951sgd} establishes asymptotic, almost-sure convergence for \ac{SGD} to the zero of a convex function if the stochastic gradients are bounded and a decreasing step-size is used.
-Highly general analyses have since shown almost-sure convergence for general non-convex functions when a strong growth with additive noise condition is satisfied~\citep{bertsekas2000gradient, bottou1991approche}.
+Highly general analyses have since shown almost-sure convergence for non-convex functions when strong growth with additive noise is satisfied~\citep{bertsekas2000gradient, bottou1991approche}.
 These conditions have been also directly derived for strongly-convex and non-convex functions and used to establish almost-sure convergence~\citep{nguyen2018sgd, lei2019stochastic}.
-Finally, recent work has left decreasing step-size schedules behind and instead showed asymptotic convergence with Adagrad-style step-sizes~\citep{li2019convergence}.
+Recently, asymptotic convergence was shown with Adagrad-style step-sizes instead of a fixed, decreasing schedule~\citep{li2019convergence}.
 
-\newpage
+\section{Preliminaries and Assumptions}\label{sec:setup}
 
-%% Dump from Painless SGD %%
-\iffalse
+%% Basic Assumptions
+This work considers the problem of minimizing a continuous function \( f : \R^d \into \R \) under interpolation conditions.
+It is necessary to make some basic assumptions about \( f \) in order to establish convergence rates for first-order algorithms.
+We assume that \( f \) is bounded below with at least one finite minimizer.
+That is, there exists \( \wopt \in \R^d \) such that 
+\begin{align*}
+    f(w) \geq f(\wopt) \quad \quad \forall w \in \R^d. 
+\end{align*}
+Additionally, \( f \) is required to be differentiable and \( L \)-smooth, meaning the gradient mapping \( \w \mapsto \grad(\w) \) is an \( L \)-Lipschitz function,
+\[ \norm{\grad(\w) - \grad(v)} \leq L \norm{\w - v} \quad \quad \forall \, \w, v \in \R^d. \]
+This is equivalent to the existence of the following quadratic upper-bound on \( f \):
+\begin{align*}
+    f(v) &\leq f(w) \abr{\grad(\w), v - \w} + \frac{L}{2}\norm{v - \w}^2 &\forall \, \w,v \in \R^d. \tag{\( L \)-Smoothness} 
+    \intertext{At times, we will further assume that \( f \) is convex or \( \mu \)-strongly-convex,}
+    f(v) &\geq f(\w) + \abr{\grad(\w), v - \w} &\forall \, \w,v \in \R^d, \tag{Convexity} \\
+    f(v) &\geq f(\w) + \abr{\grad(\w), v - \w} + \frac{\mu}{2}\norm{v - \w}^2 &\forall \, \w,v \in \R^d. \tag{\( \mu \)-Strong-Convexity}
+\end{align*}
+Convexity is satisfied for many optimization problems occurring in machine learning, including linear and logistic regression. 
 
-Stochastic gradient descent (SGD) and its variants~\cite{duchi2011adagrad,zeiler2012adadelta,kingma2015adam,tieleman2012rmsprop,schmidt2017sag,johnson2013svrg,defazio2014saga} are the preferred optimization methods in modern machine learning. They only require the gradient for one training example (or a small ``mini-batch'' of examples) in each iteration and thus can be used with large datasets. These first-order methods have been particularly successful for training highly-expressive, over-parameterized models such as non-parametric regression~\cite{liang2018just,belkin2019does} and deep neural networks~\cite{bengio2012practical,zhang2016understanding}. However, the practical efficiency of stochastic gradient methods is adversely affected by two challenges: (i) their performance heavily relies on the choice of the step-size (``learning rate'')~\cite{bengio2012practical, schaul2013no} and (ii) their slow convergence compared to methods that compute the full gradient (over all training examples) in each iteration~\cite{nesterov2013introductory}. 
+Convexity can be relaxed to a more limited property called invexity.
+Formally, we say \( f \) is invex if all stationary points of \( f \) are also global minimizers of \( f \), meaning
+\[ \grad(\w) = 0 \implies f(\w) \leq f(v) \quad \quad \forall \, v \in \R^d.  \]
+Invexity is formally weaker than convexity and follows immediately from the first-order conditions for convexity given above.
+The analogue of strong-convexity for invex functions is the Polyak-Łojasiewicz (PL) condition~\citep{karimi2016linear}.
+A function is said to be \( \mu \)-PL if
+\[ \frac{1}{2 \mu} \norm{\grad(\w)}^2 \leq f(\w) - f(\wopt), \]
+holds for all \( \w \in \R^d \).
+The Polyak-Łojasiewicz condition is weaker than strong convexity; a \( \mu \)-strongly-convex function is \( \mu \)-PL, but the converse does not hold.
 
-% second problem with stochastic methods
-Variance-reduction (VR) methods~\cite{schmidt2017minimizing,johnson2013accelerating,defazio2014saga} are relatively new variants of SGD that improve its slow convergence rate. These methods exploit the finite-sum structure of typical loss functions arising in machine learning, achieving both the low iteration cost of SGD and the fast convergence rate of deterministic methods that compute the full-gradient in each iteration. Moreover, VR makes setting the learning rate easier and there has been work exploring the use of line-search techniques for automatically setting the step-size for these methods~\cite{schmidt2017minimizing,schmidt2015non,tan2016barzilai,shang2018guaranteed}. These methods have resulted in impressive performance on a variety of problems. However, the improved performance comes at the cost of additional memory~\cite{schmidt2017minimizing} or computational~\cite{johnson2013accelerating, defazio2014saga} overheads, making these methods less appealing when training high-dimensional models on large datasets. Moreover, in practice VR methods do not tend to converge faster than SGD on over-parameterized models~\cite{defazio2018ineffectiveness}. 
 
-Indeed, recent works~\cite{vaswani2019fast,ma2018power,bassily2018exponential,liu2018mass, cevher2018linear, jain2017accelerating, schmidt2013fast} have shown that when training over-parameterized models, classic SGD with a constant step-size and \emph{without VR} can achieve the convergence rates of full-batch gradient descent. These works assume that the model is expressive enough to \emph{interpolate} the data. The interpolation condition is satisfied for models such as non-parametric regression~\cite{liang2018just,belkin2019does}, over-parametrized deep neural networks~\cite{zhang2016understanding}, boosting~\cite{schapire1998boosting}, and for linear classifiers on separable data. However, the good performance of SGD in this setting relies on using the proposed constant step-size, which depends on problem-specific quantities not known in practice. On the other hand, there has been a long line of research on techniques to automatically set the step-size for classic SGD. These techniques include using meta-learning procedures to modify the main stochastic algorithm~\cite{baydin2017online,yu2006fast,schraudolph1999local,almeida1998parameter,plagianakos2001learning,yu2006fast,shao2000rates}, heuristics to adjust the learning rate on the fly~\cite{kushner1995stochastic, deylon1993accelerated, schaul2013no, schoenauer2017stochastic}, and recent adaptive methods inspired by online learning~\cite{duchi2011adaptive,zeiler2012adadelta,kingma2014adam,reddi2019convergence, orabona2017training,rolinek2018l4, luo2019adaptive}. However, none of these techniques have been proved to achieve the fast convergence rates that we now know are possible in the over-parametrized setting.
-
-In this work, we use classical line-search methods~\cite{nocedal2006numerical} to automatically set the step-size for SGD when training over-parametrized models. Line-search is a standard technique to adaptively set the step-size for deterministic methods that evaluate the full gradient in each iteration. These methods make use of additional function/gradient evaluations to characterize the function around the current iterate and adjust the magnitude of the descent step. The additional noise in SGD complicates the use of line-searches in the general stochastic setting and there have only been a few attempts to address this. Mahsereci et al.~\cite{mahsereci2017probabilistic} define a Gaussian process model over probabilistic Wolfe conditions and use it to derive a termination criterion for the line-search. The convergence rate of this procedure is not known, and experimentally we found that our proposed line-search technique is simpler to implement and more robust. Other authors~\cite{friedlander2012hybrid,byrd2012sample, de2016big, paquette2018stochastic,krejic2013line} use a line-search termination criteria that requires function/gradient evaluations averaged over multiple samples. However, in order to achieve convergence, the number of samples required per iteration (the ``batch-size'') increases progressively, losing the low per iteration cost of SGD. Other work~\cite{blanchet2019convergence,gratton2017complexity} exploring trust-region methods assume that the model is sufficiently accurate, which is not guaranteed in the general stochastic setting. In contrast to these works, our line-search procedure does not consider the general stochastic setting and is designed for models that satisfy interpolation; it achieves fast rates in the over-parameterized regime without the need to manually choose a step-size or increase the batch size.
-\fi
 \endinput

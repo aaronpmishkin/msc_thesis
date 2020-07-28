@@ -120,11 +120,11 @@
                                 &= \etamax \E\sbr{\norm{\grad(\wk, \zk)}^2} - \etamax \norm{\grad(\wk)}^2 - \etamin \E_{\zk}\sbr{\norm{\grad(\wk)}^2 + \norm{\grad(\wk, \zk)}^2} \\ &\hspace{1em} + L \etak^2 \E_{\zk}\sbr{\norm{\grad(\wk, \zk)}^2}\\
                                 \intertext{Collecting terms and applying the strong growth condition,}
         2 \E_{\zk}\sbr{\Delta_k} &\leq \rbr{\etamax - \etamin + L \etamax^2} \E_{\zk}\sbr{\norm{\grad(\wk, \zk)}^2} - \rbr{\etamax + \etamin}\norm{\grad(\wk)}^2\\
-                               &\leq \rho \rbr{\etamax - \etamin + L \etamax^2} \norm{\grad(\wk)}^2 - \rbr{\etamax + \etamin}\norm{\grad(\wk)}^2\\
-                               &= - \rbr{\rbr{\etamax + \etamin} - \rho \rbr{\etamax - \etamin + L \etamax^2}}\norm{\grad(\wk)}^2.
+                               &\leq \sgc \rbr{\etamax - \etamin + L \etamax^2} \norm{\grad(\wk)}^2 - \rbr{\etamax + \etamin}\norm{\grad(\wk)}^2\\
+                               &= - \rbr{\rbr{\etamax + \etamin} - \sgc \rbr{\etamax - \etamin + L \etamax^2}}\norm{\grad(\wk)}^2.
     \end{align*}%%
     \begin{align*}%%
-        \intertext{Assuming \( \delta = \rbr{\etamax + \etamin} - \rho \rbr{\etamax - \etamin + L \etamax^2} > 0 \),}
+        \intertext{Assuming \( \delta = \rbr{\etamax + \etamin} - \sgc \rbr{\etamax - \etamin + L \etamax^2} > 0 \),}
         \implies \norm{\grad(\wk)}^2 &\leq \frac{2}{\delta} \E_{\zk}\sbr{-\Delta_k}.
         \intertext{Taking expectations and summing from \( k = 0 \) to \( K - 1 \),}
         \implies \frac{1}{K} \sum_{k=0}^{K-1} \E\sbr{\norm{\grad(\wk)}^2} &\leq \frac{2}{\delta \, K} \sum_{k=0}^{K-1} \E \sbr{- \Delta_k}\\
@@ -137,39 +137,39 @@
     It remains to show that \( \delta > 0  \) holds. Our analysis proceeds in cases.\\
     \textbf{Case 1}: \( \etamax \leq \frac{2(1-c)}{\Lmax} \). Then \( \etamin = \etamax \) and 
     \begin{align*}
-        \delta &= \rbr{\etamax + \etamax} - \rho \rbr{\etamax - \etamax + L \etamax^2} \\
-        &= 2 \etamax - \rho L \etamax^2 > 0 \\
-        \implies \etamax &< \frac{2}{\rho L}. 
+        \delta &= \rbr{\etamax + \etamax} - \sgc \rbr{\etamax - \etamax + L \etamax^2} \\
+        &= 2 \etamax - \sgc L \etamax^2 > 0 \\
+        \implies \etamax &< \frac{2}{\sgc L}. 
     \end{align*}
     \textbf{Case 2}: \( \etamax > \frac{2(1-c)}{\Lmax} \). Then \( \etamin = \frac{2(1-c)}{\Lmax} \) and 
     \begin{align*}
-        \delta =  \rbr{\etamax + \frac{2(1-c)}{\Lmax}} - \rho \rbr{\etamax - \frac{2(1-c)}{\Lmax} + L \etamax^2}. 
+        \delta =  \rbr{\etamax + \frac{2(1-c)}{\Lmax}} - \sgc \rbr{\etamax - \frac{2(1-c)}{\Lmax} + L \etamax^2}. 
         \intertext{This is a concave quadratic in \( \etamax \) and is strictly positive when}
-        \etamax \in \rbr{0, \frac{\rbr{1 - \rho} + \sqrt{{(\rho - 1)}^2 + \sfrac{\sbr{8 \rho (1 + \rho) L (1-c)}}{\Lmax}}}{2 L \rho}}.
+        \etamax \in \rbr{0, \frac{\rbr{1 - \sgc} + \sqrt{{(\sgc - 1)}^2 + \sfrac{\sbr{8 \sgc (1 + \sgc) L (1-c)}}{\Lmax}}}{2 L \sgc}}.
     \end{align*}
     To avoid contradiction with the case assumption \( \frac{2(1-c)}{\Lmax} < \etamax \), we require
     \begin{align*}
-        \frac{\rbr{1 - \rho} + \sqrt{{(\rho - 1)}^2 + \sfrac{\sbr{8 \rho (1 + \rho) L (1-c)}}{\Lmax}}}{2 L \rho} &> \frac{2(1-c)}{\Lmax}\\
-        \implies \frac{8 \rho (1 + \rho) L (1-c)}{\Lmax} &> \rbr{\frac{4L \rho}{\Lmax} + (\rho - 1)}^2 - \rbr{\rho - 1}^2\\
-                                                               &= \frac{16L^2 \rho^2 (1-c)^2}{\Lmax^2} + \frac{8 L \rho (\rho - 1) (1-c)}{\Lmax}\\ 
-        \implies \frac{\Lmax}{\rho L} &> (1-c)\\
-        \implies c &> 1 - \frac{\Lmax}{\rho L}.
+        \frac{\rbr{1 - \sgc} + \sqrt{{(\sgc - 1)}^2 + \sfrac{\sbr{8 \sgc (1 + \sgc) L (1-c)}}{\Lmax}}}{2 L \sgc} &> \frac{2(1-c)}{\Lmax}\\
+        \implies \frac{8 \sgc (1 + \sgc) L (1-c)}{\Lmax} &> \rbr{\frac{4L \sgc}{\Lmax} + (\sgc - 1)}^2 - \rbr{\sgc - 1}^2\\
+                                                               &= \frac{16L^2 \sgc^2 (1-c)^2}{\Lmax^2} + \frac{8 L \sgc (\sgc - 1) (1-c)}{\Lmax}\\ 
+        \implies \frac{\Lmax}{\sgc L} &> (1-c)\\
+        \implies c &> 1 - \frac{\Lmax}{\sgc L}.
     \end{align*}
     The line-search requires \( c \in \rbr{0,1} \).
-    Noting that \( \rho \geq 1 \) by definition, we have \( \frac{\Lmax}{\rho L} > 0 \) as long as \( L, \Lmax > 0 \).
+    Noting that \( \sgc \geq 1 \) by definition, we have \( \frac{\Lmax}{\sgc L} > 0 \) as long as \( L, \Lmax > 0 \).
     This condition holds as long as \( f \) is bounded-below and non-zero.
     We obtain the non-empty constraint set
-    \[ c \in \rbr{1 - \frac{\Lmax}{\rho L}, 1}. \]
+    \[ c \in \rbr{1 - \frac{\Lmax}{\sgc L}, 1}. \]
     Substituting the maximum value for \( c \) into the upper-bound on \( \etamax \) yields a similar requirement,
-    \[ \etamax \in \rbr{0, \frac{2}{\rho L}}. \]
+    \[ \etamax \in \rbr{0, \frac{2}{\sgc L}}. \]
     This completes the second case.
 
     Putting the two cases together gives the final constraints on \( c \) and \( \etamax \) as
-    \[ c \geq 1 - \frac{\Lmax}{\rho L} \quad \quad \etamax < \frac{2}{\rho L}. \]
+    \[ c \geq 1 - \frac{\Lmax}{\sgc L} \quad \quad \etamax < \frac{2}{\sgc L}. \]
     We note that the upper and lower bounds on \( \etak \) are consistent since 
-    \[ \etamin = \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax} < \min\cbr{\frac{2 \Lmax}{\rho L \Lmax}, \etamax} = \max\cbr{\frac{2}{\rho L}, \etamax} \leq \frac{2}{\rho L}, \] 
+    \[ \etamin = \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax} < \min\cbr{\frac{2 \Lmax}{\sgc L \Lmax}, \etamax} = \max\cbr{\frac{2}{\sgc L}, \etamax} \leq \frac{2}{\sgc L}, \] 
     where the last inequality follows from the bound on \( \etamax \).
-    In particular, taking \( c \rightarrow 1 \) and \( \etamax \rightarrow \frac{2}{\rho L} \) yields an adaptive step-size \(\etak \in (0,\frac{2}{\rho L}).  \)
+    In particular, taking \( c \rightarrow 1 \) and \( \etamax \rightarrow \frac{2}{\sgc L} \) yields an adaptive step-size \(\etak \in (0,\frac{2}{\sgc L}).  \)
 \end{proof}
 
 

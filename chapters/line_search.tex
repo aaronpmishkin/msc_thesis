@@ -4,8 +4,8 @@
 
 A major weakness of constant step-size \ac{SGD} is that the problem constants must be known a priori in order to select a step-size for which convergence is guaranteed.
 Consider \autoref{thm:sgc-convex} as an example. 
-A fast linear rate of convergence is guaranteed only when \( \eta~\leq~\frac{2}{\rho\rbr{\mu + L}} \), but optimization speed is sub-optimal for \( \eta \ll \frac{2}{\rho\rbr{\mu + L}} \).
-Meeting this requirement demands knowledge of the strong-convexity and smoothness constants, \( \mu \) and \( L \), as well as the strong growth parameter \( \rho \).
+A fast linear rate of convergence is guaranteed only when \( \eta~\leq~\frac{2}{\sgc\rbr{\mu + L}} \), but optimization speed is sub-optimal for \( \eta \ll \frac{2}{\sgc\rbr{\mu + L}} \).
+Meeting this requirement demands knowledge of the strong-convexity and smoothness constants, \( \mu \) and \( L \), as well as the strong growth parameter \( \sgc \).
 In practice, we are unlikely to have knowledge of these coefficients or to possess straightforward means for estimating them.
 This leaves a dilemma: over-estimate the optimal step-size and risk divergence, or use a small step-size that yields slow convergence. 
 
@@ -99,7 +99,7 @@ This fact also motivates our transition from assuming the strong/weak growth con
 \autoref{lemma:step-size-bound} is the main tool needed to analyze \ac{SGD} with the Armijo line-search in the convex setting.
 Specifically, it allows us to establish the following progress condition, which will be at the core of our proofs for convex and strongly convex functions. 
 \begin{restatable}{lemma}{lsIntermediate}~\label{lemma:ls-intermediate}
-    Let \( f \) be a convex, \( L \)-smooth function and \oracle{} a \( \Lmax \) individually-smooth \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfy minimizer interpolation.
+    Let \( f \) be a convex, \( L \)-smooth function and \oracle{} a \( \Lmax \) individually-smooth, individually-convex \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfy minimizer interpolation.
     Then stochastic gradient descent using the Armijo line-search with \( c \geq \half \) satisfies the following
     inequality:
     \[ f(\wk)- f(\wopt) \leq \max\cbr{\frac{\Lmax}{2(1-c)},\inv{\etamax}} \rbr{\norm{\wk - \wopt}^2 - \E_{\zk}\sbr{\norm{\wkk - \wopt}^2}}. \]
@@ -115,7 +115,7 @@ Indeed, these are exactly the strategies used to prove Theorems~\ref{thm:sc-line
 We start with the strongly-convex case.
 
 \begin{restatable}{theorem}{scLineSearch}~\label{thm:sc-line-search}
-    Let \( f \) be a \( \mu \)-strongly-convex, \( L \)-smooth function and \( \oracle{} \) an \( \Lmax \) individually-smooth \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation.
+    Let \( f \) be a \( \mu \)-strongly-convex, \( L \)-smooth function and \( \oracle{} \) an \( \Lmax \) individually-smooth, individually-convex \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation.
     Then stochastic gradient descent using the Armijo line-search with \( c \geq \half \) converges as
     \begin{align*}
         \E \sbr{f(\wkk)} - f(\wopt) &\leq \rbr{\frac{L}{\mu}}\rbr{1 - \mu \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax}}^k \rbr{f(w_0) - f(\wopt)}. 
@@ -125,14 +125,16 @@ We start with the strongly-convex case.
 
 Setting \( c = \half \) and \( \etamax = \infty \) in \autoref{thm:sc-line-search} gives  
 \[\E \sbr{f(\wkk)} - f(\wopt) \leq \rbr{\frac{L}{\mu}}\rbr{1 - \frac{\mu}{\Lmax}}^k \rbr{f(w_0) - f(\wopt)}, \]
-which is slightly worse than the result obtain for fixed step-size \ac{SGD} in \autoref{ch:sgd}\footnote{Recall that \( \rho \leq \frac{\mu}{\Lmax}  \) for \( f \) \( \mu \)-SC, \oracle{} individually smooth, and \( \rbr{f, \oracle{}} \) satisfying minimizer interpolation.} and tight with \citet[Theorem 5]{vaswani2019fast}. 
-The gap in convergence rate between fixed step-size and Armijo line-search emerges from the probabilistic dependence between \( \etak \) and \( \grad(\wk, \zk) \), which prevents us from using coercivity of \( \grad(\wk) \) (\autoref{lemma:coercivity}). 
-For comparison, see the proof of \autoref{thm:sgc-convex} in \autoref{app:sgd-sc}. 
+which is exactly the result obtained for fixed step-size \ac{SGD} in the same setting (cf. \autoref{thm:sgc-ind-convex}). 
+The convergence speed is also the same as the worst-case under the weak growth condition~\citep[Theorem 5]{vaswani2019fast}.
+Note that the latter result does not require individual convexity; intuitively, individual convexity is required when using the line-search for the returned step-size to reliably make progress towards the global minimizer.
+Non-convex \( f(\cdot, \zk) \) can satisfy minimizer interpolation, while still admitting stochastic gradients \( \grad(\cdot, \zk) \) which point away from the minimizer \( \wopt \).
+This problem is presented formally in \autoref{sec:ls-nc-challenges}, which discusses challenges in establishing convergence for non-convex functions.
 
 \autoref{table:ls-comparison} contrasts \autoref{thm:sc-line-search} with the other known result for \ac{SGD} with Armijo line-search on strongly-convex functions \citep[Theorem 1]{vaswani2019painless}. 
 In particular, note that the convergence rate presented here depends on the strong-convexity constant of the overall function, \( \mu \), instead of the expected constant \( \bar \mu = \Ek \sbr{\mu_{\zk}} \).
-This is a very significant theoretical improvement for the following reason: our analysis permits all stochastic functions to be convex only, while that of \citet{vaswani2019painless} requires \( f(\cdot, \z) \) to be strongly-convex for at least one \( \z \in \calZ \).
-Such a condition is unlikely to hold in practice (see the discussion in \autoref{sec:sgd-sc}).
+This is a significant theoretical improvement for the following reason: our analysis permits all stochastic functions to be convex only, while that of \citet{vaswani2019painless} requires \( f(\cdot, \z) \) to be strongly-convex for at least one \( \z \in \calZ \).
+Such a condition is unlikely to hold in practice (see the discussion in \autoref{sec:sgd-sgc-ind-convex}).
 
 \section{Convergence for Convex Functions}~\label{sec:ls-convex}
 
@@ -142,7 +144,7 @@ non-asymptotic, final-iterate rates are also an open problem when \( \etak \) is
 The proof of the following theorem follows almost immediately from \autoref{lemma:ls-intermediate} as briefly described in the previous section; it can be found in \autoref{app:convex-line-search}.
 
 \begin{restatable}{theorem}{convexLineSearch}~\label{thm:convex-line-search}
-    Let \( f \) be a convex, \( L \)-smooth function and \( \oracle{} \) an \( \Lmax \) individually-smooth \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation.
+    Let \( f \) be a convex, \( L \)-smooth function and \( \oracle{} \) an \( \Lmax \) individually-smooth, individually-convex \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation.
     Then stochastic gradient descent using the Armijo line-search with \( c \geq \half \) converges as 
     \begin{align*}
         \E\sbr{f(\bar \w_K)} - f(\wopt) &\leq \frac{1}{2 \, K} \max\cbr{\frac{\Lmax}{2(1-c)}, \frac{1}{\etamax}} \norm{\w_0 - \wopt}^2, 
@@ -151,7 +153,7 @@ The proof of the following theorem follows almost immediately from \autoref{lemm
 \end{restatable}
 This result is tight in the following sense: when \( c = \half \) and \( \etamax = \infty \), \autoref{thm:convex-line-search} yields 
 \[  \E\sbr{f(\bar \w_K)} - f(\wopt) \leq \frac{\Lmax}{2 \, K} \norm{\w_0 - \wopt}^2. \]
-This rate is identical to that for constant step-size \ac{SGD} with \( \eta = \frac{1}{\Lmax} \) if we assume a worst-case value for the weak-growth parameter \( \rho \) in \autoref{thm:wgc-convex}.
+This rate is identical to that for constant step-size \ac{SGD} with \( \eta = \frac{1}{\Lmax} \) if we assume a worst-case value for the weak-growth parameter \( \wgc \) in \autoref{thm:wgc-convex}.
 If \( f(\cdot, \z) = f \) for each \( z \in \calZ \), then \( \Lmax = L \) and this rate is comparable to the best known convergence results for gradient descent on convex functions~\citep{bubeck2015convex}. 
 
 \autoref{table:ls-comparison} compares \autoref{thm:convex-line-search} with the original result from  \citet[Theorem 2]{vaswani2019painless}.
@@ -177,26 +179,28 @@ The unnecessary strictness of the original result prevents the natural case wher
 \end{table}
 
 The complexity of \ac{SGD} with the stochastic Armijo line-search is particularly challenging to determine for general non-convex functions.
-As discussed below, proofs which analyze the sequence of distances to the minimizer \( \seq{\norm{\wk - \wopt}^2} \) produced by \ac{SGD} fail without convexity.
+As discussed below, proofs which analyze the sequence of distances to the minimizer \( \seq{\norm{\wk - \wopt}^2} \) fail without convexity.
 This includes the technique used to prove Theorems~\ref{thm:sc-line-search} and~\ref{thm:convex-line-search}.
 Instead, convergence to a stationary point is typically established through the quadratic majorant provided by \( L \)-smoothness of \( f \).
 The following theorem shows that such convergence does indeed hold, but mandates a severe upper-bound on the line-search.
-A major weakness of our result is that the step-size bound requires explicit knowledge of the strong growth parameter \( \rho \) as well as \( \Lmax \). 
+A major weakness of our result is that setting \( \etamax \) requires explicit knowledge of \( \rho \) and \( \Lmax \). 
 
 \begin{restatable}{theorem}{nonConvexLineSearch}~\label{thm:non-convex-line-search}
-    Let \( f \) be a \( L \)-smooth function and \( \oracle{} \) an \( \Lmax \) individually-smooth \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies the strong growth condition with parameter \( \rho \).
-    Then stochastic gradient descent using the Armijo line-search with \( c >  1 - \frac{\Lmax}{\rho L}\) and \( \etamax <  \frac{2}{\rho L} \) converges as
+    Let \( f \) be a \( L \)-smooth function and \( \oracle{} \) an \( \Lmax \) individually-smooth \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies the strong growth condition with parameter \( \sgc \).
+    Then stochastic gradient descent using the Armijo line-search with \( c >  1 - \frac{\Lmax}{\sgc L}\) and \( \etamax <  \frac{2}{\sgc L} \) converges as
     \[ \min_{k \in [K]} \norm{\grad(\wk)}^2 \leq \frac{1}{\delta \, K} \rbr{f(w_0) - f(\wopt)}, \]
-    where \( \delta = \rbr{\etamax + \frac{2(1-c)}{\Lmax}} - \rho \rbr{\etamax - \frac{2(1-c)}{\Lmax} + L \etamax^2} \).
+    where \( \delta = \rbr{\etamax + \frac{2(1-c)}{\Lmax}} - \sgc \rbr{\etamax - \frac{2(1-c)}{\Lmax} + L \etamax^2} \).
 \end{restatable}
 \noindent See \autoref{app:non-convex-line-search} for proof. \hfill \break 
 
-The step-size constraint \( \etak \leq \etamax < \frac{2}{\rho L} \) forces the Armijo line-search to behave like constant step-size \ac{SGD}.
-Indeed, \autoref{lemma:sgc-decrease-condition} shows that \( \eta < \frac{2}{\rho L} \) is exactly the condition required for constant step-size \ac{SGD} to make guaranteed progress for a \( L \)-smooth function such that \( \rbr{f, \oracle{}} \) satisfies strong growth.
-It is not clear if such a strict upper-bound on the step-size is a fundamental property of \ac{SGD} for non-convex functions, or an artifact of the proof for \autoref{thm:non-convex-line-search}. 
+The step-size constraint \( \etak \leq \etamax < \frac{2}{\sgc L} \) forces the Armijo line-search to behave like constant step-size \ac{SGD}.
+Indeed, \autoref{lemma:sgc-decrease-condition} shows that \( \eta < \frac{2}{\sgc L} \) is exactly the condition required for constant step-size \ac{SGD} to make guaranteed progress for a \( L \)-smooth function such that \( \rbr{f, \oracle{}} \) satisfies strong growth.
+It is not clear the upper-bound on \( \etamax \) is a fundamental property of \ac{SGD} for non-convex functions, or an artifact of the proof for \autoref{thm:non-convex-line-search}. 
 In either case, it is worthwhile to to see how the requirement on \( \etamax \) emerges.
 
-A main object in our proofs so far is the inner-product 
+\subsection{Challenges in the Analysis}\label{sec:ls-nc-challenges}
+
+A main object in our proofs so far has been the inner-product 
 \begin{align*}
     \etak \abr{\grad(\wk, \zk), \wk - \wopt}&.
     \intertext{When \( \etak \) is independent of \( \zk \), linearity of expectation gives the following:}
@@ -216,5 +220,5 @@ Again, a correlated inner-product \( \etak \abr{\grad(\wk), \grad(\wk, \zk)} \) 
 \end{align*}
 where the inequality stems from separately bounding \( \etak \) on each positive and negative terms.
 This bound is worst-case, but disambiguates step-size and stochastic gradient terms and allows the proof to proceed.
-As a side-effect, we require a tight upper-bound on the maximum step-size: \( \etamax < \frac{2}{\rho L} \).
+As a side-effect, we require a tight upper-bound on the maximum step-size: \( \etamax < \frac{2}{\sgc L} \).
 

@@ -17,18 +17,32 @@ The proof of Lemma~\ref{lemma:iterate-bounds} follows immediately from the defin
     Similarly, if \( f \) is \( \mu \)-strongly-convex, then \( f \) satisfies the Polyak-Łojasiewicz condition, 
     \[ f(\w) - \f(\wopt) \leq \frac{1}{2 \mu}\norm{\grad(\w)}^2 \quad \quad \forall \, \w \in \R^d. \]
 \end{restatable}
-See \citet{karimi2016linear} for proof.
+\noindent See \citet{karimi2016linear} for proof.
 
 \begin{restatable}{lemma}{preCoercivity}~\label{lemma:pre-coercivity}
     Let \( f  \) be a convex, \( L  \)-smooth function. 
     Then \( f  \) satisfies the following inequality for all \( \w, v \in \R^d \):
     \[ f(\w) - f(v)  \leq  \abr{\grad(\w), \w - v}- \frac{1}{2L} \norm{\grad(\w) - \grad(v)}^2. \] 
 \end{restatable}
-See \citet[Lemma 3.5]{bubeck2015convex} for proof.
+\noindent See \citet[Lemma 3.5]{bubeck2015convex} for proof.
+
+\begin{restatable}{lemma}{coCoercivity}~\label{lemma:co-coercivity}
+    Let \( f \) be a convex, \( L  \)-smooth function. 
+    Then \( f \) satisfies the following inequality:
+    \[ \abr{\grad(x) - \grad(y), x - y} \geq \frac{1}{\Lmax}\norm{\grad(x) - \grad(y0)}^2. \]
+\end{restatable}
+\noindent See \citet[Eq. 3.6]{bubeck2015convex} for proof.
 
 \begin{restatable}[Coercivity of the Gradient]{lemma}{coercivity}~\label{lemma:coercivity}
     Let \( f \) be a \( \mu  \)-strongly-convex, \( L  \)-smooth function. 
     Then \( f \) satisfies the following inequality:
     \[ \abr{\grad(x) - \grad(y), x - y} \geq \frac{\mu L}{\mu + L}\norm{x - y}^2 + \frac{1}{\mu + L} \norm{\grad(x) - \grad(y)}^2.  \] 
 \end{restatable}
-See \citet[Lemma 3.11]{bubeck2015convex} for proof.
+\noindent See \citet[Lemma 3.11]{bubeck2015convex} for proof.
+
+\begin{restatable}{lemma}{innerToIterates}~\label{lemma:inner-to-iterates}
+    Let \( f \) be a \( \mu  \)-strongly-convex, \( L  \)-smooth function. 
+    Then \( f \) satisfies the following inequality:
+    \[ \abr{\grad(x) - \grad(y), x - y} \leq \mu\norm{x - y}^2. \]
+\end{restatable}
+\noindent See \citet[Theorem 2.1.9]{nesterov2004lectures} for proof.

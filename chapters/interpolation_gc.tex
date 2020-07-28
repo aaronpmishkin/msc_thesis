@@ -2,46 +2,11 @@
 
 \chapter{Interpolation and Growth Conditions}~\label{ch:interpolation-gc}
 
-\section{Preliminaries}\label{sec:setup}
-
-This work considers the problem of minimizing a continuous function \( f : \R^d \into \R \) under interpolation conditions.
-The focus is on establishing non-asymptotic convergence rates for stochastic, first-order optimization algorithms in the unconstrained setting. 
-The analysis covers stochastic gradient descent with a fixed step-size and with an Armijo-type line-search, as well as Nesterov's accelerated gradient method with stochastic gradients.
-These theoretical results are developed for general stochastic first-order oracles and cover finite-sum functions with sub-sampled gradients as a special case. 
-
-
-%% Basic Assumptions
-It is necessary to make some basic assumptions about the function \( f \) in order to establish convergence rates for first-order algorithms.
-We assume that \( f \) is bounded below with at least one finite minimizer.
-That is, there exists \( \wopt \in \R^d \) such that 
-\begin{align*}
-    f(w) \geq f(\wopt) \quad \quad \forall w \in \R^d. 
-\end{align*}
-Additionally, \( f \) is required to be differentiable and \( L \)-smooth, meaning the gradient mapping \( \w \mapsto \grad(\w) \) is an \( L \)-Lipschitz function,
-\[ \norm{\grad(\w) - \grad(v)} \leq L \norm{\w - v} \quad \quad \forall \, \w, v \in \R^d. \]
-This is equivalent to the existence of the following quadratic upper-bound on \( f \):
-\begin{align*}
-    f(v) &\leq f(w) \abr{\grad(\w), v - \w} + \frac{L}{2}\norm{v - \w}^2 &\forall \, \w,v \in \R^d. \tag{\( L \)-Smoothness} 
-    \intertext{At times, we will further assume that \( f \) is convex or \( \mu \)-strongly-convex,}
-    f(v) &\geq f(\w) + \abr{\grad(\w), v - \w} &\forall \, \w,v \in \R^d, \tag{Convexity} \\
-    f(v) &\geq f(\w) + \abr{\grad(\w), v - \w} + \frac{\mu}{2}\norm{v - \w}^2 &\forall \, \w,v \in \R^d. \tag{\( \mu \)-Strong-Convexity}
-\end{align*}
-Convexity is satisfied for many optimization problems occurring in machine learning, including linear and logistic regression. 
-
-Convexity can be relaxed to a more limited property called invexity.
-Formally, we say \( f \) is invex if all stationary points of \( f \) are also global minimizers of \( f \), meaning
-\[ \grad(\w) = 0 \implies f(\w) \leq f(v) \quad \quad \forall \, v \in \R^d.  \]
-Invexity is formally weaker than convexity and follows immediately from the first-order conditions for convexity given above.
-The analogue of strong-convexity for invex functions is the Polyak-Łojasiewicz (PL) condition~\citep{karimi2016linear}.
-A function is said to be \( \mu \)-PL if
-\[ \frac{1}{2 \mu} \norm{\grad(\w)}^2 \leq f(\w) - f(\wopt), \]
-holds for all \( \w \in \R^d \).
-The Polyak-Łojasiewicz condition is weaker than strong convexity; a \( \mu \)-strongly-convex function is \( \mu \)-PL, but the converse does not hold.
 
 
 %% Oracle Model
-\subsection{Stochastic Oracles}~\label{sec:stochastic-oracles}
-As stated above, this work is primarily concerned with the analysis of iterative methods for stochastic optimization.
+\section{Stochastic Oracles}~\label{sec:stochastic-oracles}
+% As stated above, this work is primarily concerned with the analysis of iterative methods for stochastic optimization.
 The defining feature of stochastic optimization algorithms is that they cannot directly access the value or gradient of \( f \).
 Instead, they obtain noisy function and gradient evaluations through a \ac{SFO}  \oracle. 
 At each iteration \( k \), \oracle{} outputs a stochastic function and gradient \( f(v, \zk) \) and \( \grad(v, \zk) \) at query point \( v \), where \( \zk \) is a random variable with distribution \( \mu_k \) supported on \( \calZ_k \subseteq \R^m \), \( m > 0 \).%%
@@ -78,9 +43,10 @@ Note that the existence of an \( \Lmax \) individually-smooth, unbiased \ac{SFO}
     Alternatively, if \( \oracle{} \) is biased but \( \calZ \) is finite, then \( \Ek \sbr{f(\cdot, \zk)} \) is \( \Lmax \)-smooth for all \( k \). 
 \end{restatable}
 See \autoref{app:stochastic-oracles} for proof. 
-In one case, we will also make use of individual strong-convexity.
+In several cases, we will also make use of individual strong-convexity.
 \begin{restatable}[Individual Strong-Convexity]{definition}{individuallySC}~\label{def:individually-sc}
-    A \ac{SFO} \oracle{} is called \( \mumax \) individually-strongly-convex if the stochastic function \( f(\w, \z) \) is \( \mu_{\z} \)-strongly-convex with \( \mu_{\z} \leq \max \) for all \( \z \in \calZ \).
+    A \ac{SFO} \oracle{} is called \( \mumax \) individually-strongly-convex if the stochastic function \( f(\w, \z) \) is \( \mu_{\z} \)-strongly-convex with \( \mu_{\z} \leq \mumax \) for all \( \z \in \calZ \).
+    If \( \mumax = 0 \), then we say \oracle{} is merely individually-convex.
 \end{restatable}
 
 Individually-smooth oracles are wide-spread throughout machine learning in the form of finite-sum functions. 
@@ -215,8 +181,8 @@ An important consequence of \autoref{lemma:sgc-finite-support} is the equivalenc
 
 A relaxed version of the strong growth condition is the weak growth condition, which was recently proposed by \citet{vaswani2019fast}.
 \begin{definition}[Weak Growth Condition]\label{def:wgc}
-    A function-oracle pair \( \rbr{f, \oracle{}} \) satisfies weak growth with parameter \(\rho \) if
-    \[ \Ek \sbr{\norm{\grad(\w, \zk)}^2} \leq \rho L (f(\w) - f(\wopt)), \]
+    A function-oracle pair \( \rbr{f, \oracle{}} \) satisfies weak growth with parameter \(\alpha \) if
+    \[ \Ek \sbr{\norm{\grad(\w, \zk)}^2} \leq \alpha L (f(\w) - f(\wopt)), \]
     holds for all \( k \geq 0 \) and \( \w \in \R^d\).
 \end{definition}
 
@@ -232,7 +198,7 @@ The reverse implications are more involved; we establish them formally in the fo
     Let \( f \) be an \( L \)-smooth function and \oracle{} an \( \Lmax \) individually-smooth \ac{SFO}.
     Furthermore, assume that \( \rbr{f, \oracle{}} \) satisfy minimizer interpolation (\autoref{def:interpolation-minima}).
     Then \( \rbr{f, \oracle{}} \) satisfies the weak growth condition with parameter
-    \[ \rho = \frac{L_{\text{max}}}{L}. \]
+    \[ \wgc = \frac{L_{\text{max}}}{L}. \]
 \end{restatable}
 
 \begin{restatable}[Interpolation and Strong Growth]{lemma}{interpToSGC}~\label{lemma:interpolation_to_sgc}
@@ -241,6 +207,3 @@ The reverse implications are more involved; we establish them formally in the fo
     If \( f \) also satisfies the Polyak-Łojasiewicz condition with parameter \( \mu \), then \( \rbr{f, \oracle{}} \) satisfies the strong growth condition with parameter
     \[ \rho = \frac{L_{\text{max}}}{\mu}. \]
 \end{restatable}
-
-\todo{Strong and weak growth seems sufficient for almost-sure convergence when support-set is finite? That's weird}
-\todo{Define the PL condition in the preliminaries.}
