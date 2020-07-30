@@ -169,12 +169,12 @@ The unnecessary strictness of the original result prevents the natural case wher
         \multirow{2}{*}{Assumptions} & \multicolumn{2}{c}{Convergence Rate}\\%
         \cmidrule(lr){2-3} 
                  & \multicolumn{1}{c}{Ours} & \multicolumn{1}{c}{\citet{vaswani2019painless}}\\ \midrule
-        \( \mu \)-SC & \( O\rbr{\exp\cbr{- \frac{\mu}{\Lmax} \, K}} \)% 
-                     & \( O\rbr{\exp\cbr{- \frac{\bar \mu}{\Lmax} \, K}} \) \\ \addlinespace
-    Convex       & \( O\rbr{\frac{\Lmax}{2 \, K}} \)%
-                 & \( O\rbr{\frac{3 \Lmax}{K}} \)\\ \addlinespace 
+    \( \mu \)-SC & \( O\rbr{\frac{\Lmax}{\mu} \log\rbr{\frac{1}{\epsilon}}} \)% 
+                 & \( O\rbr{\frac{\Lmax}{\bar \mu} \log\rbr{\frac{1}{\epsilon}}} \) \\ \addlinespace
+    Convex       & \( O\rbr{\frac{\Lmax}{2 \, \epsilon}} \)%
+                 & \( O\rbr{\frac{3 \Lmax}{\epsilon}} \)\\ \addlinespace 
         \end{tabular}
-        \caption{Comparison of convergence rates for \ac{SGD} with the stochastic Armijo line-search.  We omit results for non-convex functions, which are identical between the two works. Results are shown for \( \etamax = \infty \) and \( c = \frac{1}{2} \), excepting the convex case of \citet{vaswani2019painless} where \( c = \frac{2}{3} \) is used as suggested by the authors. The constant \( \bar \mu = \min_k \cbr{\E_{\zk} \sbr{\mu_{zk}} } \) requires that at least one stochastic function in the support of \( \zk \) is strongly convex for each iteration \( k \); in contrast, our strongly-convex proof relies only on the parameter of the true function \( \mu \).  }%
+        \caption{Comparison of iteration complexities for \ac{SGD} with the stochastic Armijo line-search.  We omit results for non-convex functions, which are identical between the two works. Results are shown for \( \etamax = \infty \) and \( c = \frac{1}{2} \), excepting the convex case of \citet{vaswani2019painless} where \( c = \frac{2}{3} \) is used as suggested by the authors. The constant \( \bar \mu = \min_k \cbr{\E_{\zk} \sbr{\mu_{zk}} } \) requires that at least one stochastic function in the support of \( \zk \) is strongly convex for each iteration \( k \); in contrast, our strongly-convex proof relies only on the parameter of the true function \( \mu \).  }%
     \label{table:ls-comparison}
 \end{table}
 

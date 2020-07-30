@@ -210,13 +210,13 @@ This significant improvement addresses the criticism of~\citet{liu2020accelerati
     \begin{tabular}{c c c  }\toprule
         \multirow{2}{*}{Assumptions} & \multicolumn{2}{c}{Convergence Rate}\\%
         \cmidrule(lr){2-3} 
-                 & \multicolumn{1}{c}{Ours} & \multicolumn{1}{c}{\citet{vaswani2019painless}}\\ \midrule
-        \( \mu \)-SC & \( O\rbr{\exp\cbr{- \sqrt{\frac{\mu}{\sgc L}} \, K}} \)% 
-                     & \( O\rbr{\exp\cbr{- \sqrt{\frac{\mu}{\sgc^2 L}} \, K}} \) \\ \addlinespace
-        Convex       & \( O\rbr{\frac{\sgc L}{K^2}} \)%
-                 & \( O\rbr{\frac{\sgc^2 L}{K^2}} \)\\ \addlinespace 
+                 & \multicolumn{1}{c}{Ours} & \multicolumn{1}{c}{VBS~\citep{vaswani2019painless}}\\ \midrule
+        \( \mu \)-SC & \( O\rbr{\sqrt{\frac{\rho L}{\mu}} \log\rbr{\frac{1}{\epsilon}}} \)% 
+                     & \( O\rbr{\sqrt{\frac{\rho^2 L}{\mu}} \log\rbr{\frac{1}{\epsilon}}} \) \\ \addlinespace
+        Convex       & \( O\rbr{\sqrt{\frac{\sgc L}{\epsilon}}\,} \)%
+                     & \( O\rbr{\sqrt{\frac{\sgc^2 L}{\epsilon}}\,} \)\\ \addlinespace 
         \end{tabular}
-        \caption{Comparison of convergence rates for stochastic acceleration schemes.}%
+        \caption{Comparison of iteration complexities for stochastic acceleration schemes.}%
     \label{table:agd-comparison}
 \end{table}
 
