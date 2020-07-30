@@ -24,17 +24,17 @@ where the order of the gradient and expectation operators was exchanged by appea
 \section{Interpolation}~\label{app:interpolation}
 
 \interpRelationships*
-\begin{proof}
-    \( \rbr{\text{Minimizer Interpolation} \implies \text{Mixed Interpolation}} \)\\
+\begin{proof}\hfill \break
+    \noindent \((\mathbf{i})\: \text{Minimizer Interpolation} \implies \text{Mixed Interpolation} \)\\
     The stochastic functions \( f(\w, \z) \) are minimized at \( \wopt \) for all \( \z \in \calZ \).
     First-order optimality conditions now imply \( \grad(\wopt, \z) = 0 \).\hfill \break
 
-    \( \rbr{\text{Stationary-Point Interpolation} \implies \text{Mixed Interpolation}} \)\\
+\noindent    \( (\mathbf{ii}) \: \text{Stationary-Point Interpolation} \implies \text{Mixed Interpolation} \)\\
     Suppose \( \wopt \) is a global minimizer of \( f \). 
     First-order optimality conditions imply \( \wopt \) is a stationary point \( f \).
     Stationary-point interpolation now implies \( \wopt \) is a stationary point of \( f(\cdot, \z) \) for all \( \z \in \calZ \).\hfill \break
 
-    \( \rbr{ \text{Mixed Interpolation, Stationary-Point Interpolation} \centernot \implies \text{Minimizer Interpolation}} \)\\
+\noindent    \(  (\mathbf{iii}) \:\text{Mixed Interpolation, Stationary-Point Interpolation} \centernot \implies \text{Minimizer Interpolation} \)\\
     We construct a simple counter example.
     Define the finite-sum function
     \[ f(\w) = \half \rbr{f_1(\w) + f_2(\w)} = \frac{3}{2}\w^2 - \half\w^2, \]
@@ -44,7 +44,7 @@ where the order of the gradient and expectation operators was exchanged by appea
     The stochastic functions \( f_1 \) and \( f_2 \) are stationary at the global minimum \( f(0) = 0 \), but \( f_2 \) is maximized at this point.
     So, both stationary-point and mixed interpolation hold, but minimizer interpolation does not.\hfill \break
 
-    \( \rbr{\text{Minimizer Interpolation} \centernot \implies \text{Gradient Interpolation}} \)\\
+\noindent    \( (\mathbf{iv}) \: \text{Minimizer Interpolation} \centernot \implies \text{Gradient Interpolation} \)\\
     This also follows from a simple finite-sum function.
     Consider
     \[ f(\w) = \half \rbr{f_1(\w) + f_2(\w)} = -\half \cos(\w) - \half \cos(\frac{\w}{2}), \]
@@ -53,7 +53,7 @@ where the order of the gradient and expectation operators was exchanged by appea
     The stochastic functions \( f_1(\w) \) and \( f_2(\w) \) are also globally minimized at every point in \( \calX_0 \), so minimizer interpolation holds.
     However, stationary-point interpolation does not hold as \( f \) has infinitely many stationary points which are not stationary points of \( f_1 \) or \( f_2 \). \hfill \break
 
-    Finally, suppose \oracle{} is such that \( f(\cdot, \z) \) is invex for \( \z \in \calZ \).
+    Finally, suppose that \( f \) is invex and \oracle{} is such that \( f(\cdot, \z) \) is invex for \( \z \in \calZ \).
     The equivalence of all three definitions follows immediately, since all stationary points of invex functions are global minima.
 \end{proof}
 

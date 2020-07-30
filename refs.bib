@@ -27,18 +27,42 @@
   year      = {1999},
 }
 
+%%stochastic approximation
+@book{kushner1997sa,
+  author    = {Harold J. Kushner and
+               Gang George Yin},
+  title     = {Stochastic Approximation Algorithms and Applications},
+  series    = {Applications of Mathematics},
+  volume    = {35},
+  publisher = {Springer},
+  year      = {1997},
+}
+
+    ### Machine Learning Monographs ###
+
+@book{hastie2009elements,
+  author    = {Trevor Hastie and
+               Robert Tibshirani and
+               Jerome H. Friedman},
+  title     = {The Elements of Statistical Learning: Data Mining, Inference, and
+               Prediction, 2nd Edition},
+  series    = {Springer Series in Statistics},
+  publisher = {Springer},
+  year      = {2009},
+}
+
     ### SGD ###
 
 @article{robbins1951sgd,
-    author      = {Robbins, Herbert and Monro, Sutton},
-    journal     = {Ann. Math. Statist.},
-    month       = {09},
-    number      = {3},
-    pages       = {400--407},
-    publisher   = {The Institute of Mathematical Statistics},
-    title       = {A Stochastic Approximation Method},
-    volume      = {22},
-    year        = {1951}
+  author      = {Robbins, Herbert and Monro, Sutton},
+  journal     = {Ann. Math. Statist.},
+  month       = {09},
+  number      = {3},
+  pages       = {400--407},
+  publisher   = {The Institute of Mathematical Statistics},
+  title       = {A Stochastic Approximation Method},
+  volume      = {22},
+  year        = {1951}
 }
 
 @incollection{bengio2012practical,
@@ -502,14 +526,37 @@
 
 %% original Armijo line-search reference
 @article{armijo1966ls,
-    author      = {Armijo, Larry},
-    journal     = {Pacific Journal of Mathematics},
-    number      = {1},
-    pages       = {1--3},
-    publisher   = {Pacific Journal of Mathematics, A Non-profit Corporation},
-    title       = {Minimization of functions having Lipschitz continuous first partial derivatives.},
-    volume      = {16},
-    year        = {1966}
+  author      = {Armijo, Larry},
+  journal     = {Pacific Journal of Mathematics},
+  number      = {1},
+  pages       = {1--3},
+  publisher   = {Pacific Journal of Mathematics, A Non-profit Corporation},
+  title       = {Minimization of functions having Lipschitz continuous first partial derivatives.},
+  volume      = {16},
+  year        = {1966}
+}
+
+%% Wolfe Conditions: Original paper and corrections.
+@article{wolfe1969convergence,
+  title={Convergence conditions for ascent methods},
+  author={Wolfe, Philip},
+  journal={SIAM review},
+  volume={11},
+  number={2},
+  pages={226--235},
+  year={1969},
+  publisher={SIAM}
+}
+
+@article{wolfe1971convergence,
+  title     = {Convergence conditions for ascent methods. II: Some corrections},
+  author    = {Wolfe, Philip},
+  journal   = {SIAM review},
+  volume    = {13},
+  number    = {2},
+  pages     = {185--188},
+  year      = {1971},
+  publisher = {SIAM}
 }
 
 %% golden-section search
@@ -550,6 +597,13 @@
   author    = {Fridovich-Keil, Sara and Recht, Benjamin},
   booktitle = {The 11th Workshop on Optimization for Machine Learning ({OPT} 2019)},
   year      = {2019},
+}
+
+@article{ogaltsov2019adaptive,
+  title     = {Adaptive gradient descent for convex and non-convex stochastic optimization},
+  author    = {Ogaltsov, Aleksandr and Dvinskikh, Darina and Dvurechensky, Pavel and Gasnikov, Alexander and Spokoiny, Vladimir},
+  journal   = {arXiv preprint arXiv:1911.08380},
+  year      = {2019}
 }
 
 @article{mahsereci2017pls,
@@ -993,7 +1047,7 @@
 
 # original accelerated method
 @inproceedings{nesterov1983method,
-  title     = {A method for unconstrained convex minimization problem with the rate of convergence \( {O}(1/k^{2}) \)},
+  title     = {A method for unconstrained convex minimization problem with the rate of convergence ${O}(1/k^{2})$ },
   author    = {Nesterov, Yurii},
   booktitle = {Doklady an {USSR}},
   volume    = {269},
