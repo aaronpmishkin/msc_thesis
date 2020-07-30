@@ -23,7 +23,7 @@ Intuition indicates that it is only when \( \lambda \) is moderate that minimizi
 The next lemma formalizes these observations into a version of weak growth which holds for \( \rbr{F, \oracle{}_2} \).
 
 \begin{restatable}{lemma}{regularizedWGC}\label{lemma:regularized-wgc}
-    Let \( f \) be an \( L \)-smooth function and oracle{} a SFO such that \( \rbr{f, \oracle{}} \) satisfy the weak growth condition with parameter \( \rho \).
+    Let \( f \) be an \( L \)-smooth function and \oracle{} a SFO such that \( \rbr{f, \oracle{}} \) satisfy the weak growth condition with parameter \( \rho \).
     Then the \( L_2 \)-regularized problem \( \rbr{F, \oracle{}_2} \) satisfies the following inequality for all \( \w \in \R^d \) and \( k \geq 0 \):
     \[ \Ek\sbr{\norm{\nabla F(\w, \zk)}^2} \leq 4 \max\cbr{\rho L, \lambda} \rbr{F(\w) - F(\wopt) - \frac{\lambda - L}{2} \norm{\wopt - \wbar}^2 + \frac{\lambda}{2} \norm{\wbar}^2}, \]
     where \( \wopt \) minimizes the regularized function \( F \).
@@ -52,7 +52,7 @@ In the case that \( \mu = 0 \), we are still able to obtain linear convergence b
 \autoref{thm:sgd-regularized-wgc} shows that the size of the neighborhood to which SGD converges is determined by the degree of regularization, which fits with the intuition from the previous section.
 We make the following observations about the effect of \( \lambda \) on region of convergence:
 \begin{inparaenum}[(i)]
-\item the minimizer \( \wopt \) depends on \( \lambda \), with \( \wopt = \wbar \) when \( \lambda = 0 \). It is easy to see that the neighborhood terms collapse to \( 0 \) and convergence mirrors \autoref{thm:sgc-convex} in when \( \lambda = 0 \) holds;
+\item the minimizer \( \wopt \) depends on \( \lambda \), with \( \wopt = \wbar \) when \( \lambda = 0 \) --- it is easy to see that the neighborhood terms collapse to \( 0 \) and convergence mirrors \autoref{thm:sgc-convex} in when \( \lambda = 0 \) holds;
 \item as \( \lambda \rightarrow \infty \), \( \wopt \rightarrow 0 \) and the neighborhood again collapses to \( 0 \); and 
 \item when \( f \) is convex and \( \eta \) attains is maximal value, the convergence rate of SGD has the special case 
 \[  \E\sbr{\norm{\wkk - \wopt}^2} \leq \rbr{1 - \frac{2 \lambda^2(L + \lambda)}{\max\cbr{\rho L, \lambda} \rbr{L + 2\lambda}^2}}^k \norm{\w_0 - \wopt}^2 + \frac{\lambda}{\rbr{L + \lambda}}\rbr{\norm{\wbar}^2 - \norm{\wopt - \wbar}^2}. \]
@@ -64,5 +64,6 @@ Consider generalizing \autoref{eq:l2-reguarlized-problem} to
 \[ F(\w) = f(\w) + g(\w), \]
 where \( f \) is a \( L \)-smooth function with SFO \oracle{} such that \( \rbr{f, \oracle{}} \) satisfies interpolation and \( g \) is a potentially non-smooth regularizer or indicator function. 
 This problem class includes \( L_1 \)-regularized minimization, as well as minimization with (convex) constraints.
-A interesting and unexplored avenue of research is extending the analysis above to this setting through the proximal-gradient method \todo{citations here}.
+A interesting avenue of research is extending the analysis above to this setting through the proximal-gradient method.
+Although \citet{cevher2018linear} considered such problems, they considered convergence under strong growth plus noise only and did not derive specific expressions for the neighbourhood size.
 

@@ -3,27 +3,27 @@
 \chapter{Acceleration}~\label{ch:acceleration}
 
 The focus in Chapters~\ref{ch:sgd} and~\ref{ch:line-search} was on relatively simple first-order methods: \ac{SGD} with a fixed step-size and with a stochastic line-search, respectively.
-Now, we move on to a more complicated algorithm which is guaranteed faster rates of convergence in the deterministic setting.
-The last first-order method which is analyzed in this work is Nesterov's famous \ac{AGD}~\cite[Eq. 2.2.20]{nesterov2004lectures}.
+Now, we move on to a more complicated algorithm which is guaranteed faster convergence in the deterministic setting.
+The last first-order method which is analyzed in this work is Nesterov's famous \ac{AGD}~\cite{nesterov2004lectures}.
 First, a small degree of background for accelerated methods is developed, with a particular focus on why stochastic acceleration is an interesting question for oracles satisfying interpolation.
 Then, the following convergence results are established for \ac{SAGD}:
 \begin{enumerate}
-    \item \( O\rbr{\exp\cbr{- \sqrt{\frac{\mu}{\sgc L}} \, K}} \) convergence for strongly convex \( f \) when \( \rbr{f, \oracle{}} \) satisfies strong growth; this rate is tight with the deterministic analysis when \( \sgc = 1 \).
-    \item \( O(\frac{1}{K^2}) \)  convergence for convex \( f \) when \( \rbr{f, \oracle{}} \) satisfies strong growth; again, this rate is tight with \ac{AGD} for deterministic oracles when \( \sgc = 1 \).
+    \item \( O\rbr{\sqrt{\frac{\sgc L}{\mu}} \log \rbr{\inv{\epsilon}}} \) iteration complexity for strongly convex \( f \) when \( \rbr{f, \oracle{}} \) satisfies strong growth; this rate is tight with the deterministic analysis when \( \sgc = 1 \).
+    \item \( O\rbr{\sqrt{\frac{\sgc L}{\epsilon}} \,} \) iteration complexity for convex \( f \) when \( \rbr{f, \oracle{}} \) satisfies strong growth; again, this rate is tight with \ac{AGD} when \( \sgc = 1 \).
 \end{enumerate}
 The chapter ends with a brief discussion of acceleration under the weak growth condition, which is an open question.
 
 Recall that Theorems~\ref{thm:sgc-convex} and~\ref{thm:wgc-convex} establish fast linear and sub-linear convergence rates for \ac{SGD} that are comparable with analyses for deterministic problems (e.g. gradient descent).
 Unfortunately, the classic work by \citet{nemirovsky1983problem} in 1983 shows that the convergence of gradient descent is not tight with lower-bounds for convex, Lipschitz-smooth functions with deterministic oracles. 
-Subsequent by developments by Nesterov~\citep{nesterov1983method, nemirovsky1985optimal, nesterov1988approach} define a series of first-order methods (terminating with \ac{AGD}) achieving optimal \( O(\frac{1}{K^2}) \) convergence in the setting analyzed by Nemirovsky and Yudin. 
-Algorithms with this optimal rate are called \emph{accelerated} and subsequent research has generated a large number of accelerated algorithms for deterministic problems.
+Subsequent by developments by Nesterov~\citep{nesterov1983method, nemirovsky1985optimal, nesterov1988approach} defined a series of first-order methods (terminating with \ac{AGD}) achieving the optimal \( O(\frac{1}{K^2}) \) convergence in the setting analyzed by Nemirovsky and Yudin. 
+Algorithms with this rate are called \emph{accelerated} and subsequent research has generated a large number of accelerated algorithms for deterministic problems.
 That acceleration literature firmly places gradient descent as a sub-optimal algorithm and also casts the analyses in \autoref{ch:sgd} in a new light.
-In particular, the close relationship between \ac{SGD} under interpolation and deterministic gradient descent indicates that \ac{SAGD} may be a faster algorithm than \ac{SGD} in restricted settings. 
+In particular, the obvious parallels between \ac{SGD} under interpolation and deterministic gradient descent hint that \ac{SAGD} may be a faster algorithm than \ac{SGD} in restricted settings. 
 
 In fact, restricting the \ac{SFO} is necessary for any hope of proving an accelerated rate for \ac{SAGD}.
 Black-box accelerated methods which do not leverage structural information about \( f \) rapidly accumulate errors when used with general stochastic oracles \( \oracle{} \)~\citep{devolder2014first, schmidt2011convergence}. 
 Such error accumulation prevents convergence. 
-The key question now is whether or not the interpolation setting is restricted enough to permit acceleration;
+The key question is whether or not the interpolation setting is restricted enough to permit acceleration;
 the goal of this chapter is to extend the estimating sequences framework~\citep{nesterov2004lectures} to show that \ac{SAGD} does in fact achieve an accelerated convergence rate when the strong growth condition holds.
 
 \begin{figure}[t]
@@ -47,19 +47,17 @@ the goal of this chapter is to extend the estimating sequences framework~\citep{
 
 We now introduce \ac{AGD} in greater detail before discussing its analysis using estimating sequences. 
 \autoref{procedure:accelerated-sgd} presents the classic procedural definition for \ac{AGD} with stochastic gradients; the major differences to \ac{SGD} are
-\begin{inparaenum}[i)]
+\begin{inparaenum}[(i)]
 \item \ac{AGD} introduces a secondary sequence of points \( \seq{\yk} \) that are calculated by extrapolating from the primary sequence \( \seq{\wk} \),
 \item the primary sequence is updated using stochastic gradient steps from the extrapolation points \( \yk \), rather than the proceeding iterate \( \wk \), and 
-\item the extrapolation step-size is computed from a quadratic equation which depends on \( \mu \) and \( L \), where \( \mu = 0 \) for convex functions. 
+\item the extrapolation step-size is computed from a quadratic equation that depends on \( \mu \) and \( L \), where \( \mu = 0 \) for convex functions. 
 \end{inparaenum}
 The procedure for selecting the \( \betak \) step-sizes is particularly unintuitive and has lead some authors to describe the fast convergence of \ac{AGD} as an ``algebraic trick''~\citep{allen2014linear}.
 Partly for this reason, we shall re-express \ac{AGD} as alternating steps of gradient descent on \( f \) and a new function \( \phi : \R^d \rightarrow \R \).
 
 
-\section{Estimating Sequences}\label{sec:estimating-sequences}
+\section{Estimating Sequences}~\label{sec:estimating-sequences}
 
-
-Suppose that we are trying to minimize convex \( f \).
 Let \( \seq{\wk} \) be the sequence of iterates produced by \ac{SGD}.\@
 \autoref{lemma:sgc-decrease-condition} shows that the following descent condition holds if \( f \) is \( L \)-smooth and \( \rbr{f, \oracle{}} \) satisfies strong growth:
 \[ \Ek\sbr{f(\wkk)} \leq f(\wk) - \eta \rbr{1 - \frac{\sgc L \eta}{2}}\norm{\grad(\wk)}^2. \]
@@ -72,8 +70,8 @@ Sufficiently accurate approximations can replace or augment the worst-case curva
 This intuition is formalized by the notion of estimating sequences~\citep{nesterov2004lectures}.
 
 \begin{definition}[Estimating Sequences]~\label{def:estimating_sequences}
-    The two sequences \( \seq{\lambda_k}_{k=0}^\infty \) and \( \seq{\phi_k}_{k=0}^\infty \) are called estimating sequences for the \( f : \R^d \rightarrow \R \) if
-    \begin{inparaenum}[(1)]
+    The two sequences \( \seq{\lambda_k}_{k=0}^\infty \) and \( \seq{\phi_k}_{k=0}^\infty \) are called estimating sequences for \( f : \R^d \rightarrow \R \) if
+    \begin{inparaenum}[(i)]
         \item \( \lambda_k \geq 0 \) for all \( k \);
         \item \( \lim_{k\rightarrow \infty} \lambda_k = 0 \); and
         \item for all \( k \in \bbN \) and \( \w \in \R^d \), the functions \( \phi_k: \R^d \rightarrow \R \) satisfy
@@ -81,8 +79,8 @@ This intuition is formalized by the notion of estimating sequences~\citep{nester
     \end{inparaenum}
 \end{definition}
 
-If \( \phi_0 \) is chosen so that \( \phi_0(\w) \approx f(\w) \) for all \( \w \), then \( \seq{\phi_k}_{k=0}^\infty \) matches our intuition of sequence of improving, local approximations to \( f \).
-This is particularly since the conditions on \( \lambda_k \) guarantee \( \lim_{k \rightarrow \infty} \phi_k = f \) point-wise.
+If \( \phi_0 \) is chosen so that \( \phi_0(\w) \approx f(\w) \) for all \( \w \), then \( \seq{\phi_k}_{k=0}^\infty \) matches our intuition of a sequence of improving, local approximations to \( f \).
+This is particularly true since the conditions on \( \lambda_k \) guarantee \( \lim_{k \rightarrow \infty} \phi_k = f \) point-wise.
 Finally, and most importantly, if \( f(\wk)~\leq~\inf_x \phi_k(x) \) for all \( k \), then we obtain
 \begin{align*}
     f(\wk) \leq \phi_k(\wopt) &\leq (1 - \lambda_k) f(\wopt) + \phi_0(\wopt)\\
@@ -101,7 +99,7 @@ Let us now fix a choice of estimating sequences following~\citet[Lemma 2.2.2]{ne
         \lambda_{k+1} &= (1- \alpha_k) \lambda_k\\
         \phi_{k+1}(\w) &= (1-\alpha_k) \phi_k(\w) + \alpha_k \rbr{f(\yk) + \abr{\grad(\yk), \w - \yk} + \frac{\mu}{2} \norm{\w - \yk}^2},
     \end{align*}
-    where \( \lambda_0 = 1 \) and \( \phi_0(x) = \phi_0^* + \frac{\gamma_0}{2}\norm{x - v_0}^2 \) with \( \gamma_0 \geq 0 \), \( v_0 \in \R^n \) and \( \phi_0^* \in \R \) arbitrary.
+    where \( \lambda_0 = 1 \) and \( \phi_0(x) = \phi_0^* + \frac{\gamma_0}{2}\norm{x - v_0}^2 \) with arbitrary \( \gamma_0 \geq 0 \), \( v_0 \in \R^n \) and \( \phi_0^* \in \R \).
 \end{restatable}
 
 \autoref{lemma:estimating-sequence} provides a recipe for generating local approximations of \( f \) by updating \( \phi_k \) with a global minorant centered at \( \wk \). 
@@ -152,7 +150,7 @@ We will show this second property shortly, but first we formally state the equiv
 \end{restatable}
 
 Now we establish the main result of this section; convergence for convex and \( \mu \)-strongly-convex functions will follow almost immediately in Sections~\ref{sec:agd-sc} and~\ref{sec:agd-convex}.
-The proof relies on the expected decrease condition given by \autoref{lemma:sgc-decrease-condition}, which holds for \( L \)-smooth \( f \) when \( \rbr{f, \oracle{}} \) satisfy strong growth.
+The proof relies on the expected decrease condition given by \autoref{lemma:sgc-decrease-condition}, which holds for \( L \)-smooth \( f \) when \( \rbr{f, \oracle{}} \) satisfies strong growth.
 Intuitively, this condition shows that \ac{SGD} obtains similar per-iteration improvement (in expectation) to deterministic gradient descent if strong growth holds. 
 Finally, note that the expectations in the lemma below are taken with respect to the entire sequence of random variables \( \seq{\z_t}_{t=0}^k \).
 
@@ -176,8 +174,9 @@ The last step of the analysis is to select an appropriate value for \( \gamma_0 
     Let \( f \) be a \( \mu \)-strongly-convex function with \( \mu > 0 \) and \oracle{} a \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies strong growth with parameter \( \sgc \).
     Moreover, choose \( \gamma_0 = \mu \), \( v_0 = \w_0 \), and \( \phi_0^* = f(\w_0) \).
     Then \ac{RSAGD} converges as  
-    \[ \E\sbr{f(\wk)} - f(\wopt) \leq \rbr{1 - \sqrt{\frac{\mu}{\sgc L}}}^{k} \rbr{ f(w_0) - f(\wopt) + \frac{\mu}{2} \norm{\wopt - \w_0}^2 }.  \]
+    \[ \E\sbr{f(\w_K)} - f(\wopt) \leq \rbr{1 - \sqrt{\frac{\mu}{\sgc L}}}^{K} \rbr{ f(w_0) - f(\wopt) + \frac{\mu}{2} \norm{\wopt - \w_0}^2 }.  \]
 \end{restatable}
+\noindent See \autoref{app:agd-sc} for proof.\hfill \break
 
 Accelerated convergence of \ac{SAGD} is an immediate corollary of the equivalence of \ac{RSAGD} and \ac{SAGD} (\autoref{lemma:agdEquivalence}) and \autoref{thm:sc-agd}.
 The only catch here is that \( \alpha_0 \) must be selected to correspond to \( \gamma_0 = \mu \).
@@ -187,7 +186,7 @@ It is easy to see that choosing \( \alpha_0 = \sqrt{\frac{\mu}{\sgc L}} \) for \
     Let \( f \) be a \( \mu \)-strongly-convex function with \( \mu > 0 \) and \oracle{} a \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies strong growth with parameter \( \sgc \).
     Moreover, choose \( \alpha_0 = \sqrt{\frac{\mu}{\sgc L}} \). 
     Then \ac{SAGD} converges as  
-    \[ \E\sbr{f(\wk)} - f(\wopt) \leq \rbr{1 - \sqrt{\frac{\mu}{\sgc L}}}^{k} \rbr{ f(w_0) - f(\wopt) + \frac{\mu}{2} \norm{\wopt - \w_0}^2 }.  \]
+    \[ \E\sbr{f(\w_K)} - f(\wopt) \leq \rbr{1 - \sqrt{\frac{\mu}{\sgc L}}}^{K} \rbr{ f(w_0) - f(\wopt) + \frac{\mu}{2} \norm{\wopt - \w_0}^2 }.  \]
 \end{corollary}
 
 \autoref{cor:sc-agd} looks like a potential positive answer to the problem of whether or not acceleration is possible in the interpolation setting.
@@ -232,9 +231,10 @@ See~\autoref{table:agd-comparison} for additional details.
     Let \( f \) be a convex function and \oracle{} a \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies strong growth with parameter \( \sgc \).
     Moreover, choose \( \gamma_0 = 2 \sgc L \), \( v_0 = \w_0 \), and \( \phi_0^* = f(\w_0) \).
     Then \ac{RSAGD} converges as  
-    \[ \E\sbr{f(\wk)} - f(\wopt) \leq \frac{2}{\rbr{k+1}^2}\rbr{f(\w_0) - f(\wopt) + \sgc L \norm{\w_0 - \wopt}^2 }. \]
+    \[ \E\sbr{f(\w_K)} - f(\wopt) \leq \frac{2}{\rbr{K+1}^2}\rbr{f(\w_0) - f(\wopt) + \sgc L \norm{\w_0 - \wopt}^2 }. \]
 \end{restatable}
 
+\noindent The proof is given in \autoref{app:agd-convex}.
 Again, we have the following corollary from the equivalence of \ac{RSAGD} and \ac{SAGD}. 
 Note that the choice of \( \alpha_0 = \sqrt{2} - 1 \) for \ac{SAGD} is identical to the choice of \( \gamma_0 = 2 \sgc L \) in \ac{RSAGD}, since \( \alpha_0^2 = (1 - \alpha_0) \gamma_0 / (\sgc L) \).
 
@@ -242,11 +242,11 @@ Note that the choice of \( \alpha_0 = \sqrt{2} - 1 \) for \ac{SAGD} is identical
     Let \( f \) be a convex function and \oracle{} a \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies strong growth with parameter \( \sgc \).
     Moreover, choose \( \alpha_0 = \sqrt{2} - 1 \).
     Then \ac{RSAGD} converges as  
-    \[ \E\sbr{f(\wk)} - f(\wopt) \leq \frac{2}{\rbr{k+1}^2}\rbr{f(\w_0) - f(\wopt) + \sgc L \norm{\w_0 - \wopt}^2 }. \]
+    \[ \E\sbr{f(\w_K)} - f(\wopt) \leq \frac{2}{\rbr{K+1}^2}\rbr{f(\w_0) - f(\wopt) + \sgc L \norm{\w_0 - \wopt}^2 }. \]
 \end{corollary}
 
  An unfortunate aspect of the \autoref{thm:convex-agd} is that it uses the strong growth condition, rather than weak growth.
- Recall that sufficient conditions for strong growth are minimizer interpolation, individual-smoothness, and the PL condition (\autoref{lemma:interpolation_to_sgc}). 
+ Recall that sufficient conditions for strong growth are minimizer interpolation, individual-smoothness, and the PL condition (\autoref{lemma:interpolation-to-sgc}). 
  Thus, requiring strong growth in this case has the \emph{flavour} of requiring \( f \) to be strongly-convex, but only leads to sub-linear convergence.
 This is quite disappointing, but it is not obvious that the assumption can be relaxed.
 
@@ -258,14 +258,13 @@ The direct proof using estimating sequences collapses without obvious recourse.
 An alternative, which shows progress in terms of the optimality gap and distance to the minimizer can be derived, which we state now.
 
  \begin{restatable}{lemma}{wgcDecreaseCondition}~\label{lemma:wgc-decrease-condition}
-    Let \( f \) be an \( L \)-smooth, convex function satisfying the weak growth condition with parameter \( \wgc \). 
-    Moreover, suppose that the stochastic functions \( f(\cdot, \z) \) are \( L_\z \)-smooth.
+     Let \( f \) be an \( L \)-smooth, convex function and \oracle{} an individually-smooth and convex \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies the weak growth condition with parameter \( \wgc \). 
     Then the following decrease condition holds for stochastic gradient descent with step-size \( \eta \leq \frac{1}{\Lmax} \):
     \[ \E_{\zk} \sbr{f(\wkk) + \wgc L^2 \eta \norm{\wkk - \wopt}^2} \leq f(\wk) + \wgc L^2 \eta \norm{\wk - \wopt}^2 - \eta \norm{\grad(\wk)}^2. \]
 \end{restatable}
 \noindent See \autoref{app:agd-additional-lemmas} for proof. \hfill \break
 
-It is not clear whether the analysis presented here can be modified to use \autoref{lemma:wgc-decrease-condition}. 
+It is not clear whether the analysis of \ac{SAGD} presented here can be modified to use \autoref{lemma:wgc-decrease-condition}. 
 The naive approach is to change the choice of estimating sequences so that \( \phi_k \)  depends on \( \norm{\wk - \wopt}^2 \); a version of \autoref{lemma:estimating-sequence-bound} would then be proved using the new decrease condition.
 However, such work is outside the scope of this thesis and is left for subsequent research.
 Accelerated convergence under weak growth remains an open question.

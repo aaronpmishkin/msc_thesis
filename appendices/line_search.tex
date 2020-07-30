@@ -75,9 +75,7 @@
            \Ek\sbr{\norm{\wkk - \wopt}^2} &\leq \norm{\wk - \wopt}^2  - \mu \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax}\norm{\wk - \wopt}^2 \\
                                                &= \rbr{1 - \mu \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax}} \norm{\wk - \wopt}^2.
                                                    \intertext{Taking expectations and recursing on the inequality,}
-       \implies \E \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \mu \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax}}^k \norm{\w_0 - \wopt}^2 \\
-       \intertext{\autoref{lemma:iterate-bounds} now yields}
-   \implies \E \sbr{f(\wkk)} - f(\wopt) &\leq \rbr{\frac{L}{\mu}}\rbr{1 - \mu \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax}}^k \rbr{f(w_0) - f(\wopt)}. 
+       \implies \E \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \mu \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax}}^k \norm{\w_0 - \wopt}^2.
    \end{align*} 
 \end{proof}
 
