@@ -98,7 +98,7 @@ A case analysis in \autoref{app:sgd-additional-lemmas} shows that the step-size 
 If \( \mu < L \), then \( \frac{\mu + L}{L \Lmax} < \frac{2}{\Lmax} \) and the following theorem improves upon the original result. 
 
 \begin{restatable}{theorem}{sgcIndConvex}~\label{thm:sgc-ind-convex}
-    Let \( f \) be a \( \mu \)-strongly-convex, \( L \)-smooth function and \( \oracle{} \) an \( \Lmax \) individually-smooth, individually-convex \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation.
+    Let \( f \) be a \( \mu \)-strongly-convex, \( L \)-smooth function and \( \oracle{} \) an \( \Lmax \) individually-smooth and convex \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation.
     Then stochastic gradient descent with fixed step-size \( \eta < \frac{2}{\Lmax} \) converges as
     \[ \E\sbr{\norm{\w_{K+1} - \wopt}^2} \leq \rbr{1 - \mu \, \eta \rbr{2 - \eta \Lmax}}^K \norm{\w_0 - \wopt}^2. \]
 \end{restatable}
@@ -122,10 +122,10 @@ If \( \mu < L \), then \( \frac{\mu + L}{L \Lmax} < \frac{2}{\Lmax} \) and the f
     \makecell{Ind. Smooth \\ \& \(\mu_z\)-SC}% 
                  & \( \eta \leq \frac{2}{\mumax + \Lmax} \)%
                  & \multicolumn{1}{c}{N/A}% 
-                 & \( O\rbr{\frac{\mumax + \Lmax}{4 \delta_{\text{max}}} \log\rbr{\frac{1}{\epsilon}}} \)%
+                 & \( O\rbr{\frac{\mumax + \Lmax}{4 \delta_{\text{min}}} \log\rbr{\frac{1}{\epsilon}}} \)%
                  & \multicolumn{1}{c}{N/A} \\ \bottomrule 
     \end{tabular}
-    \caption{Comparison of iteration complexities of fixed step-size \ac{SGD} for \( \mu \)-SC \( f \) under the strong growth condition. For each result, we report the complexity obtained with the optimal step-size according to that analysis. Recall from \autoref{thm:sgc-ind-sc} that \( \delta_{\text{max}} = \max_{\z \in \calZ} \frac{\mu_\z L_\z}{\mu_\z + L_\z} \). The first row shows our results for general \oracle{} are tighter than SLR (Schmidt-Le~Roux~\citep{schmidt2013fast}) allow for larger step-sizes.}%
+    \caption{Comparison of iteration complexities of fixed step-size \ac{SGD} for \( \mu \)-SC \( f \) under the strong growth condition. For each result, we report the complexity obtained with the optimal step-size according to that analysis. Recall from \autoref{thm:sgc-ind-sc} that \( \delta_{\text{min}} = \min_{\z \in \calZ} \frac{\mu_\z L_\z}{\mu_\z + L_\z} \). The first row shows our results for general \oracle{} are tighter than SLR (Schmidt-Le~Roux~\citep{schmidt2013fast}) allow for larger step-sizes.}%
     \label{table:sgd-sc-comparison}
 \end{table}
 
@@ -137,16 +137,16 @@ The individual functions \( f_i(\w) = \rbr{\abr{\w, x_i} - y_i}^2 \) are clearly
 However, in the unlikely case that if \oracle{} is also individually-strongly-convex, we can show that \ac{SGD} will converge almost surely, as established in the following theorem.
 
 \begin{restatable}{theorem}{sgcIndSC}~\label{thm:sgc-ind-sc}
-    Let \( f \) be a \( \mu \)-strongly-convex, \( L \)-smooth function and \( \oracle{} \) an \( \Lmax \) individually-smooth, \( \mumax \) individually-strongly-convex \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation. 
+    Let \( f \) be a \( \mu \)-strongly-convex, \( L \)-smooth function and \( \oracle{} \) an \( \Lmax \) individually-smooth and \( \mumax \)-strongly-convex \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation. 
     Then stochastic gradient descent with fixed step-size \( \eta \leq \frac{2}{\mumax + \Lmax} \) converges deterministically at the rate 
-    \[ \norm{\w_{K+1} - \wopt}^2 \leq \rbr{1 - 2 \eta \, \delta_{\text{max}} }^K \norm{\w_0 - \wopt}^2, \] 
-    where \( \delta_{\text{max}} = \max_{\z \in \calZ} \frac{\mu_\z L_\z}{\mu_\z + L_\z} \).
+    \[ \norm{\w_{K+1} - \wopt}^2 \leq \rbr{1 - 2 \eta \, \delta_{\text{min}} }^K \norm{\w_0 - \wopt}^2, \] 
+    where \( \delta_{\text{min}} = \min_{\z \in \calZ} \frac{\mu_\z L_\z}{\mu_\z + L_\z} \).
 \end{restatable}%
 \noindent See \autoref{app:sgd-sc} for proof.\hfill \break
 
 \autoref{thm:sgc-ind-sc} is not surprising; strongly-convex functions have only one minimizer, meaning that gradient-descent on a single stochastic function \( f(\cdot, \zk) \) is sufficient to recover the global solution to the optimization problem.
-Choosing the best-conditioned sub-function function yields convergence to \( \wopt \) as \( O\rbr{\exp\cbr{ - 2 \eta \, \delta_{\text{min}} \, K}} \), where \( \delta_{\text{min}} = \min_{\z \in \calZ} \frac{\mu_z L_\z}{\mu_z + L_\z} \)~\citep{bubeck2015convex}.
-Notice that we have exchanged worst-case performance for best-case (\( \delta_{\text{max}} \) vs \( \delta_{\text{min}} \)) by optimizing \( f(\cdot, \z) \) directly.
+Choosing the best-conditioned sub-function function yields convergence to \( \wopt \) as \( O\rbr{\exp\cbr{ - 2 \eta \, \delta_{\text{max}} \, K}} \), where \( \delta_{\text{max}} = \max_{\z \in \calZ} \frac{\mu_z L_\z}{\mu_z + L_\z} \)~\citep{bubeck2015convex}.
+Notice that we have exchanged worst-case performance for best-case (\( \delta_{\text{min}} \) vs \( \delta_{\text{max}} \)) by optimizing \( f(\cdot, \z) \) directly.
 \ac{SGD} is clearly sub-optimal when \oracle{} is individually-strongly-convex and the optimization procedure has direct access to \( f(\cdot, \z ) \) for each \( \z \in \calZ \), such as in the finite-sum setting. 
 This illustrates the dangers of assuming individual strong-convexity and interpolation hold simultaneously.
 
@@ -242,7 +242,7 @@ This theorem is due to~\citet{neveu1975discrete} and will be the cornerstone of 
 \noindent With necessary the measure-theoretic background complete, we are now ready to study the almost-sure convergence of stochastic gradient descent.
 
 \begin{restatable}{theorem}{wgcAlmostSure}~\label{thm:wgc-almost-sure}
-    Let \( \f \) be a convex, \( L \)-smooth function with at least one finite minimizer and \oracle{} a \( \Lmax \) individually-smooth \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfy the weak growth condition with parameter \( \wgc \).
+    Let \( \f \) be a convex, \( L \)-smooth function with at least one finite minimizer and \oracle{} a \( \Lmax \) individually-smooth \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies the weak growth condition with parameter \( \wgc \).
     Then stochastic gradient descent with fixed step-size \( \eta < \frac{1}{\wgc L} + \frac{1}{\Lmax} \) converges to a minimizer of \( f \) almost surely,
 \end{restatable}
 
@@ -263,7 +263,7 @@ The final result of this chapter shows almost-sure convergence to a stationary p
 The proof is presented in \autoref{app:almost-sure-convergence} and follows a similar structure to the proof of \autoref{thm:wgc-almost-sure}.
 
 \begin{restatable}{theorem}{sgcAlmostSure}~\label{thm:sgc-almost-sure}
-    Let \( \f \) be an \( L \)-smooth function and \oracle{} a SFO such that \( \rbr{f, \oracle{}} \) satisfy the strong growth condition with parameter \( \sgc \).
+    Let \( \f \) be an \( L \)-smooth function and \oracle{} a SFO such that \( \rbr{f, \oracle{}} \) satisfies the strong growth condition with parameter \( \sgc \).
     Then stochastic gradient descent with fixed step-size \(\eta < \frac{2}{\sgc L} \) converges to a stationary point of \( f \) almost surely.
 \end{restatable}
 

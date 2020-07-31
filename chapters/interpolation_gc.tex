@@ -62,7 +62,7 @@ Note that the existence of an \( \Lmax \) individually-smooth, unbiased \ac{SFO}
 \begin{restatable}{corollary}{indSmoothToSmooth}~\label{cor:ind-smooth-to-smooth}
     Let \( f : \R^d \rightarrow \R \) be a differentiable function.  
     If there exists an unbiased, \( \Lmax \) individually-smooth \ac{SFO} \oracle{} for \( f \), then \( f \) is \( L \)-smooth with \( L \leq \Lmax \).
-    Alternatively, if \( \oracle{} \) is biased but \( \calZ \) is finite, then \( \Ek \sbr{f(\cdot, \zk)} \) is \( \Lmax \)-smooth for all \( k \). 
+    Alternatively, if \( \oracle{} \) is biased but the support \( \calZ \) is finite and the partial derivatives \( \frac{\partial}{\partial w^j} f(\w, \z) \) are finite for each \( z \in \calZ \), then \( \Ek \sbr{f(\cdot, \zk)} \) is \( \Lmax \)-smooth for all \( k \). 
 \end{restatable}
 \noindent See \autoref{app:stochastic-oracles} for proof. 
 In several cases, we will also make use of individual strong-convexity.
@@ -175,7 +175,7 @@ Similarly, interpolation is satisfied for linear classifiers on separable datase
 In the general setting of \acp{SFO}, the following lemma establishes simple conditions for \( \rbr{f, \oracle{}} \) to satisfy minimizer interpolation.
 \begin{restatable}{lemma}{boundedBelow}~\label{lemma:bounded-below}
     A function-oracle pair \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation (\autoref{def:interpolation-minima}) if \oracle{} is unbiased and 
-    \[ f(\w, \z ) \geq f(\wopt) \; \forall \w \in \R^d,  \quad \forall \z \in \calZ. \]
+    \[ f(\w, \z ) \geq f(\wopt) \quad \forall \w \in \R^d, \: \forall \z \in \calZ. \]
 \end{restatable}
 \noindent See \autoref{app:interpolation} for proof.\hfill \break
 
@@ -270,15 +270,13 @@ Replicating this last argument under weak growth shows that the weak growth cond
 The reverse implications are more involved; we establish them formally in the following lemmas. 
 \begin{restatable}[Interpolation and Weak Growth]{lemma}{interpToWGC}~\label{lemma:interpolation-to-wgc}
     Let \( f \) be an \( L \)-smooth function and \oracle{} an \( \Lmax \) individually-smooth \ac{SFO}.
-    Furthermore, assume that \( \rbr{f, \oracle{}} \) satisfy minimizer interpolation (\autoref{def:interpolation-minima}).
-    Then \( \rbr{f, \oracle{}} \) satisfies the weak growth condition with parameter
+    If \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation, then the pair also satisfies the weak growth condition with parameter
     \[ \wgc \leq \frac{L_{\text{max}}}{L}. \]
 \end{restatable}
 
 \begin{restatable}[Interpolation and Strong Growth]{lemma}{interpToSGC}~\label{lemma:interpolation-to-sgc}
-    Let \( f \) be an \( L \)-smooth function and \oracle{} an \( \Lmax \) individually-smooth \ac{SFO}.
-    Furthermore, assume that \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation.
-    If \( f \) also satisfies the Polyak-Łojasiewicz condition with parameter \( \mu \), then \( \rbr{f, \oracle{}} \) satisfies the strong growth condition with parameter
+    Let \( f \) be a \( L \)-smooth  \( \mu \)-PL function and \oracle{} an \( \Lmax \) individually-smooth \ac{SFO}.
+    If \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation, then the pair also satisfies the strong growth condition with parameter
     \[ \rho \leq \frac{L_{\text{max}}}{\mu}. \]
 \end{restatable}
 \noindent See \autoref{app:growth-conditions} for the proofs of both lemmas. \hfill \break
