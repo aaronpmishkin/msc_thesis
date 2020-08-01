@@ -6,7 +6,7 @@
 
 \agdEquivalence*
 \begin{proof}
-    The canonical form for \( \phi_k \) means the updated for \( \yk \) can be expanded into the following:
+    We expand the updated for \( \yk \) using the canonical form of \( \phi_k \) as follows: 
     \begin{align*}
         \yk &= \wk - \frac{\alphak}{\gamma_k + \alphak \mu} \nabla \phi_k(\wk)\\
             &= \wk - \frac{\alphak}{\gamma_k + \alphak \mu} \nabla \rbr{\phi^*_k + \frac{\gamma_k}{2}\norm{\wk - \vk}^2}\\
@@ -17,13 +17,15 @@
             &= \frac{1}{\gamma_k + \alphak \mu} \rbr{\gamma_{k+1} \wk + \alphak \gamma_k \vk}.
     \end{align*}
     This is identical to update Step (b) of \textbf{Constant Step-Size Scheme I} given by \citet[Eq. 2.2.19]{nesterov2004lectures}.
-    The equivalence of \textbf{Constant Step-Size Scheme I} and AGD (called \textbf{Constant Step-Size Scheme II}) is established by \citet[Page 92]{nesterov2004lectures} ---  albeit with a different step-size for the gradient step ---  which completes the proof.
+    The equivalence of \textbf{Constant Step-Size Scheme I} and \ac{AGD} (called \textbf{Constant Step-Size Scheme II}) is established by \citet[Page 92]{nesterov2004lectures} ---  albeit with a different step-size for the gradient step ---  which completes the proof.
 \end{proof}
+
+\newpage
 
 \estimatingSequenceBound*
 \begin{proof}
     First we establish a few preliminaries.
-    The condition that \( \gamma_0 \ind \seq{\zk} \) implies the \( \seq{\gamma_k}_{k=0}^\infty \), \( \seq{\alpha_k}_{k=0}^\infty \), and \( \seq{\lambda_k}_{k=0}^\infty \) sequences evolve \emph{independently} of the stochastic processes \( \seq{\yk}_{k=0}^\infty \), \( \seq{\wk}_{k=0}^\infty \), and \( \seq{v_k}_{k=0}^\infty \).
+    The condition \( \gamma_0 \ind \seq{\zk} \) implies the \( \seq{\gamma_k}_{k=0}^\infty \), \( \seq{\alpha_k}_{k=0}^\infty \), and \( \seq{\lambda_k}_{k=0}^\infty \) sequences evolve \emph{independently} of the stochastic processes \( \seq{\yk}_{k=0}^\infty \), \( \seq{\wk}_{k=0}^\infty \), and \( \seq{v_k}_{k=0}^\infty \).
     This will be necessary in later in the proof.
     Next, instantiating \autoref{lemma:sgc-decrease-condition} with \( \eta = \frac{1}{\sgc L} \) yields
     \begin{align}
@@ -33,39 +35,36 @@
     \end{align}
     Now we move on to the main argument, which proceeds by induction.\hfill \break
 
-    The choice of \( \phi^*_0 = f(x_0) \) ensures \( \inf \phi_0(\w) = f(\w_0) \) deterministically, which is the base case for induction.\hfill \break
-
-    The inductive assumption is \( \E[\inf \phi_k(\w)] \geq \E[ f(\wk) ] \); let us use this to show that
-    \[ \E[\inf \phi_{k+1}(\w)] \geq \E[f(\wkk)], \]
-    holds.
+    \noindent The choice of \( \phi^*_0 = f(x_0) \) ensures \( \inf \phi_0(\w) = f(\w_0) \) deterministically, which is the base case for induction.
+    The inductive assumption is \( \E[\inf \phi_k(\w)] \geq \E[ f(\wk) ] \); let us use this to show 
+    \[ \E\sbr{\inf_{\w} \phi_{k+1}(\w)} \geq \E\sbr{f(\wkk)}. \]
     Recall the explicit form of the minimizer \( \inf \phi_{k+1}(\w) = \phi_{k+1}^* \) is 
     \begin{align*}
         \phi_{k+1}^* &= (1- \alpha_k) \phi^*_k + \alpha_k f(\yk) - \frac{\alpha_k^2}{2\gamma_{k+1}}\norm{\grad(\yk)}^2 + \frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}} \\
-        \intertext{Taking expectations with respect to \( \z_{0}, \ldots, \z_k \), using \( \gamma_0 \ind \seq{\zk} \), and linearity of expectation: }
+        \intertext{Taking expectations with respect to \( \z_{0}, \ldots, \z_k \) and using \( \gamma_0 \ind \seq{\zk} \) plus linearity of expectation: }
         \E[\phi_{k+1}^*] &= (1- \alpha_k) \E[\phi^*_k] + \E\sbr{\alpha_k f(\yk) - \frac{\alpha_k^2}{2\gamma_{k+1}}\norm{\grad(\yk)}^2} \\ & \hspace{5em} + \E\sbr{\frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
-                         &\geq (1- \alpha_k) \E\sbr{f(\wk)} + \E\sbr{\alpha_k f(\yk) - \frac{\alpha_k^2}{2\gamma_{k+1}}\norm{\grad(\yk)}^2} \\ & \hspace{5em} + \E\sbr{\frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}}
-        &= (1- \alpha_k) f(\wk) + \alpha_k f(\yk) - \frac{1}{2\sgc L}\norm{\grad(\yk)}^2 + \frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}, \\
+                         &\geq (1- \alpha_k) \E\sbr{f(\wk)} + \E\sbr{\alpha_k f(\yk) - \frac{\alpha_k^2}{2\gamma_{k+1}}\norm{\grad(\yk)}^2} \\ & \hspace{5em} + \E\sbr{\frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}},
         \intertext{where the inequality follows from the inductive assumption. 
-        Convexity of \( f \) implies \( f(\wk) - \abr{ \grad(\yk), \wk - \yk } \geq f(\yk) \). 
+        Convexity of \( f \) implies \( f(\wk) \geq f(\yk) + \abr{ \grad(\yk), \wk - \yk } \). 
         This inequality holds in expectation, allowing us to obtain }
-        \E[\phi_{k+1}^*] &\geq (1- \alpha_k) \E[\rbr{f(\wk) - \abr{\grad(\yk), \wk - \yk}}] + \E\bigg[(1-\alpha_k) \abr{\grad(\yk), \wk - \yk} + \alpha_k f(\yk) \\ & \hspace{5em} - \frac{1}{2\sgc L}\norm{\grad(\yk)}^2 \bigg] + \E\sbr{\frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
-        &\geq  (1-\alpha_k) \E[f(\yk)] + \E\sbr{\alpha_k f(\yk) - \frac{1}{2\sgc L} \norm{\grad(\yk)}^2} \\
-        & \hspace{5em} + (1-\alpha_k) \E\sbr{\abr{\grad(\yk), \wk - \yk} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
+        \E[\phi_{k+1}^*] &\geq (1- \alpha_k) \E[\rbr{f(\yk) + \abr{\grad(\yk), \wk - \yk}}] + \E\bigg[\alpha_k f(\yk) - \frac{1}{2\sgc L}\norm{\grad(\yk)}^2 \bigg] \\ & \hspace{5em} + \E\sbr{\frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
         &=  \E\sbr{f(\yk) - \frac{1}{2\sgc L} \norm{\grad(\yk)}^2} + (1-\alpha_k) \E\bigg[\abr{\grad(\yk), \wk - \yk} \\ & \hspace{5em} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}\bigg] \\
         \intertext{\autoref{eq:expected-decrease} now implies}
-        \E[\phi_{k+1}^*] &\geq \E\sbr{f(\wkk)} + (1-\alpha_k) \E\sbr{\abr{\grad(\yk), \wk - \yk} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
+        \E[\phi_{k+1}^*] &\geq \E\sbr{f(\wkk)} + (1-\alpha_k) \E\sbr{\abr{\grad(\yk), \wk - \yk} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}}. \\
         \intertext{The remainder of the proof is largely unchanged from the determnistic case:}
-        \phi_{k+1}^*  &=  \E[f(\wkk)] + (1-\alpha_k) \E\sbr{\frac{\alpha_k}{\gamma_k + \alpha_k \mu} \abr{\grad(\yk), \nabla\phi_k(\wk)} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
+        \E\sbr{\phi_{k+1}^*}  &=  \E[f(\wkk)] + (1-\alpha_k) \E\sbr{\frac{\alpha_k}{\gamma_k + \alpha_k \mu} \abr{\grad(\yk), \nabla\phi_k(\wk)} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
         \intertext{Noting that \( \nabla \phi_k(\wk) = \gamma_k \rbr{\wk - v_k} \) and \( v_k - \yk = \frac{\gamma_{k+1}}{\gamma_k + \alpha_k \mu}\rbr{v_k - \wk} \) gives }
-        &= \E[f(\wkk)] +(1-\alpha_k) \E\sbr{\frac{\alpha_k \gamma_k}{\gamma_k + \alpha_k \mu} \abr{\grad(\yk), \wk - v_k} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
+        \E\sbr{\phi_{k+1}^*} &= \E[f(\wkk)] +(1-\alpha_k) \E\sbr{\frac{\alpha_k \gamma_k}{\gamma_k + \alpha_k \mu} \abr{\grad(\yk), \wk - v_k} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
         &= \E[f(\wkk)] + (1-\alpha_k) \E\bigg[\frac{\alpha_k \gamma_k}{\gamma_k + \alpha_k \mu} \abr{\grad(\yk), \wk - v_k} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\Big(\frac{\mu}{2} \norm{\yk - v_k}^2 \\
         & \hspace{5em} + \frac{\gamma_{k+1}}{\gamma_k + \alpha_k \mu} \abr{\grad(\yk), v_k - \wk}\Big)\bigg] \\
         &= \E[f(\wkk)] + \frac{\mu \alpha_k(1-\alpha_k)\gamma_k}{2 \gamma_{k+1}} \E\sbr{\norm{\yk - v_k}^2} \\
         \intertext{Non-negativity of \( \frac{\mu \alpha_k(1-\alpha_k)\gamma_k}{2 \gamma_{k+1}} \) gives the final result,} 
-        &\geq \E[f(\wkk)].
+        \E\sbr{\phi_{k+1}^*} &\geq \E[f(\wkk)].
     \end{align*}
-    We conclude that \( \E[\inf \phi_{k}(\w)] \geq \E[f(\wk)] \) holds for all \( k \geq 0 \) by induction. 
+    We conclude that \( \E[\inf \phi_{k}(\w)] \geq \E[f(\wk)] \) holds for all \( k \in \bbN \) by induction. 
 \end{proof}
+
+\newpage
 
 \section{Convergence for Strongly-Convex Functions}\label{app:agd-sc}
 
@@ -73,9 +72,9 @@
 \begin{proof}
     We obtain the following inequality immediately:
     \begin{align*}
-        \E\sbr{f(\wk)} &\leq \E[\inf_x \phi_k(x)] \tag{by Lemma~\ref{lemma:estimating-sequence-bound}}\\
+        \E\sbr{f(\wk)} &\leq \E[\inf_x \phi_k(x)] \tag{\autoref{lemma:estimating-sequence-bound}}\\
         &\leq \E[\phi_k(\wopt)] \\
-        &\leq \rbr{1 - \lambda_k} f(\wopt) + \lambda_k \phi_0(\wopt) \tag{by Definition~\ref{def:estimating_sequences}}\\
+        &\leq \rbr{1 - \lambda_k} f(\wopt) + \lambda_k \phi_0(\wopt) \tag{\autoref{lemma:estimating-sequence}}\\
         \implies \E\sbr{f(\wk)} - f(\wopt) &\leq \lambda_k (\phi_0(\wopt) - f(\wopt))\\
                                            &= \lambda_k \rbr{f(\w_0) - f(\wopt) + \frac{\mu}{2}\norm{\w_0 - \wopt}^2 }.
     \end{align*}
@@ -89,6 +88,7 @@
     \[ \E\sbr{f(\wk)} - f(\wopt) \leq \rbr{1 - \sqrt{\frac{\mu}{\sgc L}}}^{k} \rbr{ f(w_0) - f(\wopt) + \frac{\mu}{2} \norm{\wopt - \w_0}^2 }. \]
 \end{proof}
 
+\newpage
 
 \section{Convergence for Convex Functions}\label{app:agd-convex}
 
@@ -116,8 +116,8 @@
     \[  \E\sbr{f(\wk)} - f(\wopt) \leq \frac{2}{\rbr{k+1}^2}\rbr{f(\w_0) - f(\wopt) + \sgc L \norm{\w_0 - \wopt}^2 }. \]
 \end{proof}
 
+\newpage
 
-%% Only included in long version. 
 \section{Additional Lemmas}\label{app:agd-additional-lemmas}
 
 \wgcDecreaseCondition*

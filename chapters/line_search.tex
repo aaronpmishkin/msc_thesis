@@ -89,8 +89,8 @@ Lower-bounding the step-size relies on smoothness of \( f(\cdot, \zk) \), which 
 This fact also motivates our transition from assuming the strong/weak growth conditions to directly reasoning with individually-smooth oracles where \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation.
 \begin{restatable}{lemma}{stepSizeBound}~\label{lemma:step-size-bound}
     Let \( f \) be an \( L \)-smooth function and \oracle{} an \( \Lmax \) individually-smooth \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation. 
-    Then the step-size returned by the Armijo line-search constrained to lie in the \( (0, \etamax] \) range satisfies the following inequalities:
-    \[ \min\cbr{\frac{2 (1-c)}{\Lk}, \etamax} \leq \etak \leq \frac{f(\wk, \zk) - f(\wopt, \zk)}{c \norm{\grad(\wk, \zk)}^2}. \]
+    Then the step-size returned by the Armijo line-search constrained to lie in the \( (0, \etamax \, ] \) range satisfies the following inequalities:
+    \[ \min\cbr{\frac{2 (1-c)}{\Lmax}, \etamax} \leq \etak \leq \frac{f(\wk, \zk) - f(\wopt, \zk)}{c \norm{\grad(\wk, \zk)}^2}. \]
 \end{restatable}
 \noindent See \autoref{app:line-search} for proof.
 

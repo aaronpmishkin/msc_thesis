@@ -2,7 +2,7 @@
 
 \chapter{Beyond Interpolation}~\label{ch:beyond-interpolation}
 
-So far we have investigated the performance of stochastic gradient methods for unconstrained minimization of a \( L \)-smooth function \( f \) given access to a SFO \oracle{} such that \( \rbr{f, \oracle{}} \) satisfies interpolation or a growth condition. 
+So far we have investigated the performance of stochastic gradient methods for unconstrained minimization of a \( L \)-smooth function \( f \) given access to a \ac{SFO} \oracle{} such that \( \rbr{f, \oracle{}} \) satisfies interpolation or a growth condition. 
 This chapter extends these analyses to \( L_2 \)-regularized minimization of \( f \), 
 \begin{align}
     \min_{\w \in \R^d} F(\w) := f(\w) + \frac{\lambda}{2} \norm{\w}^2,\label{eq:l2-reguarlized-problem}
@@ -10,7 +10,7 @@ This chapter extends these analyses to \( L_2 \)-regularized minimization of \( 
 where \( \lambda > 0 \) is a tuning parameter which controls the degree of regularization. 
 To maintain consistency with common notation, \( \wopt \) will refer to the global minimizer of this regularized problem, while minimizers of \( f \) will now be denoted as \( \wbar \).
 
-The canonical SFO for \( L_2 \)-regularized minimization evaluates the regularization term exactly, giving the following stochastic function and gradient evaluations: 
+The canonical \ac{SFO} for \( L_2 \)-regularized minimization evaluates the regularization term exactly, giving the following stochastic function and gradient evaluations: 
 \[ F(\w, \zk) = f(\w, \zk) + \frac{\lambda}{2} \norm{\w}^2 \quad \quad \nabla F(\w, \zk) = \grad(\w, \zk) + \lambda \w.  \]
 We call this the \( L_2 \)-regularization of \( \oracle{} \) and denote it as \( \oracle{}_2 \).
 Except in degenerate circumstances,\footnote{For example, when \( f \) is minimized at \( 0 \).} the pair \( \rbr{F, \oracle{}_2} \) will \emph{not} satisfy interpolation or weak/strong growth even when \( \rbr{f, \oracle{}} \) does. 
@@ -23,7 +23,7 @@ Intuition indicates that it is only when \( \lambda \) is moderate that minimizi
 The next lemma formalizes these observations into a version of weak growth which holds for \( \rbr{F, \oracle{}_2} \).
 
 \begin{restatable}{lemma}{regularizedWGC}\label{lemma:regularized-wgc}
-    Let \( f \) be an \( L \)-smooth function and \oracle{} a SFO such that \( \rbr{f, \oracle{}} \) satisfy the weak growth condition with parameter \( \rho \).
+    Let \( f \) be an \( L \)-smooth function with at least one finite minimizer \( \wbar \) and \oracle{} a \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies the weak growth condition with parameter \( \rho \).
     Then the \( L_2 \)-regularized problem \( \rbr{F, \oracle{}_2} \) satisfies the following inequality for all \( \w \in \R^d \) and \( k \geq 0 \):
     \[ \Ek\sbr{\norm{\nabla F(\w, \zk)}^2} \leq 4 \max\cbr{\rho L, \lambda} \rbr{F(\w) - F(\wopt) - \frac{\lambda - L}{2} \norm{\wopt - \wbar}^2 + \frac{\lambda}{2} \norm{\wbar}^2}, \]
     where \( \wopt \) minimizes the regularized function \( F \).
@@ -35,34 +35,34 @@ The next lemma formalizes these observations into a version of weak growth which
 
 \section{Convergence for \( L_2 \)-Regularized Convex Functions}~\label{sec:regularized-convex}
 
-Let us use \autoref{lemma:regularized-wgc} to show that SGD with a constant step-size converges linearly to a \emph{neighborhood} of \( \wopt \) when \( f \) is convex or strongly-convex.
+Let us use \autoref{lemma:regularized-wgc} to show that \ac{SGD} with a constant step-size converges linearly to a \emph{neighborhood} of \( \wopt \) when \( f \) is convex or strongly-convex.
 Approximate convergence to a region around \( \wopt \) is the best that can be obtained without an averaging scheme or decreasing step-size due to the irreducible \( \frac{\lambda}{2} \norm{\wbar}^2 + \frac{\lambda + \mu}{2} \norm{\wopt - \wbar}^2 \) term in the noise-bound.
 The following analysis assumes \( \mu \)-strong-convexity, but permits \( \mu = 0 \) in order to capture convex functions.
 In the case that \( \mu = 0 \), we are still able to obtain linear convergence because the regularized function \( F \) is \( \mu + \lambda \)-strongly-convex and \( L + \lambda \)-smooth. 
 
 
 \begin{restatable}{theorem}{sgdReguarlizedWGC}\label{thm:sgd-regularized-wgc}
-    Let \( f \) be a \( \mu \)-strongly-convex (with \( \mu = 0 \) in the convex case), \( L \)-smooth function with at least one finite minimizer \( \wbar \) and \( \oracle{} \) a SFO such that the pair \( \rbr{f, \oracle{}} \) satisfies the weak growth condition with constant \( \rho \).
-    Then SGD with constant step-size \( \eta \leq \frac{\mu + \lambda}{\max\cbr{\rho L, \lambda}\rbr{(\mu + \lambda) + (L + \lambda)}} \) obtains the following convergence rate for the \( L_2 \)-regularized problem \( \rbr{F, \oracle{}_2} \):
+    Let \( f \) be a \( \mu \)-strongly-convex (with \( \mu = 0 \) in the convex case), \( L \)-smooth function with at least one finite minimizer \( \wbar \) and \oracle{} a \ac{SFO} such that the pair \( \rbr{f, \oracle{}} \) satisfies the weak growth condition with constant \( \rho \).
+    Then stochastic gradient descent with constant step-size \( \eta \leq \frac{\mu + \lambda}{\max\cbr{\rho L, \lambda}\rbr{(\mu + \lambda) + (L + \lambda)}} \) obtains the following convergence rate for the \( L_2 \)-regularized problem \( \rbr{F, \oracle{}_2} \):
     \[  \E\sbr{\norm{\wkk - \wopt}^2} \leq \rbr{1 - \frac{2 \eta (\mu + \lambda)(L + \lambda)}{(\mu + \lambda) + (L + \lambda)}}^k \norm{\w_0 - \wopt}^2 + \gamma\rbr{\lambda \norm{\wbar}^2 - \rbr{\lambda + \mu}\norm{\wopt - \wbar}^2}, \]
     where \( \gamma = \frac{\eta \max\cbr{\rho L, \lambda} \sbr{(\mu + \lambda) + (L + \lambda)}}{(\mu + \lambda)(L + \lambda)}. \)  
 \end{restatable}
 \noindent See \autoref{app:regularized-convex} for proof. \hfill \break
 
-\autoref{thm:sgd-regularized-wgc} shows that the size of the neighborhood to which SGD converges is determined by the degree of regularization, which fits with the intuition from the previous section.
+\autoref{thm:sgd-regularized-wgc} shows that the size of the neighborhood to which \ac{SGD} converges is determined by the degree of regularization, which fits with the intuition from the previous section.
 We make the following observations about the effect of \( \lambda \) on region of convergence:
 \begin{inparaenum}[(i)]
 \item the minimizer \( \wopt \) depends on \( \lambda \), with \( \wopt = \wbar \) when \( \lambda = 0 \) --- it is easy to see that the neighborhood terms collapse to \( 0 \) and convergence mirrors \autoref{thm:sgc-convex} in when \( \lambda = 0 \) holds;
 \item as \( \lambda \rightarrow \infty \), \( \wopt \rightarrow 0 \) and the neighborhood again collapses to \( 0 \); and 
-\item when \( f \) is convex and \( \eta \) attains is maximal value, the convergence rate of SGD has the special case 
+\item when \( f \) is convex and \( \eta \) attains is maximal value, the convergence rate of \ac{SGD} has the special case 
 \[  \E\sbr{\norm{\wkk - \wopt}^2} \leq \rbr{1 - \frac{2 \lambda^2(L + \lambda)}{\max\cbr{\rho L, \lambda} \rbr{L + 2\lambda}^2}}^k \norm{\w_0 - \wopt}^2 + \frac{\lambda}{\rbr{L + \lambda}}\rbr{\norm{\wbar}^2 - \norm{\wopt - \wbar}^2}. \]
 Crudely assuming \( \frac{\lambda}{\lambda + L} \approx 1 \) shows that the volume of the neighborhood largely depends on the convergence of \( \wopt \) to \( 0 \) as \( \lambda \) grows.
 \end{inparaenum}
 
-The characterization of SGD for \( L_2 \)-regularized problems  under interpolation in \autoref{thm:sgd-regularized-wgc} is a small but promising step towards the analysis of general structural minimization problems.
+The characterization of \ac{SGD} for \( L_2 \)-regularized problems  under interpolation in \autoref{thm:sgd-regularized-wgc} is a small but promising step towards the analysis of general structural minimization problems.
 Consider generalizing \autoref{eq:l2-reguarlized-problem} to 
 \[ F(\w) = f(\w) + g(\w), \]
-where \( f \) is a \( L \)-smooth function with SFO \oracle{} such that \( \rbr{f, \oracle{}} \) satisfies interpolation and \( g \) is a potentially non-smooth regularizer or indicator function. 
+where \( f \) is a \( L \)-smooth function with \ac{SFO} \oracle{} such that \( \rbr{f, \oracle{}} \) satisfies interpolation and \( g \) is a potentially non-smooth regularizer or indicator function. 
 This problem class includes \( L_1 \)-regularized minimization, as well as minimization with (convex) constraints.
 An interesting avenue of research is extending the analysis above to this setting through the proximal-gradient method.
 Although \citet{cevher2018linear} considered such problems, they considered convergence under strong growth plus noise only and did not derive specific expressions for the neighbourhood size.

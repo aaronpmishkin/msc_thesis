@@ -20,9 +20,9 @@
                                                               \intertext{Combining the two cases yields}
         \Ek\sbr{\norm{\nabla F(\w, \zk)}^2} &\leq 4 \max\cbr{\rho L, \lambda}\rbr{F(\w) - f(\wbar)}.
        \intertext{Let \( \delta = \mu \) if \( f \) is \( \mu \)-strongly-convex and set \( \delta = -L \) otherwise. 
-                  Strong-convex (or smoothness if \( \delta = -L \)) implies \( f(\wbar) \geq f(\wopt) + \abr{\grad(\wopt), \wbar - \wopt} + \frac{\delta}{2}\norm{\wbar - \wopt}^2 \). Subsituting this into the bound gives}
+                  Strong-convexity (or smoothness if \( \delta = -L \)) implies \( f(\wbar) \geq f(\wopt) + \abr{\grad(\wopt), \wbar - \wopt} + \frac{\delta}{2}\norm{\wbar - \wopt}^2 \). Subsituting this into the bound gives}
        \Ek\sbr{\norm{\nabla F(\w, \zk)}^2} &\leq 4 \max\cbr{\rho L, \lambda}\rbr{F(\w) - f(\wopt) - \abr{\grad(\wopt), \wbar - \wopt} - \frac{\delta}{2}\norm{\wbar - \wopt}^2}\\
-       \intertext{Recall that \( \wopt \) minimizes the regularized function \( F \). Then, by first-order optimality conditions, \( \grad(\wopt) = - \lambda \wopt \) and we obtain} 
+       \intertext{Recall that \( \wopt \) minimizes the regularized function \( F \). First-order optimality conditions imply \( \grad(\wopt) = - \lambda \wopt \) and we obtain} 
        \Ek\sbr{\norm{\nabla F(\w, \zk)}^2} &\leq 4 \max\cbr{\rho L, \lambda} \rbr{F(\w) - f(\wopt) + \abr{\lambda \wopt, \wbar - \wopt} - \frac{\delta}{2}\norm{\wbar - \wopt}^2 }\\
                                                      &= 4 \max\cbr{\rho L, \lambda} \rbr{F(\w) - f(\wopt) - \lambda \norm{\wopt}^2  + \lambda \abr{\wopt, \wbar} - \frac{\delta}{2}\norm{\wbar - \wopt}^2}\\
                                                      &=  4 \max\cbr{\rho L, \lambda} \rbr{F(\w) - F(\wopt) - \frac{\lambda}{2} \norm{\wopt}^2 + \lambda \abr{\wopt, \wbar} - \frac{\delta}{2}\norm{\wbar - \wopt}^2}\\
@@ -30,6 +30,8 @@
    \end{align*} 
    Substituting in the appropriate value for \( \delta \) completes the proof.
 \end{proof}
+
+\newpage
 
 \section{Convergence for \( L_2 \)-Regularized Convex Functions}~\label{app:regularized-convex}
 
@@ -43,12 +45,12 @@
                                                 &= \eta^2 \Ek\sbr{\norm{\nabla F(\wk, \zk)}^2} - 2 \eta \abr{\nabla F(\wk), \wk - \wopt} + \norm{\wk - \wopt}^2.
                                                 \intertext{Let \( C = 2 \eta^2 \max\cbr{\rho L, \lambda} \rbr{ \lambda \norm{\wbar}^2 - \rbr{\lambda + \mu} \norm{\wopt - \wbar}^2} \). Then \autoref{lemma:regularized-wgc} implies}
         \Ek\sbr{\norm{\wkk - \wopt}^2} &\leq 4 \eta^2 \max\cbr{\rho L, \lambda} \rbr{F(\wk) - F(\wopt)} - 2 \eta \abr{\nabla F(\wk), \wk - \wopt}  \\ & \hspace{5em} + \norm{\wk - \wopt}^2 + C\\
-        \intertext{Using \( (\mu + \lambda) \)-strong-convexity of \( f \),}
+        \intertext{Using \( (\mu + \lambda) \)-strong-convexity of \( F \),}
         \implies  \Ek\sbr{\norm{\wkk - \wopt}^2} &\leq \frac{2 \eta^2 \max\cbr{\rho L, \lambda}}{\mu + \lambda} \norm{\nabla F(\wk)}^2 - 2 \eta \abr{\nabla F(\wk), \wk - \wopt} + \norm{\wk - \wopt}^2 + C.
         \intertext{Coercivity of the gradient (\autoref{lemma:coercivity}) now implies} 
-        \Ek\sbr{\norm{\wkk - \wopt}^2} &\leq \frac{2 \eta^2 \max\cbr{\rho L, \lambda}}{\mu + \lambda} \norm{\nabla F(\wk)}^2 - 2 \eta \bigg( \frac{(\mu + \lambda)(L + \lambda)}{(\mu + \lambda) + (L + \lambda)} \norm{\wk - \wopt}^2 \\ & \hspace{5em} + \frac{1}{(\mu + \lambda) + (L + \lambda)} \norm{\nabla F(\wk)}^2 \bigg) + C\\
+        \Ek\sbr{\norm{\wkk - \wopt}^2} &\leq \frac{2 \eta^2 \max\cbr{\rho L, \lambda}}{\mu + \lambda} \norm{\nabla F(\wk)}^2 - 2 \eta \bigg( \frac{(\mu + \lambda)(L + \lambda)}{(\mu + \lambda) + (L + \lambda)} \norm{\wk - \wopt}^2 \\ & \hspace{5em} + \frac{1}{(\mu + \lambda) + (L + \lambda)} \norm{\nabla F(\wk)}^2 \bigg) + \norm{\wk - \wopt}^2 + C\\
                                        &= 2 \eta \rbr{\frac{\eta \max\cbr{\rho L, \lambda}}{\mu + \lambda} - \frac{1}{(\mu + \lambda) + (L + \lambda)}} \norm{\nabla F(\wk)}^2 \\ & \hspace{5em} + \rbr{1 - \frac{2 \eta (\mu + \lambda)(L + \lambda)}{(\mu + \lambda) + (L + \lambda)}} \norm{\wk - \wopt}^2 + C.  
-                                       \intertext{If \( \eta \leq \frac{\mu + \lambda}{\max\cbr{\rho L, \lambda}\rbr{(\mu + \lambda) + (L + \lambda)}} \) then we obtain}
+                                       \intertext{If \( \eta \leq \frac{\mu + \lambda}{\max\cbr{\rho L, \lambda}\rbr{(\mu + \lambda) + (L + \lambda)}}, \) then we obtain}
         \Ek\sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \frac{2 \eta (\mu + \lambda)(L + \lambda)}{(\mu + \lambda) + (L + \lambda)}} \norm{\wk - \wopt}^2 + C.
         \intertext{Let \( \delta =  \frac{2 \eta (\mu + \lambda)(L + \lambda)}{(\mu + \lambda) + (L + \lambda)} \). Taking expectations and recursing on this inequality,}
         \implies \E\sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \delta}^k \norm{\w_0 - \wopt}^2 + C \sum_{l=0}^{k-1}  \rbr{1 - \delta}^l\\
