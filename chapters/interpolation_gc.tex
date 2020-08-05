@@ -72,13 +72,7 @@ In several cases, we will also make use of individual strong-convexity.
 \end{restatable}
 
 Individually-smooth oracles are wide-spread throughout machine learning in the form of finite-sum functions. 
-Finite-sum functions are a particular class of structured optimization problem where the objective \( f \) is the sum of \( n \) sub-functions. 
-This is written as
-\begin{align*}
-    f(\w) = \frac{1}{n} \sum_{i = 0}^n f_i(\w), 
-\end{align*}
-where the functions \( f_i : \R^d \rightarrow \R \) may be strongly-convex, convex, or non-convex depending on the problem.
-Such objective functions arise naturally in empirical risk minimization (ERM), where each \( f_i \) typically corresponds to a example \( (x_i, y_i) \) in a training set.
+Recall that finite-sum functions are a particular class of structured optimization problem where the objective \( f \) is the sum of \( n \) sub-functions. 
 The following example demonstrates individual smoothness in the context of least-squares regression. 
 \begin{example}[Least Squares Regression: Individual Smoothness]\label{example:ls-ind-smooth}
     The classic least-squares regression problem
