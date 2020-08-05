@@ -27,7 +27,7 @@ A form of automatic reduction in gradient noise occurs~\citep{liu2020acceleratin
 The connection between over-parameterization and fast stochastic optimization has led to a wave of interest in analyzing first-order methods under interpolation and weak/strong growth.
 A number of works have shown that \ac{SGD} obtains the fast convergence rate of deterministic gradient methods for interpolating models~\citep{schmidt2013fast, bassily2018exponential, vaswani2019fast, cevher2018linear, jain2018accelerating}, while closely related research has established accelerated convergence rates under an additional requirement for convexity~\citep{liu2020accelerating, vaswani2019fast, jain2018accelerating}.
 Sub-sampled second-order methods have also been explored and proved to have local linear convergence for specific function classes~\citep{meng2020fastandfurious}.
-These positive results show the interpolation setting is restricted enough to break the \( \Omega\rbr{\epsilon^{-4}} \) barrier for stochastic first-order methods and attain the optimal \( \Theta(\epsilon^{-1}) \) complexity (up to problem-specific constants) \edit{for finding stationary points of} smooth, convex functions~\cite{nemirovsky1985optimal, arjevani2016iteration}. 
+These positive results show the interpolation setting is restricted enough to break the \( \Omega\rbr{\epsilon^{-4}} \) barrier for stochastic first-order methods and attain the optimal \( \Theta(\epsilon^{-1}) \) complexity (up to problem-specific constants) \edit{for finding stationary points of} smooth, convex functions~\citep{nemirovsky1985optimal, arjevani2016iteration}. 
 
 Despite these rapid advances, theoretical rates and practical performance for \ac{SGD} under interpolation still rely on carefully selected hyper-parameters.
 A number of approaches from the general stochastic setting are rapidly being adopted to tackle this problem.
@@ -38,7 +38,7 @@ Very recently, adaptive variants of \ac{SGD} without momentum have analyzed both
 This thesis analyzes a small, but core group of methods in stochastic optimization under interpolation.
 The focus is on first-order algorithms; we consider constant step-size \ac{SGD}, \ac{SGD} with a stochastic Armijo line-search, and a version of Nesterov's accelerated gradient descent with stochastic gradients~\citep{nesterov2004lectures}. 
 In nearly all cases, we show that existing analyses can be tightened to yield faster convergence rates with a larger range of step-sizes. 
-In the case of acceleration, the improvement is comparable to taking the square-root of the condition number and addresses criticisms that previous analyses yield inferior rates to those of \ac{SGD} in some circumstances~\cite{liu2020accelerating}. 
+In the case of acceleration, the improvement is comparable to taking the square-root of the condition number and addresses criticisms that previous analyses yield inferior rates to those of \ac{SGD} in some circumstances~\citep{liu2020accelerating}. 
 
 The thesis is organized as follows: 
 In \autoref{ch:interpolation-gc}, we formalize interpolation and the strong/weak growth conditions in the context of general stochastic oracles. 
@@ -100,35 +100,52 @@ which is finite-sum with sub-functions \( f_i(\w) =  \rbr{\abr{\w, x_i} - y_i}^2
 
 \noindent \textbf{Interpolation}:
 Existing work focuses on interpolation in the context of finite-sum objectives. 
-In this setting, \citet{bassily2018exponential} say an objective-optimizer pair satisfies interpolation if the evaluations of the sub-functions approach the same minimal value in the iteration limit. 
-\citet{berrada2019training} propose an \( \epsilon \)-interpolation definition which requires the values of the sub-functions to be lower-bounded and within \( \epsilon  \) of that bound at the minimizer of the overall objective. 
-A larger body of work considers interpolation to hold when the global minimizers of the overall objective are either global minimizers or stationary points of the sub-functions~\cite{vaswani2019fast, vaswani2019painless, vaswani2020adaptive, meng2020fastandfurious, loizou2020sps}.\\
+\edit{In this setting, \citet{bassily2018exponential} define interpolation in terms of sequences converging to global minima of \( f \). 
+They say interpolation holds if, for every sequence \( \seq{\wk} \) satisfying \( \lim_{k \rightarrow \infty} f(\wk) = f(\wopt) \), we also have 
+\[ \forall i \in [n], \quad \lim_{k \rightarrow \infty} f_i(\wk) = f(\wopt). \]
+\citet{berrada2019training} propose \( \epsilon \)-interpolation, which requires the sub-functions to be lower-bounded and \( \epsilon \) sub-optimal for all \( \wopt \in \argmin f \): 
+\[ \forall i \in [n], \quad \inf_\w f_i(\w) \geq B \quad \text{and} \quad f_i(\wopt) - B \leq \epsilon. \]
+A larger body of work considers interpolation to hold when the optimal points \( \wopt \) are also stationary points or global minimizers of each sub-function \( f_i \)~\citep{vaswani2019fast, vaswani2019painless, vaswani2020adaptive, meng2020fastandfurious, loizou2020sps},
+\begin{gather*}
+    \wopt \in \argmin_{\w} f(\w) \implies \wopt \in \argmin_{\w} f_i(\w) \quad \forall i \in [n],\\
+          \text{or} \\
+    \wopt \in \argmin_{\w} f(\w) \implies \grad_i(\wopt) = 0 \quad \forall i \in [n].
+\end{gather*}
+We will focus on interpolation conditions of this form, which we extend to general objective functions and stochastic gradients.\\ 
+}
 
 \noindent \textbf{Growth Conditions}:
-The strong growth condition was first proposed in the context of incremental gradient methods by \citet{solodov1998incremental} and \citet{tseng1998incremental} as an almost-sure bound on the squared-norm of the stochastic gradients. 
+The strong growth condition was first proposed in the context of incremental gradient methods by \citet{solodov1998incremental} and \citet{tseng1998incremental} as a bound on the squared-norm of the stochastic gradients.
+\edit{Suppose \( f \) is finite-sum and \( P(i) \) is an arbitrary sub-sampling distribution used to compute stochastic gradients. 
+    Then strong growth with parameter \( \rho > 0 \) may be written as 
+\[ \text{Maximal Strong Growth:} \quad \norm{\grad_i(\w)}^2 \leq \rho \norm{\grad(\w)}^2, \hspace{10.5em} \]
+where the inequality holds almost-surely with respect to \( P \).}
 This definition was later used by~\citet{schmidt2013fast} to derive linear convergence rates for \ac{SGD} with a constant step-size. 
-\citet{vaswani2019fast} propose a modified version of strong growth which holds in expectation, rather than almost-surely. 
+\citet{vaswani2019fast} propose a modified version of strong growth which holds in expectation,
+\edit{\[ \text{Strong Growth:} \quad \E_P \sbr{\norm{\grad_i(\w)}^2} \leq \rho \norm{\grad(\w)}^2. \hspace{8.6em} \]}
 We call this latter condition strong growth and refer to the earlier definition as maximal strong growth.
-\citet{vaswani2019fast} also propose the weak growth condition as a natural relaxation of strong growth. 
-
-\citet{cevher2018linear} refer to strong growth simply as ``the growth condition'' and suggest strong growth with an additive noise parameter as an alternative relaxation, which they also call weak growth.
+\citet{vaswani2019fast} also propose the following weak growth condition as a natural relaxation of strong growth: 
+\edit{\[ \text{Weak Growth}: \quad \E\sbr{\norm{\grad_i(\w)}^2} \leq 2 \rho L \rbr{f(\w) - f(\wopt)}. \hspace{4.2em} \]}
+\citet{cevher2018linear} refer to strong growth simply as ``the growth condition'' and suggest strong growth with an additive noise parameter as an alternative relaxation, 
+\edit{\[ \text{Strong Growth + Noise:} \quad \E_P \sbr{\norm{\grad_i(\w)}^2} \leq \rho \norm{\grad(\w)}^2 + \sigma^2, \hspace{10em} \]}
+which they also call weak growth.
 For clarity, we refer to this assumption as strong growth with additive noise.
-For unbiased stochastic oracles, this condition is equivalent to assuming a bound on the variance of the stochastic gradients~\citep{khaled2020better, ghadimi2012optimal1}.
-\citet{cevher2018linear} study the convergence of proximal-gradient methods under this condition and also prove that strong growth is both sufficient \emph{and necessary} for \ac{SGD} to converge linearly.\\
+For unbiased stochastic gradients, strong with with noise is slightly weaker than assuming a bound on the variance of the stochastic gradients~\citep{khaled2020better, ghadimi2012optimal1}.
+\citet{cevher2018linear} study the convergence of proximal-gradient methods under strong growth with additive noise and also prove that strong growth is both \emph{sufficient and necessary} for \ac{SGD} to converge linearly.\\
 
 
 \noindent \textbf{Stochastic Acceleration}: 
-
-\todo{cite \citet{honorio2012biased}}
-
 Many authors have considered accelerating stochastic gradient methods.
 \citet{schmidt2011convergence} provide sufficient conditions on gradient noise for acceleration of proximal-gradient methods.
 \edit{D'Aspremont}~\citep{aspremont2008approximate} and \citet{devolder2014first} investigate accelerated gradient methods under the assumption of approximate oracles with deterministic, bounded errors and derive rates for convergence and error accumulation in this setting.
-In contrast, \citet{cohen2018acceleration} consider stochastic oracles with additive gradient noise and propose a noise-resistant acceleration scheme.
+\edit{\citet{honorio2012biased} consider accelerated proximal-gradient methods under biased stochastic oracles and show high-probability convergence is not guaranteed due to accumulated errors.} 
+In contrast, \citet{cohen2018acceleration} assume access to an unbiased oracle with additive gradient noise and propose a noise-resistant acceleration scheme.
 Very recently, \citet{chen2020understanding} analyze accelerated methods for strongly-convex functions under strong growth with additive noise. 
 
-An alternative approach to provable stochastic acceleration using variance reduction for finite-sum functions was initiated by \citet{allen-zhu2017katyusha}.
-Multiple algorithms of this type have been since proposed~\citep{allen-zhou2018katyushax, tang2018restkatyusha, kovalev2020loopless}.
+\edit{An alternative approach to stochastic acceleration splits the convergence rate into stochastic and deterministic parts.
+Using this framework, many authors have shown that acceleration schemes speed-up convergence for the deterministic component and achieve nearly optimal rates in the stochastic approximation setting~\citep{ghadimi2012optimal1, ghadimi2013optimal2, hu2009accelerated}.
+For finite-sum functions, variance reduction techniques can be combined with Nesterov acceleration to improve convergence on the stochastic component~\citep{allen-zhu2017katyusha, allen-zhou2018katyushax, tang2018restkatyusha, kovalev2020loopless}.
+Such methods are as fast as deterministic acceleration up to a dependence on \( n \), the number of finite-sum functions.}
 Alternative approaches also leveraging finite-sum structure have been based on approximate proximal-point algorithms; such methods include Catalyst~\citep{lin2017catalyst} and accelerated APPA~\citep{frostig2015unregularizing}.
 
 Several works have recently considered acceleration under interpolation.
@@ -142,9 +159,10 @@ Finally, \citet{assran2020convergence} study the stochastic approximation settin
 Line-search is a classic technique to set the step-size in deterministic optimization (see \citet{nocedal1999numerical}), but extensions to stochastic optimization are non-obvious. 
 \citet{mahsereci2017pls} use a Gaussian process model to define probabilistic Wolfe conditions~\citep{wolfe1969convergence, wolfe1971convergence}; however, the convergence of \ac{SGD} with this procedure is not known.
 \citet{fridovich2019choosing} propose line-search conditions based on golden-section search~\citep{avriel1968golden}, but again only provide empirical evidence for \ac{SGD}. 
-\citet{paquette2020stochastic} and \citet{ogaltsov2019adaptive} both prove convergence of \ac{SGD} with the Armijo condition in the general stochastic setting with several caveats. 
-\citet{paquette2020stochastic} require adaptive batch-sizes, while \citet{ogaltsov2019adaptive} use explicit knowledge of an upper-bound on variance in the stochastic gradients. 
-Other authors consider similar approaches based on multiple function and/or gradient evaluations at each iteration~\citep{friedlander2012hybrid, byrd2012sample, de2016big, krejic2013line}.
+\edit{
+\citet{paquette2020stochastic}, \citet{krejic2013line}, and \citet{ogaltsov2019adaptive} prove convergence of \ac{SGD} with the Armijo condition in the general stochastic setting with several caveats. 
+\citet{paquette2020stochastic} require adaptive batch-sizes, while \citet{krejic2013line} assume the stochastic gradients are bounded and \citet{ogaltsov2019adaptive} use explicit knowledge of an upper-bound on the variance.} 
+Other authors consider similar approaches based on multiple function and/or gradient evaluations at each iteration~\citep{friedlander2012hybrid, byrd2012sample, de2016big}.
 Such approaches also use growing batch-sizes to ensure convergence.
 The work in the thesis follows \citet{vaswani2019painless}, who investigated stochastic versions of the Armijo line-search under interpolation; we provide tighter analyses in a more general setting.\\ 
 
