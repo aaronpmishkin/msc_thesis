@@ -5,7 +5,7 @@
 Interpolation is a technique from numerical analysis where a function is approximated by exactly fitting a sample of its evaluations using a tractable class of approximators. 
 This class is often piece-wise linear, piece-wise cubic, or polynomial, but can also be non-parametric. 
 Even over-parameterized neural networks can be used, assuming it is possible to solve the resulting non-convex optimization problem. 
-This is because the defining aspect interpolation methods is not the choice of approximating function, but that the approximation attains the \emph{true} function value at all points in the sample.
+This is because the defining aspect of interpolation methods is not the choice of approximating function, but that the approximation attains the \emph{true} function value at all points in the sample.
 
 
 This basic notion of interpolation can be directly carried over to supervised machine learning.  
@@ -14,28 +14,29 @@ The analogy to numerical analysis is complete if we assume that the data are gen
 For classification problems, interpolation can be defined in two obvious ways. 
 We might say a model satisfies interpolation if it predicts the correct class for each training example, or alternatively, if it attains zero loss for all training examples.  
 The latter interpretation is dependent on the choice of objective function and starts to hint at the role of interpolation in optimization.
-Note that in the regression example, the two notions of interpolation coincide for the natural choice of squared loss.
+Note that in the regression example, the two notions of interpolation coincide for the natural choice of squared loss on all examples.
 
 These intuitive definitions for interpolation mean approximately the same thing: ``to fit the data exactly''. 
 While this agrees with the spirit of the methodology and broader scientific usage of the term, a rigorous definition is necessary to analyze the complexity of first-order optimizers under interpolation. 
 This chapter formalizes interpolation in the context of stochastic optimization. 
 In particular, we do the following:
 \begin{enumerate}
-    \item Define the concept of a \acl{SFO} \oracle{} and state what it means for \oracle{} to be individually-smooth. 
-    \item Give three specific notions of interpolation in the context of a \acl{SFO} and objective function pair \( \rbr{f, \oracle{}} \).
-    \item Characterize the relationships between the different modes of interpolation as well as connections to the strong and weak growth conditions. 
+    \item Define the concept of a \ac{SFO} \oracle{} and \edit{propose a new Lipschitz-smoothness property for \acp{SFO}, which we call individually-smoothness.} 
+    \item Give three specific notions of interpolation in the context of a \acl{SFO} and objective function pair \( \rbr{f, \oracle{}} \). \edit{These are the first definitions of interpolation applicable to the general stochastic setting.}
+    \item Characterize the relationships between the three models of interpolation as well as connections to strong and weak growth. 
+        \edit{In particular, we show that interpolation implies weak growth if \oracle{} is individually-smooth; this relaxes existing sufficient conditions which further assume \( f \) is convex and finite-sum~\citep{vaswani2019fast}.} 
 \end{enumerate}
 We begin with the discussion of stochastic oracles.
 
 \section{Stochastic Oracles}~\label{sec:stochastic-oracles}
 % As stated above, this work is primarily concerned with the analysis of iterative methods for stochastic optimization.
-The defining feature of stochastic optimization algorithms is that they cannot directly access the value or gradient of \( f \).
+The defining feature of stochastic optimization algorithms is that they cannot directly access the value or gradient of the objective function \( f \).
 Instead, they obtain noisy function and gradient evaluations through a \ac{SFO}  \oracle. 
-At each iteration \( k \), \oracle{} outputs a stochastic function and gradient \( f(\w, \zk) \) and \( \grad(\w, \zk) \) at query point \( \w \), where \( \zk \) is a random variable with distribution \( \mu_k \) supported on \( \calZ_k \subseteq \R^m \), \( m > 0 \).%%
+At each iteration \( k \), \oracle{} outputs a stochastic function \( f(\w, \zk) \) and gradient \( \grad(\w, \zk) \) at query point \( \w \), where \( \zk \) is a random variable with distribution \( \mu_k \) supported on \( \calZ_k \subseteq \R^m \), \( m > 0 \).%%
 \footnote{It will be sufficient to treat the measure \( \mu_k \) as a prob.\ density function \( p_k \) for nearly all of our purposes.}
 We assume that \( f(\w, \cdot) \) is a deterministic Borel function, meaning the stochasticity in \( f(\w, \zk) \) stems only from the random variable \( \zk \).
 Similarly, \( \grad(\w, \cdot) \) is taken to be a deterministic Borel function related to \( f(\w, \cdot) \) through the standard differentiation operator,
-\[ \grad(\w, \cdot) = \sbr{\partial_{v_1} f(\w, \cdot), \ldots, \partial_{v_d} f(\w, \cdot)}^\top. \]
+\[ \grad(\w, \cdot) = \sbr{\frac{\partial}{\partial_{v_1}} f(\w, \cdot), \ldots, \frac{\partial}{\partial_{v_d}} f(\w, \cdot)}^\top. \]
 Unless stated otherwise, the oracle outputs are always taken to be unbiased, implying that 
 \begin{align*}
     \E_{\zk} \sbr{f(\w, \zk)} = f(\w) \quad \text{and} \quad \Ek \sbr{\grad(\w, \zk)} = \grad(\w), 
@@ -81,7 +82,8 @@ The following example demonstrates individual smoothness in the context of least
     The mini-batch \ac{SFO} uniformly sub-samples \( m \leq n \) examples to obtain the following function and gradient estimators:
     \[ f(\w, \z) = \frac{1}{|\z|} \sum_{i \in \z}  \rbr{\abr{w, x_i} - y_i}^2 \; \text{ and } \; \grad(\w, \z) = \frac{1}{|\z|} \sum_{i \in \z} 2 \rbr{\abr{w, x_i} - y_i} x_i, \]
     where the support set of \oracle{} is \( \calZ = \cbr{ A \subseteq \cbr{1, \dots, n} : |A| = m } \).
-    Notice that \( f(\cdot, \z) \) is convex and \( L_z \)-smooth with \( L_z = 2 \norm{x_z}^2 \), implying \oracle{} is individually-convex and \( \Lmax \) individually-smooth with \( \Lmax = 2 \max_i \norm{x_i}^2 \). 
+    \edit{Notice that \( f(\cdot, \z) \) is convex and \( L_z \)-smooth with \( L_z = 2 \norm{\sum_{i \in \z} x_z x_z^\top}_\text{op}^2 \), where $\norm{\cdot}_{\text{op}}$ is the operator norm.}
+    This implies \oracle{} is individually-convex and \( \Lmax \) individually-smooth with \( \Lmax \edit{\leq} 2 \max_{i \in [n]} \norm{x_i}^2 \). 
 \end{example}
 
 \autoref{example:ls-ind-smooth} illustrates the \emph{mini-batch} oracle commonly used in machine learning.
@@ -163,9 +165,9 @@ The following example further narrows this to least-squares regression, where in
 \end{example}
 
 There are several natural ways to establish interpolation.
-It is well-known that least-squares regression satisfies interpolation when the column rank of the data matrix is deficient~\citep{hastie2009elements}.
-That is, when \( \text{dim}\rbr{\text{span}\rbr{\cbr{x_i}_{i=1}^n}} < d \). 
-Similarly, interpolation is satisfied for linear classifiers on separable datasets~\citep{vaswani2019fast}. 
+\edit{It is well-known that least-squares regression satisfies interpolation when the \( y \in \rbr{\text{span}\rbr{\cbr{x_i}_{i=1}^n}} \). 
+This occurs, for example, when the data matrix is full-rank and \( n \leq d \)~\citep{hastie2009elements}.}
+Similarly, interpolation is satisfied for linear classifiers on separable datasets \edit{using the squared-hinge loss}~\citep{vaswani2019fast}. 
 In the general setting of \acp{SFO}, the following lemma establishes simple conditions for \( \rbr{f, \oracle{}} \) to satisfy minimizer interpolation.
 \begin{restatable}{lemma}{boundedBelow}~\label{lemma:bounded-below}
     A function-oracle pair \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation (\autoref{def:interpolation-minima}) if \oracle{} is unbiased and 
@@ -202,7 +204,7 @@ Yet, it is also simple to show that bounded variance fails to model least-square
 A far more realistic model is obtained by relaxing bounded variance to 
 \[ \Ek \sbr{\norm{\grad(\w, \zk)}^2} \leq \rho \norm{\grad(\w)}^2 + \sigma^2,  \]
 where \( \rho, \sigma \geq 0 \).
-We call this condition strong growth with additive noise for reasons which will soon be clear.
+We call this condition ``strong growth with additive noise'' for reasons which will soon be clear.
 Note that it is strictly weaker than bounded variance, which is recovered when \( \rho = 1 \).
 Strong growth with additive noise was used as early as the classical analysis of stochastic optimization algorithms by \citet{poljak1973pseudogradient}, and continues to appear in current work~\citep{bertsekas2000gradient, khaled2020better, nguyen2018sgd}. 
 
@@ -253,6 +255,15 @@ Finally, we complete our statement of growth conditions with weak growth, which 
     \[ \Ek \sbr{\norm{\grad(\w, \zk)}^2} \leq \alpha L (f(\w) - f(\wopt)), \]
     holds for all \( k \geq 0 \) and \( \w \in \R^d\).
 \end{definition}
+\noindent \edit{If \( f \) is \( \mu \)-PL, then the weak growth condition implies strong growth holds with parameter \( \rho \leq \frac{\alpha L}{\mu} \) \citep[Proposition 1]{vaswani2019fast}.
+    In fact, the converse relation holds if \( f \) is Lipschitz-smooth, as we now show.
+    \begin{restatable}{lemma}{sgcWGCRelationship}\label{lemma:sgc-wgc-relationship}
+        Let \( \rbr{f, \oracle{}} \) be a function-oracle pair satisfying the strong growth condition with parameter \( \rho \).
+        If \( f \) is \( L \)-smooth, then \( \rbr{f, \oracle{}} \) satisfies weak growth with parameter 
+        \[ \alpha \leq 2 \rho L. \]
+    \end{restatable}     
+    \noindent See \autoref{app:growth-conditions} for proof.\hfill \break
+}
 
 We can now elucidate the exact relationship between growth conditions and interpolation.
 In fact, several easy calculations are sufficient to show that various forms of interpolation are implied by strong and weak growth.
@@ -267,15 +278,21 @@ The reverse implications are more involved; we establish them formally in the fo
     If \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation, then the pair also satisfies the weak growth condition with parameter
     \[ \wgc \leq \frac{L_{\text{max}}}{L}. \]
 \end{restatable}
+\noindent See \autoref{app:growth-conditions} for proof. \hfill \break
+
+\edit{\autoref{lemma:interpolation-to-wgc} is similar to the sufficient conditions for weak growth derived by \citet{vaswani2019fast}, who additionally require \( f \) to be convex and finite-sum. 
+Thus, our result applies to a much larger class of functions and \acp{SFO} than previous work.
+We can derive similarly relaxed sufficient conditions for strong growth using the relationship between the strong and weak growth parameters. 
+The following lemma does exactly this.}
 
 \begin{restatable}[Interpolation and Strong Growth]{lemma}{interpToSGC}~\label{lemma:interpolation-to-sgc}
     Let \( f \) be a \( L \)-smooth  \( \mu \)-PL function and \oracle{} an \( \Lmax \) individually-smooth \ac{SFO}.
     If \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation, then the pair also satisfies the strong growth condition with parameter
     \[ \rho \leq \frac{L_{\text{max}}}{\mu}. \]
 \end{restatable}
-\noindent See \autoref{app:growth-conditions} for the proofs of both lemmas. \hfill \break
+\noindent See \autoref{app:growth-conditions} for proof. \hfill \break
 
 Lemmas~\ref{lemma:interpolation-to-wgc} and~\ref{lemma:interpolation-to-sgc} show that minimizer interpolation implies global regularity of the stochastic gradients when \oracle{} is individually-smooth. 
-As a by-product, we obtain worst-case bounds on the strong and weak growth parameters and demonstrate the so-called ``automatic variance reduction'' property~\citep{liu2020accelerating}, which guarantees \( \E_k\norm{\grad(\wk, \zk)}^2 \rightarrow 0 \) if \( \wk \rightarrow \wopt \) in the interpolation setting.
+As a by-product, we obtain worst-case bounds on the strong and weak growth parameters and demonstrate the ``automatic variance reduction'' property~\citep{liu2020accelerating}, which guarantees \( \E_k\norm{\grad(\wk, \zk)}^2 \rightarrow 0 \) if \( \wk \rightarrow \wopt \) in the interpolation setting.
 As we shall see in the coming chapters, these conditions are sufficient for the convergence of constant step-size \ac{SGD}, as well as effective line-search techniques and acceleration. 
 % This fulfills the promise of this section and, more generally, the chapter. 

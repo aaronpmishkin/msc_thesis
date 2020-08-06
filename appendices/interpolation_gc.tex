@@ -123,6 +123,19 @@ where \( p_k^* = \min \cbr{p_k(\tilde \z) : p_k(\z) > 0 } \).
 We conclude that maximal strong growth holds with \(\rho' = \max_k \frac{\rho}{p^*_{k}}\).
 \end{proof}
 
+
+\sgcWGCRelationship*
+\begin{proof}
+    \autoref{lemma:gradient-bounds} implies
+    \begin{align*}    
+        \norm{\grad(\w)}^2 &\leq 2 L \rbr{f(w) - f(\wopt)}. 
+        \intertext{Comining this with the definition of strong growth,}
+        \Ek\sbr{\norm{\grad(\w, \zk)}^2} &\leq \rho \norm{\grad(\w)}^2\\
+         &\leq 2 L \rho \rbr{f(w) - f(\wopt)}, 
+    \end{align*}
+    which shows that the weak growth condition holds \( \alpha = 2 L \rho \).
+\end{proof}
+
 \interpToWGC*
 \begin{proof}
     Starting from \( \Lmax \) individual-smoothness of \oracle{}, 
@@ -139,6 +152,7 @@ We conclude that maximal strong growth holds with \(\rho' = \max_k \frac{\rho}{p
     \end{align*}
     We conclude that weak growth holds with \( \alpha \leq \frac{\Lmax}{L} \). 
 \end{proof}
+
 
 \interpToSGC*
 \begin{proof}
