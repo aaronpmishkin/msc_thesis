@@ -233,10 +233,10 @@ Note that this bound is tight with Case 1 since \( 1 + \wgc L \rbr{\inv{\Lmax} -
     The strong growth condition implies 
     \begin{align*}
         \E\sbr{\sum_{k=0}^{K} \norm{\wkk - \wk}^2} &= \E\sbr{\sum_{k=0}^{K} \eta^2 \norm{\grad(\wk, \zk)}^2}\\
-                                                   &\leq \sum_{k=0}^{K} \sgc \eta^2 \E\sbr{\norm{\grad(\wk, \zk)}^2}\\
-        \implies \lim_{K\rightarrow \infty} \E \sbr{\sum_{k=0}^{K} \norm{\wkk - \wk}^2} &\leq \lim_{K\rightarrow\infty} \E \sbr{\sum_{k=0}^{K} \sgc \eta^2 \norm{\grad(\wk, \zk)}^2}\\
+                                                   &\leq \E\sbr{\sum_{k=0}^{K} \sgc \eta^2 \norm{\grad(\wk)}^2}\\
+        \implies \lim_{K\rightarrow \infty} \E \sbr{\sum_{k=0}^{K} \norm{\wkk - \wk}^2} &\leq \lim_{K\rightarrow\infty} \E \sbr{\sum_{k=0}^{K} \sgc \eta^2 \norm{\grad(\wk)}^2}\\
         \intertext{The partial sums are increasing in \( K \), so we may apply the monotone convergence theorem~\citep[Theorem 4.8]{ccinlar2011probability} to obtain} 
-        \E \sbr{\sum_{k=0}^{\infty} \norm{\wkk - \wk}^2} &\leq  \E \sbr{\sum_{k=0}^{\infty} \sgc \eta^2 \norm{\grad(\wk, \zk)}^2}\\
+        \E \sbr{\sum_{k=0}^{\infty} \norm{\wkk - \wk}^2} &\leq  \E \sbr{\sum_{k=0}^{\infty} \sgc \eta^2 \norm{\grad(\wk)}^2}\\
                                                                   &< \infty. \tag{by \autoref{eq:stationary-convergence}}
     \end{align*}
     The series \(  \sum_{k=0}^{\infty} \norm{\wkk - \wk}^2 \) is a non-negative random variable with finite expectation and so converges almost surely: 

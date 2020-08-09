@@ -16,10 +16,9 @@ The improvement in convergence speed ranges from constant factors to exponential
 In all cases, specific care is taken to understand the impact of additional assumptions, such as smoothness or convexity of the oracle.
 
 Our study of \ac{SAGD} uses the estimating sequences framework developed by \citet{nesterov2004lectures}.
-Estimating sequences allow us to cast \ac{SAGD} as alternating descent procedure on the objective and a sequence of improving local approximations, avoiding the so-called ``analytical tricks'' used in many accelerated convergence proofs. 
+Estimating sequences allow us to cast \ac{SAGD} as alternating descent procedure on the objective and a sequence of improving local approximations, avoiding the ``analytical tricks'' used in many accelerated convergence proofs. 
 Moreover, we are able to derive tighter convergence rates than existing work using this framework. 
-For instance, our results improve upon \citet{vaswani2019fast} by a multiple of the condition number for smooth, interpolating oracles.
-This is comparable to the improvement attained by \acl{AGD} over gradient descent. 
+In the case of smooth, interpolating oracles, the improvement in iteration complexity is comparable to dividing by the square-root of the condition number~\citep{vaswani2019fast}.
 
 Although this thesis attempts to be a comprehensive analysis of stochastic gradient methods under interpolation, the scope is often too narrow and several important methods are not studied.
 We briefly discuss the role of growth conditions in structural optimization in \autoref{ch:beyond-interpolation}.

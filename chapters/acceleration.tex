@@ -3,15 +3,18 @@
 \chapter{Acceleration}~\label{ch:acceleration}
 
 The focus in Chapters~\ref{ch:sgd} and~\ref{ch:line-search} was on relatively simple first-order methods: \ac{SGD} with a fixed step-size and with a stochastic line-search, respectively.
-Now, we move on to a more complicated algorithm which is guaranteed faster convergence in the deterministic setting.
-The last first-order method which is analyzed in this work is Nesterov's famous \ac{AGD}~\cite{nesterov2004lectures}.
+Now, we move on to Nesterov's famous \ac{AGD} algorithm~\cite{nesterov2004lectures}, which is guaranteed faster convergence in the deterministic setting. 
 First, a small degree of background for accelerated methods is developed, with a particular focus on why stochastic acceleration is an interesting question for oracles satisfying interpolation.
 Then, the following convergence results are established for \ac{SAGD}:
 \begin{enumerate}
     \item \( O\rbr{\sqrt{\frac{\sgc L}{\mu}} \log \rbr{\inv{\epsilon}}} \) iteration complexity for strongly convex \( f \) when \( \rbr{f, \oracle{}} \) satisfies strong growth; this rate is tight with the deterministic analysis when \( \sgc = 1 \).
     \item \( O\rbr{\sqrt{\frac{\sgc L}{\epsilon}} \,} \) iteration complexity for convex \( f \) when \( \rbr{f, \oracle{}} \) satisfies strong growth; again, this rate is tight with \ac{AGD} when \( \sgc = 1 \).
 \end{enumerate}
+\edit{These convergence rates are tighter than existing work by a factor of \( \sqrt{\rho} \)~\citep[Theorems 1-2]{vaswani2019fast}, which we show is comparable to the speed-up obtained by \ac{AGD} over gradient descent in the deterministic setting.}
 The chapter ends with a brief discussion of acceleration under the weak growth condition, which is an open question.
+\newpage
+
+\section{Background}~\label{sec:agd-background}
 
 Recall that Theorems~\ref{thm:sgc-convex} and~\ref{thm:wgc-convex} establish fast linear and sub-linear convergence rates for \ac{SGD} that are comparable with analyses for deterministic problems (e.g. gradient descent).
 Unfortunately, the classic work by \citet{nemirovsky1983problem} in 1983 shows that the convergence of gradient descent is not tight with lower-bounds for convex, Lipschitz-smooth functions with deterministic oracles. 
@@ -22,8 +25,8 @@ In particular, the obvious parallels between \ac{SGD} under interpolation and de
 
 In fact, restricting the \ac{SFO} is necessary for any hope of proving an accelerated rate for \ac{SAGD}.
 Black-box accelerated methods which do not leverage structural information about \( f \) rapidly accumulate errors when used with general stochastic oracles \( \oracle{} \)~\citep{devolder2014first, schmidt2011convergence}. 
-Such error accumulation prevents convergence. 
-The key question is whether or not the interpolation setting is restricted enough to permit acceleration;
+\edit{Such error accumulation prevents acceleration, as shown by tight \( \Omega(\epsilon^{-2}) \) and \( \Omega(\epsilon^{-1}) \) lower bounds for the iteration complexity of convex and strongly-convex minimization with general \acp{SFO}, respectively~\citep{nemirovsky1983problem, agarwal2012information, raginsky2011information}.}
+The key question is whether or not the interpolation setting is restrictive enough to exclude these lower bounds and permit acceleration;
 the goal of this chapter is to extend the estimating sequences framework~\citep{nesterov2004lectures} to show that \ac{SAGD} does in fact achieve an accelerated convergence rate when the strong growth condition holds.
 
 \begin{figure}[t]
@@ -200,22 +203,22 @@ This is roughly equivalent to gradient descent, implying \ac{SAGD} is not accele
 Overall, we conclude \ac{SAGD} is an accelerated method only relative to the complexity of other stochastic algorithms under interpolation.
 
 The analysis of \ac{SAGD} for strongly-convex functions presented here is strictly tighter than prior work by \citet[Theorem 1]{vaswani2019fast}, who also studied convergence under strong growth.
-\autoref{table:agd-comparison} compares the two complexities; their major difference is that \( \sgc \) is squared in the rate obtain by Vaswani et al. 
-Recalling \( \sgc = \sfrac{\Lmax}{\mu} \) in the worst-case implies that our result is faster by a multiple of the condition number for individually-smooth \( \oracle{} \) satisfying interpolation.
-This significant improvement addresses the criticism of~\citet{liu2020accelerating}, who showed that the rate obtained by Vaswani et al.\ could be slower than \ac{SGD} in some circumstances. 
+\autoref{table:agd-comparison} compares the two complexities; the major difference is that \( \sgc \) is squared in the rate obtain by Vaswani et al. 
+Recalling \( \sgc = \sfrac{\Lmax}{\mu} \) in the worst-case implies that our result is faster by a multiple of the condition number for individually-smooth \( \oracle{} \) satisfying minimizer interpolation, which is comparable to the improvement obtained by \ac{AGD} over deterministic gradient descent.
+This tighter rate addresses the criticism of~\citet{liu2020accelerating}, who showed that the convergence speed shown by Vaswani et al.\ could be slower than \ac{SGD} in some circumstances. 
 
 \begin{table}[t]
     \centering
     \begin{tabular}{c c c  }\toprule
         \multirow{2}{*}{Assumptions} & \multicolumn{2}{c}{Convergence Rate}\\%
         \cmidrule(lr){2-3} 
-                 & \multicolumn{1}{c}{Ours} & \multicolumn{1}{c}{VBS~\citep{vaswani2019painless}}\\ \midrule
+                 & \multicolumn{1}{c}{Ours} & \multicolumn{1}{c}{VBS}\\ \midrule
         \( \mu \)-SC & \( O\rbr{\sqrt{\frac{\rho L}{\mu}} \log\rbr{\frac{1}{\epsilon}}} \)% 
                      & \( O\rbr{\sqrt{\frac{\rho^2 L}{\mu}} \log\rbr{\frac{1}{\epsilon}}} \) \\ \addlinespace
         Convex       & \( O\rbr{\sqrt{\frac{\sgc L}{\epsilon}}\,} \)%
                      & \( O\rbr{\sqrt{\frac{\sgc^2 L}{\epsilon}}\,} \)\\ \addlinespace 
         \end{tabular}
-        \caption{Comparison of iteration complexities for stochastic acceleration schemes.}%
+        \caption{Comparison of iteration complexities for stochastic acceleration schemes under the strong growth condition. For each result, we report the complexity obtained with the optimal step-size and momentum parameter according to the analysis. Our results are tighter than VBS~\citep{vaswani2019fast} by a factor of \( \sqrt{\rho} \).}%
     \label{table:agd-comparison}
 \end{table}
 
@@ -224,7 +227,7 @@ This significant improvement addresses the criticism of~\citet{liu2020accelerati
 Our final result for \ac{SAGD} addresses convergence for convex functions under the strong growth condition. 
 The following theorem shows that \ac{RSAGD} obtains an accelerated \( O\rbr{\frac{\sgc L}{K^2}} \) complexity.
 Invoking the correspondence between \ac{RSAGD} and \ac{SAGD} leads an identical result for the latter algorithm as a corollary.
-This improves on the analysis prior work by a factor of \( \sgc \)~\citep[Theorem 2]{vaswani2019fast}. 
+This improves on prior analyses by a factor of \( \sgc \)~\citep[Theorem 2]{vaswani2019fast}. 
 See~\autoref{table:agd-comparison} for additional details.
 
 \begin{restatable}{theorem}{convexAGD}~\label{thm:convex-agd}
@@ -245,7 +248,9 @@ Note that the choice of \( \alpha_0 = \sqrt{2} - 1 \) for \ac{SAGD} is identical
     \[ \E\sbr{f(\w_K)} - f(\wopt) \leq \frac{2}{\rbr{K+1}^2}\rbr{f(\w_0) - f(\wopt) + \sgc L \norm{\w_0 - \wopt}^2 }. \]
 \end{corollary}
 
- An unfortunate aspect of the \autoref{thm:convex-agd} is that it uses the strong growth condition, rather than weak growth.
+\section{Acceleration under Weak Growth}~\label{sec:agd-weak-growth}
+
+ An disappointing aspect of \autoref{thm:convex-agd} is that it uses the strong growth condition, rather than weak growth.
  Recall that sufficient conditions for strong growth are minimizer interpolation, individual-smoothness, and the PL condition (\autoref{lemma:interpolation-to-sgc}). 
  Thus, requiring strong growth in this case has the \emph{flavour} of requiring \( f \) to be strongly-convex, but only leads to sub-linear convergence.
 This is quite disappointing, but it is not obvious that the assumption can be relaxed.

@@ -21,10 +21,11 @@ While this agrees with the spirit of the methodology and broader scientific usag
 This chapter formalizes interpolation in the context of stochastic optimization. 
 In particular, we do the following:
 \begin{enumerate}
-    \item Define the concept of a \ac{SFO} \oracle{} and \edit{propose a new Lipschitz-smoothness property for \acp{SFO}, which we call individually-smoothness.} 
-    \item Give three specific notions of interpolation in the context of a \acl{SFO} and objective function pair \( \rbr{f, \oracle{}} \). \edit{These are the first definitions of interpolation applicable to the general stochastic setting.}
+    \item Define the concept of a \ac{SFO} \oracle{} and propose a new Lipschitz-smoothness property for \acp{SFO}, which we call individually-smoothness. 
+    \item Give three specific notions of interpolation in the context of a \acl{SFO} and objective function pair \( \rbr{f, \oracle{}} \). 
+    These are the first definitions of interpolation applicable to the general stochastic setting.
     \item Characterize the relationships between the three models of interpolation as well as connections to strong and weak growth. 
-        \edit{In particular, we show that interpolation implies weak growth if \oracle{} is individually-smooth; this relaxes existing sufficient conditions which further assume \( f \) is convex and finite-sum~\citep{vaswani2019fast}.} 
+In particular, we show that interpolation implies weak growth if \oracle{} is individually-smooth; this relaxes existing sufficient conditions which further assume \( f \) is convex and finite-sum~\citep{vaswani2019fast}. 
 \end{enumerate}
 We begin with the discussion of stochastic oracles.
 
@@ -82,8 +83,8 @@ The following example demonstrates individual smoothness in the context of least
     The mini-batch \ac{SFO} uniformly sub-samples \( m \leq n \) examples to obtain the following function and gradient estimators:
     \[ f(\w, \z) = \frac{1}{|\z|} \sum_{i \in \z}  \rbr{\abr{w, x_i} - y_i}^2 \; \text{ and } \; \grad(\w, \z) = \frac{1}{|\z|} \sum_{i \in \z} 2 \rbr{\abr{w, x_i} - y_i} x_i, \]
     where the support set of \oracle{} is \( \calZ = \cbr{ A \subseteq \cbr{1, \dots, n} : |A| = m } \).
-    \edit{Notice that \( f(\cdot, \z) \) is convex and \( L_z \)-smooth with \( L_z = 2 \norm{\sum_{i \in \z} x_z x_z^\top}_\text{op}^2 \), where $\norm{\cdot}_{\text{op}}$ is the operator norm.}
-    This implies \oracle{} is individually-convex and \( \Lmax \) individually-smooth with \( \Lmax \edit{\leq} 2 \max_{i \in [n]} \norm{x_i}^2 \). 
+    Notice that \( f(\cdot, \z) \) is convex and \( L_z \)-smooth with \( L_z = 2 \norm{\sum_{i \in \z} x_z x_z^\top}_\text{op}^2 \), where $\norm{\cdot}_{\text{op}}$ is the operator norm.
+    This implies \oracle{} is individually-convex and \( \Lmax \) individually-smooth with \( \Lmax \leq 2 \max_{i \in [n]} \norm{x_i}^2 \). 
 \end{example}
 
 \autoref{example:ls-ind-smooth} illustrates the \emph{mini-batch} oracle commonly used in machine learning.
@@ -165,9 +166,9 @@ The following example further narrows this to least-squares regression, where in
 \end{example}
 
 There are several natural ways to establish interpolation.
-\edit{It is well-known that least-squares regression satisfies interpolation when the \( y \in \rbr{\text{span}\rbr{\cbr{x_i}_{i=1}^n}} \). 
-This occurs, for example, when the data matrix is full-rank and \( n \leq d \)~\citep{hastie2009elements}.}
-Similarly, interpolation is satisfied for linear classifiers on separable datasets \edit{using the squared-hinge loss}~\citep{vaswani2019fast}. 
+Least-squares regression satisfies interpolation when \( y \in \rbr{\text{span}\rbr{\cbr{x_i}_{i=1}^n}} \). 
+This occurs, for example, when the data matrix is full-rank and \( n \leq d \)~\citep{hastie2009elements}.
+Similarly, interpolation is satisfied for linear classifiers on separable datasets using the squared-hinge loss~\citep{vaswani2019fast}. 
 In the general setting of \acp{SFO}, the following lemma establishes simple conditions for \( \rbr{f, \oracle{}} \) to satisfy minimizer interpolation.
 \begin{restatable}{lemma}{boundedBelow}~\label{lemma:bounded-below}
     A function-oracle pair \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation (\autoref{def:interpolation-minima}) if \oracle{} is unbiased and 
@@ -255,15 +256,14 @@ Finally, we complete our statement of growth conditions with weak growth, which 
     \[ \Ek \sbr{\norm{\grad(\w, \zk)}^2} \leq \alpha L (f(\w) - f(\wopt)), \]
     holds for all \( k \geq 0 \) and \( \w \in \R^d\).
 \end{definition}
-\noindent \edit{If \( f \) is \( \mu \)-PL, then the weak growth condition implies strong growth holds with parameter \( \rho \leq \frac{\alpha L}{\mu} \) \citep[Proposition 1]{vaswani2019fast}.
-    In fact, the converse relation holds if \( f \) is Lipschitz-smooth, as we now show.
-    \begin{restatable}{lemma}{sgcWGCRelationship}\label{lemma:sgc-wgc-relationship}
-        Let \( \rbr{f, \oracle{}} \) be a function-oracle pair satisfying the strong growth condition with parameter \( \rho \).
-        If \( f \) is \( L \)-smooth, then \( \rbr{f, \oracle{}} \) satisfies weak growth with parameter 
-        \[ \alpha \leq 2 \rho L. \]
-    \end{restatable}     
-    \noindent See \autoref{app:growth-conditions} for proof.\hfill \break
-}
+\noindent If \( f \) is \( \mu \)-PL, then the weak growth condition implies strong growth holds with parameter \( \rho \leq \frac{\alpha L}{\mu} \) \citep[Proposition 1]{vaswani2019fast}.
+In fact, the converse relation holds if \( f \) is Lipschitz-smooth, as we now show.
+\begin{restatable}{lemma}{sgcWGCRelationship}\label{lemma:sgc-wgc-relationship}
+    Let \( \rbr{f, \oracle{}} \) be a function-oracle pair satisfying the strong growth condition with parameter \( \rho \).
+    If \( f \) is \( L \)-smooth, then \( \rbr{f, \oracle{}} \) satisfies weak growth with parameter 
+    \[ \alpha \leq 2 \rho L. \]
+\end{restatable}     
+\noindent See \autoref{app:growth-conditions} for proof.\hfill \break
 
 We can now elucidate the exact relationship between growth conditions and interpolation.
 In fact, several easy calculations are sufficient to show that various forms of interpolation are implied by strong and weak growth.
@@ -280,10 +280,10 @@ The reverse implications are more involved; we establish them formally in the fo
 \end{restatable}
 \noindent See \autoref{app:growth-conditions} for proof. \hfill \break
 
-\edit{\autoref{lemma:interpolation-to-wgc} is similar to the sufficient conditions for weak growth derived by \citet{vaswani2019fast}, who additionally require \( f \) to be convex and finite-sum. 
+\autoref{lemma:interpolation-to-wgc} is similar to the sufficient conditions for weak growth derived by \citet{vaswani2019fast}, who additionally require \( f \) to be convex and finite-sum. 
 Thus, our result applies to a much larger class of functions and \acp{SFO} than previous work.
 We can derive similarly relaxed sufficient conditions for strong growth using the relationship between the strong and weak growth parameters. 
-The following lemma does exactly this.}
+The following lemma does exactly this.
 
 \begin{restatable}[Interpolation and Strong Growth]{lemma}{interpToSGC}~\label{lemma:interpolation-to-sgc}
     Let \( f \) be a \( L \)-smooth  \( \mu \)-PL function and \oracle{} an \( \Lmax \) individually-smooth \ac{SFO}.

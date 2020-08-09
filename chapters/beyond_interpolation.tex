@@ -13,7 +13,9 @@ To maintain consistency with common notation, \( \wopt \) will refer to the glob
 The canonical \ac{SFO} for \( L_2 \)-regularized minimization evaluates the regularization term exactly, giving the following stochastic function and gradient evaluations: 
 \[ F(\w, \zk) = f(\w, \zk) + \frac{\lambda}{2} \norm{\w}^2 \quad \quad \nabla F(\w, \zk) = \grad(\w, \zk) + \lambda \w.  \]
 We call this the \( L_2 \)-regularization of \( \oracle{} \) and denote it as \( \oracle{}_2 \).
-Except in degenerate circumstances,\footnote{For example, when \( f \) is minimized at \( 0 \).} the pair \( \rbr{F, \oracle{}_2} \) will \emph{not} satisfy interpolation or weak/strong growth even when \( \rbr{f, \oracle{}} \) does. 
+Except in degenerate circumstances,%
+\footnote{For example, when \( f \) is minimized at \( \wopt = 0 \).}%
+the pair \( \rbr{F, \oracle{}_2} \) will \emph{not} satisfy interpolation or weak/strong growth even when \( \rbr{f, \oracle{}} \) does. 
 This means the analyses from previous chapters cannot be applied directly to regularized problems.
 
 There is still significant reason to believe the \( L_2 \)-regularization of \( f \) can be minimized efficiently when \( \rbr{f, \oracle{}} \) satisfy the weak growth condition.

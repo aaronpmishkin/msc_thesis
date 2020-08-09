@@ -1011,6 +1011,27 @@
   publisher = {Wiley-Interscience Series in Discrete Mathematics}
 }
 
+% lower bounds for stochastic, convex minimization
+@article{agarwal2012information,
+  author    = {Alekh Agarwal and Peter L. Bartlett and Pradeep Ravikumar and Martin J. Wainwright},
+  title     = {Information-Theoretic Lower Bounds on the Oracle Complexity of Stochastic Convex Optimization},
+  journal   = {{IEEE} Trans. Inf. Theory},
+  volume    = {58},
+  number    = {5},
+  pages     = {3235--3249},
+  year      = {2012},
+}
+
+@article{raginsky2011information,
+      author    = {Maxim Raginsky and Alexander Rakhlin},
+      title     = {Information-Based Complexity, Feedback and Dynamics in Convex Programming},
+      journal   = {{IEEE} Trans. Inf. Theory},
+      volume    = {57},
+      number    = {10},
+      pages     = {7036--7056},
+      year      = {2011},
+}
+
 %% \epsilon-optimality for (strongly-) convex functions
 @inproceedings{arjevani2016iteration,
   author    = {Yossi Arjevani and
@@ -1175,6 +1196,41 @@
   pages     = {427--438},
   year      = {2018},
 }
+
+%% accelerated SVRG:
+@inproceedings{shang2018asvrg,
+  author    = {Fanhua Shang and
+               Licheng Jiao and
+               Kaiwen Zhou and
+               James Cheng and
+               Yan Ren and
+               Yufei Jin},
+  _editor    = {Jun Zhu and
+              Ichiro Takeuchi},
+  title     = {{ASVRG:} Accelerated Proximal {SVRG}},
+  booktitle = {Proceedings of The 10th Asian Conference on Machine Learning, {ACML}
+                    2018},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {95},
+  pages     = {815--830},
+  publisher = {{PMLR}},
+  year      = {2018},
+}
+
+%% accelerated SAGA:
+@inproceedings{defazio2016pointSaga,
+  author    = {Aaron Defazio},
+  _editor    = {Daniel D. Lee and
+                Masashi Sugiyama and
+                Ulrike von Luxburg and
+                Isabelle Guyon and
+                Roman Garnett},
+  title     = {A Simple Practical Accelerated Method for Finite Sums},
+  booktitle = {Advances in Neural Information Processing Systems 29: {NeurIPS} 2016},
+  pages     = {676--684},
+  year      = {2016},
+}
+
 %% loopless SVRG and Katyusha.
 @inproceedings{kovalev2020loopless,
   author    = {Dmitry Kovalev and
@@ -1233,6 +1289,22 @@
 }
 
 %% catalyst: generic acceleration via proximal-point.
+% original version.
+@inproceedings{lin2015catalyst,
+  author    = {Hongzhou Lin and
+               Julien Mairal and
+               Za{\"{\i}}d Harchaoui},
+  _editor    = {Corinna Cortes and
+               Neil D. Lawrence and
+               Daniel D. Lee and
+               Masashi Sugiyama and
+               Roman Garnett},
+  title     = {A Universal Catalyst for First-Order Optimization},
+  booktitle = {Advances in Neural Information Processing Systems 28: {NeurIPS} 2015},
+  pages     = {3384--3392},
+  year      = {2015},
+}
+% journal version
 @article{lin2017catalyst,
   author    = {Hongzhou Lin and
                Julien Mairal and
@@ -1243,6 +1315,47 @@
   volume    = {18},
   pages     = {212:1--212:54},
   year      = {2017},
+}
+
+% accelerated stochastic dual coordinate ascent (SDCA); also based on regularized inner-out loop
+@inproceedings{shalev-shwarz2014ASDCA,
+  author    = {Shai Shalev{-}Shwartz and
+               Tong Zhang},
+  title     = {Accelerated Proximal Stochastic Dual Coordinate Ascent for Regularized
+              Loss Minimization},
+  booktitle = {Proceedings of the 31th International Conference on Machine Learning,
+              {ICML} 2014},
+  series    = {{JMLR} Workshop and Conference Proceedings},
+  volume    = {32},
+  pages     = {64--72},
+  publisher = {JMLR.org},
+  year      = {2014},
+}
+
+
+%% primal-dual methods for ind.\ smooth functions
+
+@inproceedings{zhang2015SPDC,
+  author    = {Yuchen Zhang and Xiao Lin},
+  _editor    = {Francis R. Bach and David M. Blei},
+  title     = {Stochastic Primal-Dual Coordinate Method for Regularized Empirical Risk Minimization},
+  booktitle = {Proceedings of the 32nd International Conference on Machine Learning,
+                              {ICML} 2015},
+  series    = {{JMLR} Workshop and Conference Proceedings},
+  volume    = {37},
+  pages     = {353--361},
+  publisher = {JMLR.org},
+  year      = {2015},
+}
+
+@article{lan2018incremental,
+  author    = {Guanghui Lan and Yi Zhou},
+  title     = {An optimal randomized incremental gradient method},
+  journal   = {Math. Program.},
+  volume    = {171},
+  number    = {1-2},
+  pages     = {167--215},
+  year      = {2018},
 }
 
 @inproceedings{frostig2015unregularizing,
@@ -1300,7 +1413,7 @@
   author    = {Chonghai Hu and
                James T. Kwok and
                Weike Pan},
-  editor    = {Yoshua Bengio and
+  _editor   = {Yoshua Bengio and
                Dale Schuurmans and
                John D. Lafferty and
                Christopher K. I. Williams and
