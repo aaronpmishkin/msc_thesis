@@ -53,10 +53,10 @@
                                        \intertext{If \( \eta \leq \frac{\mu + \lambda}{\max\cbr{\rho L, \lambda}\rbr{(\mu + \lambda) + (L + \lambda)}}, \) then we obtain}
         \Ek\sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \frac{2 \eta (\mu + \lambda)(L + \lambda)}{(\mu + \lambda) + (L + \lambda)}} \norm{\wk - \wopt}^2 + C.
         \intertext{Let \( \delta =  \frac{2 \eta (\mu + \lambda)(L + \lambda)}{(\mu + \lambda) + (L + \lambda)} \). Taking expectations and recursing on this inequality,}
-        \implies \E\sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \delta}^k \norm{\w_0 - \wopt}^2 + C \sum_{l=0}^{k-1}  \rbr{1 - \delta}^l\\
-                                               & = \rbr{1 - \delta}^k \norm{\w_0 - \wopt}^2 + C \rbr{\frac{1 - {(1 - \delta)}^k}{\delta}}\\
-                                               &\leq  \rbr{1 - \delta}^k \norm{\w_0 - \wopt}^2 + \frac{C}{\delta}.
+        \implies \E\sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \delta}^{k+1} \norm{\w_0 - \wopt}^2 + C \sum_{l=0}^{k}  \rbr{1 - \delta}^l\\
+                                               & = \rbr{1 - \delta}^{k+1} \norm{\w_0 - \wopt}^2 + C \rbr{\frac{1 - {(1 - \delta)}^{k+1}}{\delta}}\\
+                                               &\leq  \rbr{1 - \delta}^{k+1} \norm{\w_0 - \wopt}^2 + \frac{C}{\delta}.
                                                \intertext{Letting \( \gamma = \frac{\eta \max\cbr{\rho L, \lambda} \sbr{(\mu + \lambda) + (L + \lambda)}}{(\mu + \lambda)(L + \lambda)}\) and subsituting in the value of \( \delta \) gives the final result:}
-        \implies \E\sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \frac{2 \eta (\mu + \lambda)(L + \lambda)}{(\mu + \lambda) + (L + \lambda)}}^k \norm{\w_0 - \wopt}^2 + \gamma\rbr{\lambda \norm{\wbar}^2 - \rbr{\lambda + \mu}\norm{\wopt - \wbar}^2}.
+        \implies \E\sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \frac{2 \eta (\mu + \lambda)(L + \lambda)}{(\mu + \lambda) + (L + \lambda)}}^{k+1} \norm{\w_0 - \wopt}^2 + \gamma\rbr{\lambda \norm{\wbar}^2 - \rbr{\lambda + \mu}\norm{\wopt - \wbar}^2}.
     \end{align*}
 \end{proof}

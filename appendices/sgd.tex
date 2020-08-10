@@ -29,7 +29,7 @@
 \sgcConvex*
 \begin{proof}
     \begin{align*}
-        \norm{\wkk - \wopt}^2 &= \norm{\wk - \eta \grad(\wk, \zk) + - \wopt}^2\\
+        \norm{\wkk - \wopt}^2 &= \norm{\wk - \eta \grad(\wk, \zk) - \wopt}^2\\
                              &= \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \abr{\grad(\wk, \zk), \wk - \wopt} + \norm{\wk - \wopt}^2.
                              \intertext{Taking expectations with respect to \( \zk \), }
        \implies \Ek \sbr{\norm{\wkk - \wopt}^2} &= \eta^2 \Ek \sbr{\norm{\grad(\wk, \zk)}^2} - 2 \eta \Ek \sbr{\abr{\grad(\wk, \zk), \wk - \wopt}} + \norm{\wk - \wopt}^2\\
@@ -42,7 +42,7 @@
                                    \intertext{If \( \eta \leq \frac{2}{\sgc \rbr{\mu + L}} \) then \( \eta \sgc - \frac{2}{\mu + L} \leq 0 \) and we obtain}
        \Ek \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \frac{2 \eta \mu L}{\mu + L}}\norm{\wk - \wopt}^2.
        \intertext{Taking expectations and recursing on this inequality,}
-       \implies \E \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \frac{2 \eta \mu L}{\mu + L}}^k \norm{\w_0 - \wopt}^2.
+       \implies \E \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \frac{2 \eta \mu L}{\mu + L}}^{k+1} \norm{\w_0 - \wopt}^2.
     \end{align*}
 \end{proof}
 
@@ -51,8 +51,7 @@
 \sgcIndConvex*
 \begin{proof}
    \begin{align*}
-       \norm{\wkk - \wopt}^2 &= \norm{(\wkk - \wk) + (\wk - \wopt)}^2\\
-                             &= \norm{\wkk - \wk}^2 + 2 \abr{\wkk - \wk, \wk - \wopt} + \norm{\wk - \wopt}^2\\
+       \norm{\wkk - \wopt}^2 &= \norm{\wk - \eta \grad(\wk, \zk) - \wopt}^2\\
                              &= \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \abr{\grad(\wk, \zk), \wk - \wopt} + \norm{\wk - \wopt}^2.
                              \intertext{Recall \( f(\cdot, \zk) \) is convex, \( \Lmax \)-smooth, and \( \grad(\wopt, \zk) = 0 \) by interpolation. \autoref{lemma:co-coercivity} yields }
        \norm{\wkk - \wopt}^2 &\leq \eta^2 \Lmax \abr{\grad(\wk, \zk), \wk - \wopt} - 2 \eta \abr{\grad(\wk, \zk), \wk - \wopt} + \norm{\wk - \wopt}^2\\
@@ -64,7 +63,7 @@
        \Ek \sbr{\norm{\wkk - \wopt}^2} &\leq  - \mu \, \eta \rbr{2 - \eta \Lmax} \norm{\wk - \wopt}^2 + \norm{\wk - \wopt}^2\\
                                        &= \rbr{1 - \mu \, \eta \rbr{2 - \eta \Lmax}}\norm{\wk - \wopt}^2.
                              \intertext{Taking expectations and recursing on this inequality yields the final result,}
-       \implies \E\sbr{\norm{\wkk - \wopt}}^2 &\leq \rbr{1 - \mu \, \eta \rbr{2 - \eta \Lmax}}^k \norm{\w_0 - \wopt}^2.
+       \implies \E\sbr{\norm{\wkk - \wopt}}^2 &\leq \rbr{1 - \mu \, \eta \rbr{2 - \eta \Lmax}}^{k+1} \norm{\w_0 - \wopt}^2.
    \end{align*}
 \end{proof}
 
@@ -83,7 +82,7 @@
                                    \intertext{If \( \eta \leq \frac{2}{\rbr{\mumax + \Lmax}} \) then \( \eta - \frac{2}{\mumax + \Lmax} \leq 0 \) and we obtain}
        \norm{\wkk - \wopt}^2 &\leq \rbr{1 - 2 \eta \, \delta_{\text{min}}}\norm{\wk - \wopt}^2.
        \intertext{Recursing on this inequality,}
-       \implies \norm{\wkk - \wopt}^2 &\leq \rbr{1 - 2 \eta \, \delta_{\text{min}}}^k \norm{\w_0 - \wopt}^2.
+       \implies \norm{\wkk - \wopt}^2 &\leq \rbr{1 - 2 \eta \, \delta_{\text{min}}}^{k+1} \norm{\w_0 - \wopt}^2.
     \end{align*}
 \end{proof}
 
@@ -195,7 +194,7 @@ Note that this bound is tight with Case 1 since \( 1 + \wgc L \rbr{\inv{\Lmax} -
         \E\sbr{\sum_{k=0}^{K} \norm{\wkk - \wk}^2} &= \E\sbr{\sum_{k=0}^{K} \eta^2 \norm{\grad(\wk, \zk)}^2}\\
                                                    &\leq \sum_{k=0}^{K} \wgc \eta^2 \E\sbr{f(\wk) - f(\wopt)}\\
         \implies \lim_{K\rightarrow \infty} \E \sbr{\sum_{k=0}^{K} \norm{\wkk - \wk}^2} &\leq \lim_{K\rightarrow\infty} \E \sbr{\sum_{k=0}^{K} \wgc \eta^2 \rbr{f(\wk) - f(\wopt)}}\\
-        \intertext{The partial sums are increasing \( K \), so we may apply the monotone convergence theorem~\citep[Theorem 4.8]{ccinlar2011probability} to obtain} 
+        \intertext{The partial sums are increasing in \( K \), so we may apply the monotone convergence theorem~\citep[Theorem 4.8]{ccinlar2011probability} to obtain} 
         \E \sbr{\sum_{k=0}^{\infty} \norm{\wkk - \wk}^2} &\leq  \E \sbr{\sum_{k=0}^{\infty} \wgc \eta^2 \rbr{f(\wk) - f(\wopt)}}\\
                                                                   &< \infty. \tag{by \autoref{eq:func_convergence}}
     \end{align*}
@@ -271,7 +270,7 @@ Note that this bound is tight with Case 1 since \( 1 + \wgc L \rbr{\inv{\Lmax} -
        \implies \Ek \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \mu \, \eta} \norm{\wk - \wopt}^2 + \max\cbr{\eta \mu \rbr{\eta \alpha L - 1}, \eta L \rbr{\eta \alpha L - 1}}\norm{\wk - \wopt}^2\\
                                                 &= \rbr{1 - \mu \, \eta + \max\cbr{\eta \mu \rbr{\eta \alpha L - 1}, \eta L \rbr{\eta \alpha L - 1}}} \norm{\wk - \wopt}^2,
        \intertext{Taking expectations and recursing on the inequality gives the final results,}
-        \implies \E \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \mu \, \eta + \max\cbr{\eta \mu \rbr{\eta \alpha L - 1}, \eta L \rbr{\eta \alpha L - 1}}}^k \norm{\w_0 - \wopt}^2.
+       \implies \E \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \mu \, \eta + \max\cbr{\eta \mu \rbr{\eta \alpha L - 1}, \eta L \rbr{\eta \alpha L - 1}}}^{k+1} \norm{\w_0 - \wopt}^2.
    \end{align*}
    Tightness with the original result from \citet{vaswani2019fast} is immediate when \( \eta = \frac{1}{\alpha L} \) in the last expression above.
 \end{proof}

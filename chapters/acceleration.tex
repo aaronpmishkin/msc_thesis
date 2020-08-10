@@ -82,9 +82,9 @@ This intuition is formalized by the notion of estimating sequences~\citep{nester
     \end{inparaenum}
 \end{definition}
 
-If \( \phi_0 \) is chosen so that \( \phi_0(\w) \approx f(\w) \) for all \( \w \), then \( \seq{\phi_k}_{k=0}^\infty \) matches our intuition of a sequence of improving, local approximations to \( f \).
-This is particularly true since the conditions on \( \lambda_k \) guarantee \( \lim_{k \rightarrow \infty} \phi_k = f \) point-wise.
-Finally, and most importantly, if \( f(\wk)~\leq~\inf_x \phi_k(x) \) for all \( k \), then we obtain
+If \( \phi_0 \) is chosen so that \( \phi_0(\w) \approx f(\w) \) in a neighborhood of \( \w_0 \), then \( \seq{\phi_k}_{k=0}^\infty \) matches our intuition of a sequence of improving, local approximations to \( f \).
+This is particularly true since the conditions on \( \lambda_k \) guarantee \( \lim_{k \rightarrow \infty} \phi_k \leq f \) point-wise --- ie. \( \phi \) eventually becomes a \emph{global} lower bound on \( f \).
+Finally, and most importantly, if \( f(\wk) \leq \inf_x \phi_k(x) \) for all \( k \), then we obtain
 \begin{align*}
     f(\wk) \leq \phi_k(\wopt) &\leq (1 - \lambda_k) f(\wopt) + \phi_0(\wopt)\\
     \implies f(\wk) - f(\wopt) &\leq \lambda_k \rbr{\phi_0(\wopt) - f(\wopt)},
@@ -105,7 +105,7 @@ Let us now fix a choice of estimating sequences following~\citet[Lemma 2.2.2]{ne
     where \( \lambda_0 = 1 \) and \( \phi_0(x) = \phi_0^* + \frac{\gamma_0}{2}\norm{x - v_0}^2 \) with arbitrary \( \gamma_0 \geq 0 \), \( v_0 \in \R^n \) and \( \phi_0^* \in \R \).
 \end{restatable}
 
-\autoref{lemma:estimating-sequence} provides a recipe for generating local approximations of \( f \) by updating \( \phi_k \) with a global minorant centered at \( \wk \). 
+\autoref{lemma:estimating-sequence} provides a recipe for generating local approximations of \( f \) by updating \( \phi_k \) with a global minorant of \( f \) ``centered'' at \( \yk \). 
 This minorant is quadratic when \( f \) is strongly-convex and linear when \( f \) is convex (since \( \mu = 0 \)).
 An important property of the update is that it preserves the canonical form
 \begin{align*}
@@ -251,7 +251,7 @@ Note that the choice of \( \alpha_0 = \sqrt{2} - 1 \) for \ac{SAGD} is identical
 \section{Acceleration under Weak Growth}~\label{sec:agd-weak-growth}
 
  An disappointing aspect of \autoref{thm:convex-agd} is that it uses the strong growth condition, rather than weak growth.
- Recall that sufficient conditions for strong growth are minimizer interpolation, individual-smoothness, and the PL condition (\autoref{lemma:interpolation-to-sgc}). 
+ Recall that sufficient conditions for strong growth are minimizer interpolation, individual-smoothness, and the \ac{PL} condition (\autoref{lemma:interpolation-to-sgc}). 
  Thus, requiring strong growth in this case has the \emph{flavour} of requiring \( f \) to be strongly-convex, but only leads to sub-linear convergence.
 This is quite disappointing, but it is not obvious that the assumption can be relaxed.
 

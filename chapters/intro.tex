@@ -12,8 +12,8 @@ This property is also why stochastic first-order methods are the dominant approa
 Despite their successes, stochastic first-order methods suffer from two well known problems. 
 The step-size, momentum term, and other algorithmic hyper-parameters must be carefully tuned to obtain good performance~\citep{bengio2012practical, schaul2013no, li2019convergence, choi2019empirical}; and
 they converge slowly compared to deterministic~\citep{nesterov2004lectures} or variance-reduced algorithms~\citep{leroux2012sag, johnson2013svrg, defazio2014saga} even when well-tuned.
-The issue of hyper-parameter tuning for \ac{SGD} is the focus of intense research, with approaches ranging from adaptive step-sizes inspired by online learning~\citep{luo2019adabound, li2019convergence, orabona2017coin} to meta-learning~\citep{baydin2018hypergradient, schraudolph1999local, sutton1992gain, almeida1998parameter, plagianakos2001learning, shao2000rates} and heuristics for online estimation~\citep{schaul2013no, rolinek2018l4, tan2016bb}.
-In contrast, the slow convergence of first-order methods in the general stochastic setting cannot be improved, with tight lower-bounds showing \( \Theta(\epsilon^{-4}) \) complexity for convergence to a stationary point~\citep{drori2019complexity, arjevani2019lower}.
+Hyper-parameter tuning for \ac{SGD} is the focus of intense research, with approaches ranging from adaptive step-sizes inspired by online learning~\citep{luo2019adabound, li2019convergence, orabona2017coin} to meta-learning~\citep{baydin2018hypergradient, schraudolph1999local, sutton1992gain, almeida1998parameter, plagianakos2001learning, shao2000rates} and heuristics for online estimation~\citep{schaul2013no, rolinek2018l4, tan2016bb}.
+In contrast, the slow convergence of first-order methods in the general stochastic setting cannot be improved, with tight lower-bounds showing \( \Theta(\epsilon^{-4}) \) iteration complexity for convergence to an \( \epsilon \)-approximate stationary point~\citep{drori2019complexity, arjevani2019lower}.
 This compares poorly to deterministic methods, which are \( \Theta(\epsilon^{-2}) \) for the same problem class~\citep{carmon2019lower}.
 
 Increasing experimental and theoretical evidence shows that the slow optimization speed of stochastic first-order methods is mitigated when training over-parameterized models~\citep{ma2018power, arora2018overparameterization, zhou2019analysis}.
@@ -26,18 +26,18 @@ A form of automatic reduction in gradient noise occurs~\citep{liu2020acceleratin
 The connection between over-parameterization and fast stochastic optimization has led to a wave of interest in analyzing first-order methods under interpolation and weak/strong growth.
 A number of works have shown that \ac{SGD} obtains the fast convergence rate of deterministic gradient methods for interpolating models~\citep{schmidt2013fast, bassily2018exponential, vaswani2019fast, cevher2018linear, jain2018accelerating}, while related research has established accelerated rates under an additional requirement for convexity~\citep{liu2020accelerating, vaswani2019fast, jain2018accelerating}.
 Sub-sampled second-order methods have also been explored and proved to have local linear convergence for specific function classes~\citep{meng2020fastandfurious}.
-These positive results show the interpolation setting is restrictive enough to break the \( \Omega\rbr{\epsilon^{-4}} \) barrier for stochastic first-order methods and attain the optimal \( \Theta(\epsilon^{-1}) \) complexity (up to problem-specific constants) for finding stationary points of smooth, convex functions~\citep{nemirovsky1985optimal, arjevani2016iteration}. 
+These positive results show the interpolation setting is restrictive enough to break the \( \Omega(\epsilon^{-4}) \) barrier for stochastic first-order methods and attain the optimal \( \Theta(\epsilon^{-1}) \) complexity (up to problem-specific constants) for finding stationary points of smooth, convex functions~\citep{nemirovsky1985optimal, arjevani2016iteration}. 
 
 Despite these rapid advances, theoretical rates and practical performance for \ac{SGD} under interpolation still rely on carefully selected hyper-parameters.
 A number of approaches from the general stochastic setting are rapidly being adopted to tackle this problem.
 For instance, several works have considered a stochastic version of the Polyak step-size, which does not require knowledge of the smoothness or convexity parameters~\citep{loizou2020sps, berrada2019training}. 
 Stochastic line-searches using the classic Armijo condition~\citep{armijo1966ls} have also been proposed and shown to obtain fast convergence under interpolation~\citep{vaswani2019painless}.
-Very recently, adaptive variants of \ac{SGD} without momentum have analyzed both with and without the Armijo line-search~\citep{vaswani2020adaptive}.
+Very recently, adaptive variants of \ac{SGD} have been analyzed both with and without the Armijo line-search~\citep{vaswani2020adaptive}.
 
-This thesis analyzes a small, but core group of methods in stochastic optimization under interpolation.
-The focus is on first-order algorithms; we consider constant step-size \ac{SGD}, \ac{SGD} with a stochastic Armijo line-search, and a version of Nesterov's accelerated gradient descent with stochastic gradients~\citep{nesterov2004lectures}. 
+This thesis analyzes a core group of first-order methods in stochastic optimization under interpolation.
+We consider constant step-size \ac{SGD}, \ac{SGD} with a stochastic Armijo line-search, and a version of Nesterov's accelerated gradient descent with stochastic gradients~\citep{nesterov2004lectures}. 
 In nearly all cases, we show that existing analyses can be tightened to yield faster convergence rates with a larger range of step-sizes. 
-In the case of acceleration, the improvement is comparable to taking the square-root of the condition number and addresses criticisms that previous analyses yield inferior rates to those of \ac{SGD} in some circumstances~\citep{liu2020accelerating}. 
+In the case of acceleration, the improvement is comparable dividing by the square-root of the condition number and addresses criticisms that previous analyses yield inferior rates to those of \ac{SGD} in some circumstances~\citep{liu2020accelerating}. 
 
 The thesis is organized as follows: 
 In \autoref{ch:interpolation-gc}, we formalize interpolation and the strong/weak growth conditions in the context of general stochastic oracles. 
@@ -79,19 +79,19 @@ Convexity can be relaxed to a more limited property called invexity.
 Formally, we say a differentiable function \( f \) is invex if all stationary points are also global minimizers of \( f \)~\citep{ben1986invexity}, meaning
 \[ \grad(\w) = 0 \implies f(\w) \leq f(v) \quad \quad \forall \, v \in \R^d.  \]
 Invexity is formally weaker than convexity and follows immediately from the first-order conditions for convexity given above.
-The analogue of strong-convexity for invex functions is the Polyak-Łojasiewicz (PL) condition~\citep{karimi2016linear}.
-A function is said to be \( \mu \)-PL if
+The analogue of strong-convexity for invex functions is the \ac{PL} condition~\citep{karimi2016linear}.
+A function is said to be \( \mu \)-\ac{PL} if
 \[ \frac{1}{2 \mu} \norm{\grad(\w)}^2 \leq f(\w) - f(\wopt), \]
 holds for all \( \w \in \R^d \).
-Again, the Polyak-Łojasiewicz condition is weaker than strong convexity; a \( \mu \)-strongly-convex function is \( \mu \)-PL, but the converse does not hold.
+Again, the \ac{PL} condition is weaker than strong convexity; a \( \mu \)-strongly-convex function is \( \mu \)-\ac{PL}, but the converse does not hold.
 
 In several cases, it will be useful to interpret our results in the context of finite-sum functions.
 The function \( f \) is said to be a finite-sum if it can be written as 
-\[ f(\w) = \frac{1}{n} \sum_{i=0}^n f_i(\w),  \]
+\[ f(\w) = \frac{1}{n} \sum_{i=1}^n f_i(\w),  \]
 where the individual (or sub-) functions \( f_i : \R^d \rightarrow \R \) may be strongly-convex, convex, or non-convex depending on the problem.
 Such objective functions arise naturally in empirical risk minimization, where \( f_i \) typically corresponds to a single training example \( (x_i, y_i) \) in a training set.
 For example, the classic least-squares regression objective can be written as 
-\[ f(\w) = \frac{1}{n} \sum_{i=0}^n \rbr{\abr{\w, x_i} - y_i}^2, \] 
+\[ f(\w) = \frac{1}{n} \sum_{i=1}^n \rbr{\abr{\w, x_i} - y_i}^2, \] 
 which is finite-sum with sub-functions \( f_i(\w) =  \rbr{\abr{\w, x_i} - y_i}^2 \).
 
 
@@ -168,7 +168,7 @@ The work in the thesis follows \citet{vaswani2019painless}, who investigated sto
 \noindent \textbf{Asymptotic Convergence}:
 The original paper by \citet{robbins1951sgd} establishes asymptotic, almost-sure convergence for \ac{SGD} to the zero of a convex function if the stochastic gradients are bounded and a decreasing step-size is used.
 Highly general analyses have since shown almost-sure convergence for non-convex functions when strong growth with additive noise is satisfied~\citep{bertsekas2000gradient, bottou1991approche}.
-Alternative work directly derives these conditions from properties of strongly-convex and non-convex functions, also for the purpose of proving almost-sure convergence~\citep{nguyen2018sgd, lei2019stochastic}.
+Alternative work directly derives these conditions from properties of strongly-convex or non-convex functions, also for the purpose of proving almost-sure convergence~\citep{nguyen2018sgd, lei2019stochastic}.
 Recently, asymptotic convergence was shown with Adagrad-style step-sizes instead of a fixed, decreasing schedule~\citep{li2019convergence}.
 
 

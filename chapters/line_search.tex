@@ -11,7 +11,7 @@ This leaves a dilemma: over-estimate the optimal step-size and risk divergence, 
 
 Line-search algorithms are a classic solution to the problem of step-size selection in the deterministic setting.
 The basic notion is search along the gradient direction (or, more generally, a descent direction) for a step-size that satisfies a desirable property.
-A common metric is the Armijo condition, 
+A common rule is the Armijo condition, 
  \begin{align}
      f(\wk - \etak v_k) &\leq f(\wk) + c \cdot \etak \abr{\grad(\wk), v_k},~\label{eq:deterministic-armijo-ls}
 \end{align}
@@ -42,7 +42,7 @@ An alternative to the full Armijo line-search is the following stochastic versio
 \begin{align}
     f(\wk - \etak v_k, \zk) &\leq f(\wk, \zk) + c \cdot \etak \abr{\grad(\wk, \zk), v_k}. \label{eq:armijo-ls}
 \end{align}
-This condition identical to \autoref{eq:deterministic-armijo-ls}, but uses stochastic function and gradient evaluations queried from the \ac{SFO}.
+This condition is identical to \autoref{eq:deterministic-armijo-ls}, but uses stochastic function and gradient evaluations queried from the \ac{SFO}.
 Intuitively, the stochastic Armijo condition requires sufficient decrease on \( f(\cdot, \zk) \), rather than \( f \).
 Note that practical backtracking on \autoref{eq:armijo-ls} will require \( f(\cdot, \zk) \) to be evaluated multiple times in the same iteration.
 This is straightforward in the finite-sum setting, but may be impossible when \( \zk \) reflects an inherently noisy measurement process. 
@@ -104,12 +104,12 @@ Specifically, it allows us to establish the following progress condition, which 
     Let \( f \) be a convex, \( L \)-smooth function and \oracle{} a \( \Lmax \) individually-smooth and convex \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfy minimizer interpolation.
     Then stochastic gradient descent using the Armijo line-search with \( c \geq \half \) satisfies the following
     inequality:
-    \[ f(\wk)- f(\wopt) \leq \max\cbr{\frac{\Lmax}{2(1-c)},\inv{\etamax}} \rbr{\norm{\wk - \wopt}^2 - \E_{\zk}\sbr{\norm{\wkk - \wopt}^2}}, \]
+    \[ f(\wk)- f(\wopt) \leq \half \max\cbr{\frac{\Lmax}{2(1-c)},\inv{\etamax}} \rbr{\norm{\wk - \wopt}^2 - \E_{\zk}\sbr{\norm{\wkk - \wopt}^2}}, \]
     where \( \wopt \in \calX^* \) is arbitrary.
 \end{restatable}
 \noindent See \autoref{app:line-search} for proof. \hfill \break
 
-Visual inspection of \autoref{lemma:ls-intermediate} immediately shows that it is the ideal inequality for 
+\autoref{lemma:ls-intermediate} is the ideal inequality for 
 \begin{inparaenum}[(a)]
     \item applying \( \mu \)-strong-convexity to obtain a recursion for \( \norm{\wk - \wopt}^2 \) and  a linear convergence rate, or
     \item summing over iterations to obtain sub-linear convergence of the average iterate \( \bar w_K \).
@@ -121,13 +121,13 @@ We start with the strongly-convex case.
     Let \( f \) be a \( \mu \)-strongly-convex, \( L \)-smooth function and \( \oracle{} \) an \( \Lmax \) individually-smooth and convex \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation.
     Then stochastic gradient descent using the Armijo line-search with \( c \geq \half \) converges as
     \begin{align*}
-        \E\sbr{\norm{\w_{K+1} - \wopt}^2} &\leq \rbr{1 - \mu \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax}}^K \norm{\w_0 - \wopt}^2. 
+        \E\sbr{\norm{\w_{K} - \wopt}^2} &\leq \rbr{1 - \mu \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax}}^K \norm{\w_0 - \wopt}^2. 
     \end{align*}
 \end{restatable}%
 \noindent See \autoref{app:sc-line-search} for proof. \hfill \break
 
 Setting \( c = \half \) and \( \etamax = \infty \) in \autoref{thm:sc-line-search} gives  
-\[ \E\sbr{\norm{\w_{K+1} - \wopt}^2} \leq \rbr{1 - \frac{\mu}{\Lmax}}^K \norm{\w_0 - \wopt}^2, \]
+\[ \E\sbr{\norm{\w_{K} - \wopt}^2} \leq \rbr{1 - \frac{\mu}{\Lmax}}^K \norm{\w_0 - \wopt}^2, \]
 which is exactly the rate obtained for fixed step-size \ac{SGD} in the same setting (cf. \autoref{thm:sgc-ind-convex}). 
 The convergence speed is also the same as the worst-case under the weak growth condition when interpolation and individual smoothness hold~\citep[Theorem 5]{vaswani2019fast}.
 While this latter result does not use individual convexity, we (intuitively) need this additional assumption when using a line-search in order for the step-size to yield reliable progress towards the global minimizer.
@@ -195,7 +195,7 @@ The unnecessary strictness of the original result prevents the natural case wher
     \label{table:ls-comparison}
 \end{table}
 
-The complexity of \ac{SGD} with the stochastic Armijo line-search is particularly challenging to determine for general non-convex functions.
+The complexity of \ac{SGD} with the stochastic Armijo line-search for general non-convex functions is particularly challenging to determine.
 As discussed below, proofs which analyze the sequence of distances to a minimizer \( \seq{\norm{\wk - \wopt}^2} \) fail without convexity.
 This includes the technique used to prove Theorems~\ref{thm:sc-line-search} and~\ref{thm:convex-line-search}.
 Instead, convergence to a stationary point is typically established through the quadratic majorant provided by \( L \)-smoothness of \( f \).

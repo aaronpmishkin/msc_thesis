@@ -51,7 +51,7 @@
                              \intertext{If \( c \geq \frac{1}{2} \) then \( \etak (\frac{1}{c} - 2) \rbr{f(\wk, \zk) - f(\wopt, \zk)} \leq 0 \) and }
        \norm{\wkk - \wopt}^2 &\leq - \frac{1}{c \Lmax} \rbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2.
    \intertext{We may combine cases by taking the loosest bound as follows:}
-       \implies \norm{\wkk - \wopt}^2 &\leq - \min\cbr{\frac{4(1-c)}{\Lmax}, 2\Lmax, \frac{1}{c \Lmax}} \rbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2.
+       \implies \norm{\wkk - \wopt}^2 &\leq - \min\cbr{\frac{4(1-c)}{\Lmax}, 2\etamax, \frac{1}{c \Lmax}} \rbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2.
        \intertext{Noting \( \frac{1}{c\Lmax} \geq \frac{4 (1-c)}{\Lmax} \) for \( c \in [0.5, 1] \) (with equality holding when \( c = \half \)) implies }
        \norm{\wkk - \wopt}^2 &\leq - 2 \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax} \rbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2.
                              \intertext{Taking expectations with respect to \( \zk \):}
@@ -76,7 +76,7 @@
            \Ek\sbr{\norm{\wkk - \wopt}^2} &\leq \norm{\wk - \wopt}^2  - \mu \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax}\norm{\wk - \wopt}^2 \\
                                                &= \rbr{1 - \mu \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax}} \norm{\wk - \wopt}^2.
                                                    \intertext{Taking expectations and recursing on the inequality,}
-       \implies \E \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \mu \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax}}^k \norm{\w_0 - \wopt}^2.
+           \implies \E \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \mu \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax}}^{k+1} \norm{\w_0 - \wopt}^2.
    \end{align*} 
 \end{proof}
 

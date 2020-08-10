@@ -22,15 +22,15 @@ This chapter formalizes interpolation in the context of stochastic optimization.
 In particular, we do the following:
 \begin{enumerate}
     \item Define the concept of a \ac{SFO} \oracle{} and propose a new Lipschitz-smoothness property for \acp{SFO}, which we call individually-smoothness. 
-    \item Give three specific notions of interpolation in the context of a \acl{SFO} and objective function pair \( \rbr{f, \oracle{}} \). 
-    These are the first definitions of interpolation applicable to the general stochastic setting.
+    \item Give three specific definitions of interpolation in the context of a \acl{SFO} and objective function pair \( \rbr{f, \oracle{}} \). 
+    These are the first definitions applicable to the general stochastic setting.
     \item Characterize the relationships between the three models of interpolation as well as connections to strong and weak growth. 
 In particular, we show that interpolation implies weak growth if \oracle{} is individually-smooth; this relaxes existing sufficient conditions which further assume \( f \) is convex and finite-sum~\citep{vaswani2019fast}. 
 \end{enumerate}
 We begin with the discussion of stochastic oracles.
 
 \section{Stochastic Oracles}~\label{sec:stochastic-oracles}
-% As stated above, this work is primarily concerned with the analysis of iterative methods for stochastic optimization.
+
 The defining feature of stochastic optimization algorithms is that they cannot directly access the value or gradient of the objective function \( f \).
 Instead, they obtain noisy function and gradient evaluations through a \ac{SFO}  \oracle. 
 At each iteration \( k \), \oracle{} outputs a stochastic function \( f(\w, \zk) \) and gradient \( \grad(\w, \zk) \) at query point \( \w \), where \( \zk \) is a random variable with distribution \( \mu_k \) supported on \( \calZ_k \subseteq \R^m \), \( m > 0 \).%%
@@ -80,10 +80,10 @@ The following example demonstrates individual smoothness in the context of least
     The classic least-squares regression problem
     \[ \wopt = \argmin \frac{1}{n} \sum_{i=1}^n \rbr{\abr{w, x_i} - y_i}^2, \]
     has a finite-sum structure with \( f_i(\w) =  \rbr{\abr{w, x_i} - y_i}^2\).
-    The mini-batch \ac{SFO} uniformly sub-samples \( m \leq n \) examples to obtain the following function and gradient estimators:
-    \[ f(\w, \z) = \frac{1}{|\z|} \sum_{i \in \z}  \rbr{\abr{w, x_i} - y_i}^2 \; \text{ and } \; \grad(\w, \z) = \frac{1}{|\z|} \sum_{i \in \z} 2 \rbr{\abr{w, x_i} - y_i} x_i, \]
-    where the support set of \oracle{} is \( \calZ = \cbr{ A \subseteq \cbr{1, \dots, n} : |A| = m } \).
-    Notice that \( f(\cdot, \z) \) is convex and \( L_z \)-smooth with \( L_z = 2 \norm{\sum_{i \in \z} x_z x_z^\top}_\text{op}^2 \), where $\norm{\cdot}_{\text{op}}$ is the operator norm.
+    The mini-batch \ac{SFO} uniformly sub-samples \( b \leq n \) examples to obtain the following function and gradient estimators:
+    \[ f(\w, \z) = \frac{1}{b} \sum_{i \in \z}  \rbr{\abr{w, x_i} - y_i}^2 \; \text{ and } \; \grad(\w, \z) = \frac{1}{b} \sum_{i \in \z} 2 \rbr{\abr{w, x_i} - y_i} x_i, \]
+    where \( \z \in \calZ = \cbr{ A \subseteq \cbr{1, \dots, n} : |A| = b } \) is the set of sampled indices.
+    Notice that \( f(\cdot, \z) \) is convex and \( L_z \)-smooth with \( L_z = \frac{2}{b} \norm{\sum_{i \in \z} x_z x_z^\top}_\text{op}^2 \), where $\norm{\cdot}_{\text{op}}$ is the operator norm.
     This implies \oracle{} is individually-convex and \( \Lmax \) individually-smooth with \( \Lmax \leq 2 \max_{i \in [n]} \norm{x_i}^2 \). 
 \end{example}
 
@@ -103,7 +103,7 @@ As with individual smoothness, interpolation is shown to have a simple realizati
 The basic requirement of interpolation is that the oracle outputs \( f(\cdot, \z) \) and \( \grad(\cdot, \z) \) resemble the true function at key target points.  
 The axes of variation in the definitions to follow are (a) the specific target points and (b) the type of ``matching'' required.
 Unlike classic interpolation, matching here refers to mutual optimality or mutual stationarity, rather than a requirement for equal function values; 
-enforcing \( f(\wopt) = f(\wopt, \z) \) is not useful from an optimization perspective, since \( \grad(\wopt, \z) \) could be non-zero.
+enforcing \( f(\wopt) = f(\wopt, \z) \) may not be useful from an optimization perspective, since \( \grad(\wopt, \z) \) could be non-zero.
 The three definitions are as follows:
 
 \begin{definition}[Interpolation: Minimizers]\label{def:interpolation-minima}
@@ -252,11 +252,12 @@ An important consequence of \autoref{lemma:sgc-finite-support} is the equivalenc
 This nicely reflects the original use of maximal strong growth for incremental gradient methods. 
 Finally, we complete our statement of growth conditions with weak growth, which was recently proposed by \citet{vaswani2019fast} as a further relaxation of strong growth.
 \begin{definition}[Weak Growth Condition]\label{def:wgc}
-    A function-oracle pair \( \rbr{f, \oracle{}} \) satisfies weak growth with parameter \(\alpha \) if
+    Let \( f \) be an \( L \)-smooth function an \oracle{} an \ac{SFO}. 
+    The pair \( \rbr{f, \oracle{}} \) satisfies weak growth with parameter \(\alpha \) if
     \[ \Ek \sbr{\norm{\grad(\w, \zk)}^2} \leq \alpha L (f(\w) - f(\wopt)), \]
     holds for all \( k \geq 0 \) and \( \w \in \R^d\).
 \end{definition}
-\noindent If \( f \) is \( \mu \)-PL, then the weak growth condition implies strong growth holds with parameter \( \rho \leq \frac{\alpha L}{\mu} \) \citep[Proposition 1]{vaswani2019fast}.
+\noindent If \( f \) is \( \mu \)-\ac{PL}, then the weak growth condition implies strong growth holds with parameter \( \rho \leq \frac{\alpha L}{\mu} \) \citep[Proposition 1]{vaswani2019fast}.
 In fact, the converse relation holds if \( f \) is Lipschitz-smooth, as we now show.
 \begin{restatable}{lemma}{sgcWGCRelationship}\label{lemma:sgc-wgc-relationship}
     Let \( \rbr{f, \oracle{}} \) be a function-oracle pair satisfying the strong growth condition with parameter \( \rho \).
@@ -265,11 +266,10 @@ In fact, the converse relation holds if \( f \) is Lipschitz-smooth, as we now s
 \end{restatable}     
 \noindent See \autoref{app:growth-conditions} for proof.\hfill \break
 
-We can now elucidate the exact relationship between growth conditions and interpolation.
-In fact, several easy calculations are sufficient to show that various forms of interpolation are implied by strong and weak growth.
+We now give the exact relationships between the strong/weak growth conditions and interpolation.
 As mentioned above, maximal strong growth immediately implies stationary-point interpolation.
 Strong growth with \( \w = \wopt \) gives  
-\[ \E_k\sbr{\grad(\wopt, \zk)} = 0, \] 
+\[ \E_k\sbr{\norm{\grad(\wopt, \zk)}^2} = 0, \] 
 for all \( k \), after which non-negativity of the Euclidean norm guarantees \( \grad(\wopt, \zk) = 0 \) almost-surely and stationary-point interpolation holds.
 Replicating this last argument under weak growth shows that the weak growth condition implies mixed interpolation.
 The reverse implications are more involved; we establish them formally in the following lemmas. 
@@ -286,7 +286,7 @@ We can derive similarly relaxed sufficient conditions for strong growth using th
 The following lemma does exactly this.
 
 \begin{restatable}[Interpolation and Strong Growth]{lemma}{interpToSGC}~\label{lemma:interpolation-to-sgc}
-    Let \( f \) be a \( L \)-smooth  \( \mu \)-PL function and \oracle{} an \( \Lmax \) individually-smooth \ac{SFO}.
+    Let \( f \) be a \( L \)-smooth  \( \mu \)-\ac{PL} function and \oracle{} an \( \Lmax \) individually-smooth \ac{SFO}.
     If \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation, then the pair also satisfies the strong growth condition with parameter
     \[ \rho \leq \frac{L_{\text{max}}}{\mu}. \]
 \end{restatable}
@@ -295,4 +295,5 @@ The following lemma does exactly this.
 Lemmas~\ref{lemma:interpolation-to-wgc} and~\ref{lemma:interpolation-to-sgc} show that minimizer interpolation implies global regularity of the stochastic gradients when \oracle{} is individually-smooth. 
 As a by-product, we obtain worst-case bounds on the strong and weak growth parameters and demonstrate the ``automatic variance reduction'' property~\citep{liu2020accelerating}, which guarantees \( \E_k\norm{\grad(\wk, \zk)}^2 \rightarrow 0 \) if \( \wk \rightarrow \wopt \) in the interpolation setting.
 As we shall see in the coming chapters, these conditions are sufficient for the convergence of constant step-size \ac{SGD}, as well as effective line-search techniques and acceleration. 
-% This fulfills the promise of this section and, more generally, the chapter. 
+
+\todo{Recap and summary table?}

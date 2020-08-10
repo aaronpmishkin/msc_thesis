@@ -19,7 +19,7 @@ the pair \( \rbr{F, \oracle{}_2} \) will \emph{not} satisfy interpolation or wea
 This means the analyses from previous chapters cannot be applied directly to regularized problems.
 
 There is still significant reason to believe the \( L_2 \)-regularization of \( f \) can be minimized efficiently when \( \rbr{f, \oracle{}} \) satisfy the weak growth condition.
-For example, \( f(\wopt) - f(\wbar) \) will to be small when \( \lambda \ll L \) and so we might expect \( \rbr{F, \oracle{}_2} \) to approximately satisfy weak growth. 
+For example, \( f(\wopt) - f(\wbar) \) will be small when \( \lambda \ll \mu \) and so we might expect \( \rbr{F, \oracle{}_2} \) to approximately satisfy weak growth. 
 On the other hand, \( \oracle{}_2 \) will become nearly deterministic as \( \lambda \rightarrow \infty \) and \( \frac{\lambda}{2} \norm{\w}^2 \) dominates \( f \).
 Intuition indicates that it is only when \( \lambda \) is moderate that minimizing \( F \) will be challenging.
 The next lemma formalizes these observations into a version of weak growth which holds for \( \rbr{F, \oracle{}_2} \).
@@ -46,7 +46,7 @@ In the case that \( \mu = 0 \), we are still able to obtain linear convergence b
 \begin{restatable}{theorem}{sgdReguarlizedWGC}\label{thm:sgd-regularized-wgc}
     Let \( f \) be a \( \mu \)-strongly-convex (with \( \mu = 0 \) in the convex case), \( L \)-smooth function with at least one finite minimizer \( \wbar \) and \oracle{} a \ac{SFO} such that the pair \( \rbr{f, \oracle{}} \) satisfies the weak growth condition with constant \( \rho \).
     Then stochastic gradient descent with constant step-size \( \eta \leq \frac{\mu + \lambda}{\max\cbr{\rho L, \lambda}\rbr{(\mu + \lambda) + (L + \lambda)}} \) obtains the following convergence rate for the \( L_2 \)-regularized problem \( \rbr{F, \oracle{}_2} \):
-    \[  \E\sbr{\norm{\wkk - \wopt}^2} \leq \rbr{1 - \frac{2 \eta (\mu + \lambda)(L + \lambda)}{(\mu + \lambda) + (L + \lambda)}}^k \norm{\w_0 - \wopt}^2 + \gamma\rbr{\lambda \norm{\wbar}^2 - \rbr{\lambda + \mu}\norm{\wopt - \wbar}^2}, \]
+    \[  \E\sbr{\norm{\w_K - \wopt}^2} \leq \rbr{1 - \frac{2 \eta (\mu + \lambda)(L + \lambda)}{(\mu + \lambda) + (L + \lambda)}}^K \norm{\w_0 - \wopt}^2 + \gamma\rbr{\lambda \norm{\wbar}^2 - \rbr{\lambda + \mu}\norm{\wopt - \wbar}^2}, \]
     where \( \gamma = \frac{\eta \max\cbr{\rho L, \lambda} \sbr{(\mu + \lambda) + (L + \lambda)}}{(\mu + \lambda)(L + \lambda)}. \)  
 \end{restatable}
 \noindent See \autoref{app:regularized-convex} for proof. \hfill \break
@@ -57,7 +57,7 @@ We make the following observations about the effect of \( \lambda \) on region o
 \item the minimizer \( \wopt \) depends on \( \lambda \), with \( \wopt = \wbar \) when \( \lambda = 0 \) --- it is easy to see that the neighborhood terms collapse to \( 0 \) and convergence mirrors \autoref{thm:sgc-convex} in when \( \lambda = 0 \) holds;
 \item as \( \lambda \rightarrow \infty \), \( \wopt \rightarrow 0 \) and the neighborhood again collapses to \( 0 \); and 
 \item when \( f \) is convex and \( \eta \) attains is maximal value, the convergence rate of \ac{SGD} has the special case 
-\[  \E\sbr{\norm{\wkk - \wopt}^2} \leq \rbr{1 - \frac{2 \lambda^2(L + \lambda)}{\max\cbr{\rho L, \lambda} \rbr{L + 2\lambda}^2}}^k \norm{\w_0 - \wopt}^2 + \frac{\lambda}{\rbr{L + \lambda}}\rbr{\norm{\wbar}^2 - \norm{\wopt - \wbar}^2}. \]
+\[  \E\sbr{\norm{\w_K - \wopt}^2} \leq \rbr{1 - \frac{2 \lambda^2(L + \lambda)}{\max\cbr{\rho L, \lambda} \rbr{L + 2\lambda}^2}}^K \norm{\w_0 - \wopt}^2 + \frac{\lambda}{\rbr{L + \lambda}}\rbr{\norm{\wbar}^2 - \norm{\wopt - \wbar}^2}. \]
 Crudely assuming \( \frac{\lambda}{\lambda + L} \approx 1 \) shows that the volume of the neighborhood largely depends on the convergence of \( \wopt \) to \( 0 \) as \( \lambda \) grows.
 \end{inparaenum}
 
