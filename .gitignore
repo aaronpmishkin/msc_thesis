@@ -27,3 +27,7 @@ main.pdf
 
 # vim tags
 tags
+
+
+# system files
+.DS_STORE
