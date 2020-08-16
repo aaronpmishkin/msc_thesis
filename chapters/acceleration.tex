@@ -44,7 +44,8 @@ the goal of this chapter is to extend the estimating sequences framework~\citep{
                     \[ \ykk = \wkk + \beta_k (\wkk - \wk).  \] 
             \end{enumerate}
     \end{procedure}
-    \caption{Nesterov's accelerated gradient descent (AGD) with stochastic gradients.}%
+    \caption[Classic procedural definition of Nesterov's accelerated gradient descent algorithm.]%
+        {Classical form of \ac{AGD} with stochastic gradients.}%
     \label{procedure:accelerated-sgd}
 \end{figure} 
 
@@ -133,7 +134,8 @@ We do this now.
                     \[ \wkk = \wk - \frac{1}{\sgc L} \grad(\yk, \zk). \]
             \end{enumerate}
     \end{procedure}
-    \caption{Reformulation of Nesterov's accelerated gradient descent (AGD) as alternating steps of gradient gradient on \( \phi \) and \ac{SGD} on \( f \).}%
+    \caption[Reformulation of Nesterov's accelerated gradient descent as an alternating descent procedure.]%
+        {Reformulation of \ac{AGD} as alternating steps of gradient descent on \( \phi \) and \ac{SGD} on \( f \).}%
     \label{procedure:reformulated-agd}
 \end{figure}
 
@@ -218,7 +220,10 @@ This tighter rate addresses the criticism of~\citet{liu2020accelerating}, who sh
         Convex       & \( O\rbr{\sqrt{\frac{\sgc L}{\epsilon}}\,} \)%
                      & \( O\rbr{\sqrt{\frac{\sgc^2 L}{\epsilon}}\,} \)\\ \addlinespace 
         \end{tabular}
-        \caption{Comparison of iteration complexities for stochastic acceleration schemes under the strong growth condition. For each result, we report the complexity obtained with the optimal step-size and momentum parameter according to the analysis. Our results are tighter than VBS~\citep{vaswani2019fast} by a factor of \( \sqrt{\rho} \).}%
+        \caption[Comparison of iteration complexities for stochastic acceleration schemes under strong growth.]%
+           {Comparison of iteration complexities for stochastic acceleration schemes under the strong growth condition.
+            For each result, we report the complexity obtained with the optimal step-size and momentum parameter according to the analysis.
+            Our results are tighter than VBS~\citep{vaswani2019fast} by a factor of \( \sqrt{\rho} \).}%
     \label{table:agd-comparison}
 \end{table}
 

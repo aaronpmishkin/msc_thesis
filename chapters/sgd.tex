@@ -31,7 +31,9 @@ we shall see that such results are not straightforward in the non-asymptotic reg
             \[ \wkk = \wk - \eta \grad(\wk, \zk). \]
     \end{enumerate}
 \end{procedure}
-\caption{Stochastic gradient descent with a fixed step-size \( \eta \). Note that only one query to the stochastic oracle is needed per-iteration.}~\label{procedure:sgd}
+\caption[Procedural definition of stochastic gradient descent with a fixed step-size.]%
+        {Stochastic gradient descent with a fixed step-size \( \eta \). 
+         Note that only one query to the stochastic oracle is needed per-iteration.}~\label{procedure:sgd}
 \end{figure}
 
 Now, let us briefly introduce \ac{SGD} with a fixed step-size before diving into the analysis.
@@ -127,7 +129,11 @@ If \( \mu < L \), then \( \frac{\mu + L}{L \Lmax} < \frac{2}{\Lmax} \) and the f
                  & \( O\rbr{\frac{\mumax + \Lmax}{4 \delta_{\text{min}}} \log\rbr{\frac{1}{\epsilon}}} \)%
                  & \multicolumn{1}{c}{N/A} \\ \bottomrule 
     \end{tabular}
-    \caption{Comparison of iteration complexities of fixed step-size \ac{SGD} for \( \mu \)-SC \( f \) under the strong growth condition. For each result, we report the complexity obtained with the optimal step-size according to that analysis. Recall from \autoref{thm:sgc-ind-sc} that \( \delta_{\text{min}} = \min_{\z \in \calZ} \frac{\mu_\z L_\z}{\mu_\z + L_\z} \). The first row shows our results for general \oracle{} are tighter than SLR \citep{schmidt2013fast} because they allow for larger step-sizes.}%
+    \caption[Comparison of iteration complexities of fixed step-size stochastic gradient descent for strongly-convex functions under strong growth.]%
+    {Comparison of iteration complexities of fixed step-size \ac{SGD} for \( \mu \)-SC \( f \) under the strong growth condition.
+     For each result, we report the complexity obtained with the optimal step-size according to that analysis.
+    Recall from \autoref{thm:sgc-ind-sc} that \( \delta_{\text{min}} = \min_{\z \in \calZ} \frac{\mu_\z L_\z}{\mu_\z + L_\z} \).
+     The first row shows our results for general \oracle{} are tighter than SLR \citep{schmidt2013fast} because they allow for larger step-sizes.}%
     \label{table:sgd-sc-comparison}
 \end{table}
 
@@ -208,7 +214,10 @@ where \( \frac{2}{\Lmax} \) is the condition obtained when deriving weak growth 
                  & \( O\rbr{\frac{\Lmax}{2 \epsilon}} \)%
                  & \multicolumn{1}{c}{N/A} \\ \bottomrule 
     \end{tabular}
-    \caption{Comparison of iteration complexities of fixed step-size \ac{SGD} for convex \( f \) under the weak growth condition. For each result, we report the complexity obtained with the optimal step-size according to that analysis. Our results are tighter than VBS~\citep{vaswani2019fast} and allow for larger step-sizes.}%
+    \caption[Comparison of iteration complexities of fixed step-size stochastic gradient descent for convex functions under weak growth. ]%
+    {Comparison of iteration complexities of fixed step-size \ac{SGD} for convex \( f \) under the weak growth condition.
+    For each result, we report the complexity obtained with the optimal step-size according to that analysis.
+    Our results are tighter than VBS~\citep{vaswani2019fast} and allow for larger step-sizes.}%
     \label{table:sgd-comparison}
 \end{table}
 

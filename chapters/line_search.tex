@@ -30,14 +30,14 @@ In this work we assume that backtracking can be accomplished exactly, meaning th
 \begin{figure}[t]
     \centering
     \input{figures/line_search.tex}
-    \caption{
-        Progress when using the stochastic Armijo line-search with and without minimizer interpolation.
+    \caption[Progress made by stochastic gradient descent when using the stochastic Armijo line-search with and without minimizer interpolation.]%
+       {Progress when using the stochastic Armijo line-search with and without minimizer interpolation.
         The function \( f_{v_k} \) is the restriction of \( f \) to the descent direction \( v_k = -\grad(\wk) \), while \( \ell_{v_k} \) is the Armijo condition as a function of the step-size, \( \eta \).
         The dashed red line shows the restriction of the stochastic function \( f(\w, \z) \) to \( v_k \).
         The next iterate \( \wkk \) is obtained by choosing the largest step-size satisfying the line-search. 
         When interpolation is not satisfied, we ``over-shoot'' significantly and \( f(\wkk) > f(\wk) \) as a result.
         In contrast, minimizer interpolation ensures that the iteration makes progress towards \( \wopt \). 
-        Note that \( f(\wk,\z) = f(\wk) \) for convenience only and this need not hold in general. 
+        Note that \( f(\wk,\z) = f(\wk) \) for convenience only; this need not hold in general. 
     }%
     \label{fig:interpolation-ls}
 \end{figure}
@@ -67,19 +67,22 @@ In particular, we establish the following results under minimizer interpolation:
 \end{enumerate}
 
 \begin{figure}[t]
-\begin{procedure}{\ac{SGD} with Armijo Line-Search}
-\item Choose an initial point \( \w_0 \in \R^d \).
-\item For each iteration \( k \geq 0 \):
-    \begin{enumerate}
-        \item Query \oracle{} for \( f(\wk, \zk), \: \grad(\wk, \zk) \). 
-        \item Set \( \etak =  \etamax \) and backtrack until 
-            \[  \hspace{-1em} f(\wk - \etak \grad(\wk, \zk), \zk) \leq f(\wk, \zk) - c \cdot \etak \norm{\grad(\wk, \zk)}^2. \]
-        \item Update input as\vspace{-1ex}%
-            \[ \wkk = \wk - \etak \grad(\wk, \zk). \]
-    \end{enumerate}
-\end{procedure}
-\caption{Stochastic gradient descent with an Armijo line-search. We assume that the backtracking procedure can be evaluated exactly, meaning the maximal step-size \( \etak \) satisfying the Armijo is selected. Note that \oracle{} must be queried for additional function values \( f(\wkk, \zk) \) during backtracking.}%
-\label{procedure:armijo-ls}
+    \begin{procedure}{\ac{SGD} with Armijo Line-Search}
+    \item Choose an initial point \( \w_0 \in \R^d \).
+    \item For each iteration \( k \geq 0 \):
+        \begin{enumerate}
+            \item Query \oracle{} for \( f(\wk, \zk), \: \grad(\wk, \zk) \). 
+            \item Set \( \etak =  \etamax \) and backtrack until 
+                \[  \hspace{-1em} f(\wk - \etak \grad(\wk, \zk), \zk) \leq f(\wk, \zk) - c \cdot \etak \norm{\grad(\wk, \zk)}^2. \]
+            \item Update input as\vspace{-1ex}%
+                \[ \wkk = \wk - \etak \grad(\wk, \zk). \]
+        \end{enumerate}
+    \end{procedure}
+    \caption[Procedural definition of stochastic gradient descent with the stochastic Armijo line-search.]%
+        {Stochastic gradient descent with the stochastic Armijo line-search.
+        We assume that the backtracking procedure can be evaluated exactly, meaning the maximal step-size \( \etak \) satisfying the Armijo is selected.
+        Note that \oracle{} must be queried for additional function values \( f(\wkk, \zk) \) during backtracking.}%
+    \label{procedure:armijo-ls}
 \end{figure}
 
 Now, let us introduce a more formal definition of \ac{SGD} with the Armijo line-search before proceeding with our analysis.
@@ -95,8 +98,8 @@ While \autoref{procedure:armijo-ls} uses an idealized backtracking procedure, in
 \begin{figure}[t]
     \centering
     \input{figures/step_size_bound.tex}
-    \caption{%
-        Graphical depiction of \autoref{lemma:step-size-bound}.
+    \caption[Step-size intervals accepted and rejected by the Armijo line-search for a Lipschitz-smooth function.]%
+       {Graphical depiction of \autoref{lemma:step-size-bound}.
         The function \( f_{v_k} \) is the restriction of \( f \) to the descent direction \( v_k = -\grad(\wk) \), while \( \ell_{v_k} \) is the Armijo condition as a function of the step-size, \( \eta \).
         The dashed red line shows the upper-bound on \( f_{v_k} \) due to Lipschitz-smoothness.
         We can see that a large range of step-size make sufficient progress (yellow region) and will be accepted by the Armijo condition; step-sizes for which the graph of \( \ell_{v_k} \) lies below \( f_{\vk} \) (red region) do not make enough progress and will be rejected. 
@@ -210,7 +213,12 @@ The unnecessary strictness of the original result prevents the natural case wher
                  & \( O\rbr{\frac{\Lmax}{2 \, \epsilon}} \)%
                  & \( O\rbr{\frac{3 \Lmax}{\epsilon}} \)\\ \addlinespace 
         \end{tabular}
-        \caption{Comparison of iteration complexities for \ac{SGD} with the stochastic Armijo line-search.  We omit results for non-convex functions, which are identical between the two works. Results are shown for \( \etamax = \infty \) and \( c = \frac{1}{2} \), excepting the convex case of VML \citep{vaswani2019painless} where \( c = \frac{2}{3} \) is used as suggested by the authors. The constant \( \bar \mu = \min_k \cbr{\E_{\zk} \sbr{\mu_{zk}} } \) requires that at least one stochastic function in the support of \( \zk \) is strongly convex for each iteration \( k \); in contrast, our strongly-convex proof relies only on \( \mu \), the parameter of the true function.  }%
+        \caption[Comparison of iteration complexities for stochastic gradient descent with the stochastic Armijo line-search.]%
+        {Comparison of iteration complexities for \ac{SGD} with the stochastic Armijo line-search.
+         We omit results for non-convex functions, which are identical between the two works.
+         Results are shown for \( \etamax = \infty \) and \( c = \frac{1}{2} \), excepting the convex case of VML \citep{vaswani2019painless} where \( c = \frac{2}{3} \) is used as suggested by the authors.
+         The constant \( \bar \mu = \min_k \cbr{\E_{\zk} \sbr{\mu_{zk}} } \) requires that at least one stochastic function in the support of \( \zk \) is strongly convex for each iteration \( k \);
+         in contrast, our strongly-convex proof relies only on \( \mu \), the parameter of the true function.  }%
     \label{table:ls-comparison}
 \end{table}
 
