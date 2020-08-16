@@ -29,9 +29,16 @@ In this work we assume that backtracking can be accomplished exactly, meaning th
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=0.4\linewidth]{example-image-a}
-    \includegraphics[width=0.4\linewidth]{example-image-b}
-    \caption{Progress on stochastic functions with and without minimizer interpolation.}%
+    \input{figures/line_search.tex}
+    \caption{
+        Progress when using the stochastic Armijo line-search with and without minimizer interpolation.
+        The function \( f_{v_k} \) is the restriction of \( f \) to the descent direction \( v_k = -\grad(\wk) \), while \( \ell_{v_k} \) is the Armijo condition as a function of the step-size, \( \eta \).
+        The dashed red line shows the restriction of the stochastic function \( f(\w, \z) \) to \( v_k \).
+        The next iterate \( \wkk \) is obtained by choosing the largest step-size satisfying the line-search. 
+        When interpolation is not satisfied, we ``over-shoot'' significantly and \( f(\wkk) > f(\wk) \) as a result.
+        In contrast, minimizer interpolation ensures that the iteration makes progress towards \( \wopt \). 
+        Note that \( f(\wk,\z) = f(\wk) \) for convenience only and this need not hold in general. 
+    }%
     \label{fig:interpolation-ls}
 \end{figure}
 
@@ -85,6 +92,18 @@ There are several key differences from fixed step-size \ac{SGD}, which are noted
 \end{inparaenum}
 While \autoref{procedure:armijo-ls} uses an idealized backtracking procedure, in practice the hyper-parameter \( \beta \) may need to be tuned to avoid excessive oracle queries. 
 
+\begin{figure}[t]
+    \centering
+    \input{figures/step_size_bound.tex}
+    \caption{%
+        Graphical depiction of \autoref{lemma:step-size-bound}.
+        The function \( f_{v_k} \) is the restriction of \( f \) to the descent direction \( v_k = -\grad(\wk) \), while \( \ell_{v_k} \) is the Armijo condition as a function of the step-size, \( \eta \).
+        The dashed red line shows the upper-bound on \( f_{v_k} \) due to Lipschitz-smoothness.
+        We can see that a large range of step-size make sufficient progress (yellow region) and will be accepted by the Armijo condition; step-sizes for which the graph of \( \ell_{v_k} \) lies below \( f_{\vk} \) (red region) do not make enough progress and will be rejected. 
+        Smoothness guarantees that \( \ell_{v_k} \) is above \( f_{v_k} \) for a non-empty interval of step-sizes (green region), which will always be accepted.%
+    }%
+    \label{fig:step-size-bound}
+\end{figure}
 
 The first step of our analysis is to control the step-size \( \etak \) using smoothness and the line-search condition.
 Lower-bounding the step-size relies on smoothness of \( f(\cdot, \zk) \), which is why the results in this chapter require \oracle{} to be individually-smooth. 

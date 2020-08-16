@@ -172,8 +172,21 @@
 \usepackage{makecell}
 
 %% tikz
-\usepackage{pgfplots}
 \usepackage{tikz}
+\usepackage{pgfplots}
+\usepgfplotslibrary{fillbetween}
+\usetikzlibrary{patterns}
+%% pgf and tikz options.
+\pgfplotsset{
+    compat=1.5.1,
+    oracle/.style={color=red, style=dashed, line width=1.5pt},
+    bound/.style={color=blue, style=solid, line width=1.5pt},
+    objective/.style={color=black, style=solid, line width=1.5pt},
+}
+
+\tikzset{
+    font={\fontsize{18pt}{12}\selectfont},
+}
 
 %% add numbers to align* environments.
 \newcommand{\addnumber}{\addtocounter{equation}{1}\tag{\theequation}}

@@ -138,7 +138,16 @@ This is stated in the following lemma.
 For completeness, a short proof with counter-examples for the implications which do not hold is given in \autoref{app:interpolation-gc}.
 
 
-\input{figures/interpolation}
+\begin{figure}[t]
+    \centering
+    \input{figures/interpolation}
+    \caption{Oracle samples satisfying the three different models of interpolation for the same non-convex function.
+             The dashed red-line is the graph of \( f(\w, \z) \) for a single, fixed \( \z \in \calZ \).
+             Stationary-points are denoted as \( w' \), while the global minimizer is marked as \( \wopt \).
+             Note that \( f(\w, \z) \) is permitted to have many ``extra'' stationary points when \oracle{} satisfies stationary-point interpolation.
+         Similarly, mixed interpolation does not prevent \( f(\w, \z) \) from being unbounded below.}%
+\label{fig:interpolation-types}
+\end{figure}
 
 Let us return to the finite-sum setting and mini-batch oracle to better understand the three definitions of interpolation.
 In particular, let \( f \) and \oracle{} be such that

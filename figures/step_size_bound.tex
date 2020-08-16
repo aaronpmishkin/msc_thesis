@@ -1,0 +1,52 @@
+%! TEX root = ../../main.tex
+%% Illustration of step-sizes bound from Armijo line-search. 
+
+\begin{tikzpicture}[
+      declare function={
+        objective(\x)=      (\x<=-1) * (2*\x*\x + 6*\x + 4)    +
+        and(\x>-1, \x<=1) * (\x + 5 - pow(\x,3) - 5*\x*\x) / 4 +
+                            (\x>1) * (\x*\x - 5*\x + 4); 
+        upperBound(\x)=     ( 3*(1 - \x) + 2*pow(\x - 1, 2)); 
+        lineSearch(\x)=     ( 0 - 9 * (\x - 1) / 20 ); 
+      }
+    ]
+    \begin{axis}[
+      width=0.9\textwidth,
+      height=8cm,
+      axis x line=none, axis y line=none,
+      ymin=-3.25, ymax=5, ytick={-5,...,5}, ylabel=$y$,
+      xmin=-3.5, xmax=5.5, xtick={-5,...,7}, xlabel=$x$,
+    ]
+
+    \addplot[name path=function, domain=-3.5:5.23, samples=100, objective, line width=2pt]{objective(x)};
+    \addplot[name path=upperBound, domain=-3.5:7, samples=100, oracle, line width=2pt]{upperBound(x)};
+    \addplot[name path=lineSearch, ->, domain=1:5.3, samples=100, bound, line width=2pt]{lineSearch(x)};
+    \addplot[name path=lineSearchEnd, domain=3.55:5.2, samples=20, opacity=0, line width=2pt]{lineSearch(x)};
+
+    \addplot fill between[ 
+        of = function and lineSearch, 
+        split, % calculate segments
+        every even segment/.style = {fill=none},
+        every odd segment/.style  = {fill=yellow, fill opacity=0.7}
+     ];
+    
+    \addplot fill between[ 
+        of = function and lineSearchEnd, 
+        split, % calculate segments
+        every even segment/.style = {fill=none},
+        every odd segment/.style  = {fill=red, fill opacity=0.7}
+     ];
+
+    \addplot fill between[ 
+        of = upperBound and lineSearch, 
+        split, % calculate segments
+        every even segment/.style = {fill=none},
+        every odd segment/.style  = {fill=green, fill opacity=0.8}
+     ];
+    \node[label={180:$\wk$},circle,fill,inner sep=2pt] at (axis cs:1,0) {};
+    
+    \node[label={180:$f_{v_k}(\eta)$}] at (axis cs:-2.2,0.3) {};
+    \node[label={0:{$\ell_{v_k}(\eta)$}}] at (axis cs:3.6,-2.4) {};
+    %\node[label={180:{$h_{v_k}(\eta)$}}] at (axis cs:0.3,3) {};
+    \end{axis}
+\end{tikzpicture} 
