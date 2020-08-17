@@ -3,16 +3,22 @@
 
 \chapter{Abstract}
 
-\todo{Write abstract}
+Current machine learning practice requires solving huge-scale empirical risk minimization problems quickly and robustly. 
+These problems are often highly under-determined and admit multiple solutions which exactly fit, or \emph{interpolate}, the training data. 
 
-% Consider placing version information if you circulate multiple drafts
-%\vfill
-%\begin{center}
-%\begin{sf}
-%\fbox{Revision: \today}
-%\end{sf}
-%\end{center}
+In such cases, stochastic gradient descent has been shown to converge without decreasing step-sizes or averaging, and can achieve the fast convergence of deterministic gradient methods. 
+Recent work has further shown that stochastic acceleration and line-search methods for step-size selection are possible in this restricted setting.
+Although pioneering, existing analyses for first-order methods under interpolation have two major weaknesses:
+they are restricted to the finite-sum setting, and, secondly, they are not tight with the best deterministic rates. 
+To address these issues, we extend the notion of interpolation to stochastic optimization problems with general, first-order oracles.
+We use the proposed framework to analyze stochastic gradient descent with a fixed step-size and with an Armijo-type line-search, as well as Nesterov's accelerated gradient method with stochastic gradients.
+In nearly all settings, we obtain faster convergence with a wider range of parameters. 
+The improvement for stochastic Nesterov acceleration is comparable to dividing by the square-root of the condition number and addresses criticism that existing rates were not truly ``accelerated''. 
+In the case of convex functions, our convergence rates for stochastic gradient descent --- both with and without the stochastic Armijo line-search --- recover the best-known rates in the deterministic setting.
+We also provide a simple extension to \( \ell_2 \)-regularized minimization, which opens the path to proximal-gradient methods and non-smooth optimization under interpolation. 
 
-The focus is on establishing non-asymptotic convergence rates for stochastic, first-order optimization algorithms in the unconstrained setting. 
-The analysis covers stochastic gradient descent with a fixed step-size and with an Armijo-type line-search, as well as Nesterov's accelerated gradient method with stochastic gradients.
-These theoretical results are developed for general stochastic first-order oracles and cover finite-sum functions with sub-sampled gradients as a special case. 
+
+%% Unused
+
+% Our theoretical results are developed for general stochastic first-order oracles and apply to finite-sum functions with sub-sampled gradients as a special case. 
+%For example, modern neural network architectures are powerful enough to memorize large datasets and achieve near zero loss on many common natural-image benchmarks. 
