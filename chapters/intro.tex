@@ -25,7 +25,7 @@ A form of automatic reduction in gradient noise occurs~\citep{liu2020acceleratin
 
 The connection between over-parameterization and fast stochastic optimization has led to a wave of interest in analyzing first-order methods under interpolation and weak/strong growth.
 A number of works have shown that \ac{SGD} obtains the fast convergence rate of deterministic gradient methods for interpolating models~\citep{schmidt2013fast, bassily2018exponential, vaswani2019fast, cevher2018linear, jain2018accelerating}, while related research has established accelerated rates under an additional requirement for convexity~\citep{liu2020accelerating, vaswani2019fast, jain2018accelerating}.
-Sub-sampled second-order methods have also been explored and proved to have local linear convergence for specific function classes~\citep{meng2020fastandfurious}.
+Sub-sampled second-order methods have also been explored and proved to have local quadratic convergence for specific function classes~\citep{meng2020fastandfurious}.
 These positive results show the interpolation setting is restrictive enough to break the \( \Omega(\epsilon^{-4}) \) barrier for stochastic first-order methods and attain the optimal \( \Theta(\epsilon^{-1}) \) complexity (up to problem-specific constants) for finding stationary points of smooth, convex functions~\citep{nemirovsky1985optimal, arjevani2016iteration}. 
 
 Despite these rapid advances, theoretical rates and practical performance for \ac{SGD} under interpolation still rely on carefully selected hyper-parameters.
@@ -51,7 +51,7 @@ Asymptotic convergence of SGD with a constant step-size to
 is shown under the strong and weak growth conditions.
 Chapters~\ref{ch:line-search} and~\ref{ch:acceleration} then address the convergence of \ac{SGD} with a stochastic Armijo line-search and stochastic accelerated gradient descent, respectively. 
 Finally, \autoref{ch:beyond-interpolation} leaves the basic interpolation setting behind and considers structural minimization with interpolating functions as components. 
-Convergence to an explicit neighborhood is derived for \( L_2 \)-regularized problems as a special case. 
+Convergence to an explicit neighborhood is derived for \( L_2 \)-regularized problems as a special case. \\
 
 
 \section{Preliminaries and Assumptions}~\label{sec:setup}
@@ -81,7 +81,7 @@ Formally, we say a differentiable function \( f \) is invex if all stationary po
 Invexity is formally weaker than convexity and follows immediately from the first-order conditions for convexity given above.
 The analogue of strong-convexity for invex functions is the \ac{PL} condition~\citep{karimi2016linear}.
 A function is said to be \( \mu \)-\ac{PL} if
-\[ \frac{1}{2 \mu} \norm{\grad(\w)}^2 \leq f(\w) - f(\wopt), \]
+\[ \frac{1}{2 \mu} \norm{\grad(\w)}^2 \geq f(\w) - f(\wopt), \]
 holds for all \( \w \in \R^d \).
 Again, the \ac{PL} condition is weaker than strong convexity; a \( \mu \)-strongly-convex function is \( \mu \)-\ac{PL}, but the converse does not hold.
 
@@ -128,7 +128,7 @@ We call this latter condition strong growth and refer to the earlier definition 
 \[ \text{Strong Growth + Noise:} \quad \E_{P_i} \sbr{\norm{\grad_i(\w)}^2} \leq \rho \norm{\grad(\w)}^2 + \sigma^2, \hspace{8em} \]
 which they also call weak growth.
 For clarity, we refer to this assumption as strong growth with additive noise.
-For unbiased \( P_i \), strong with noise is slightly weaker than assuming a bound on the variance of the stochastic gradients~\citep{khaled2020better, ghadimi2012optimal1}.
+For unbiased \( P_i \), strong growth with noise is slightly weaker than assuming a bound on the variance of the stochastic gradients~\citep{khaled2020better, ghadimi2012optimal1}.
 \citet{cevher2018linear} study the convergence of proximal-gradient methods under strong growth with additive noise and also prove that strong growth is both \emph{sufficient and necessary} for \ac{SGD} to converge linearly.\\
 
 
@@ -136,16 +136,17 @@ For unbiased \( P_i \), strong with noise is slightly weaker than assuming a bou
 Many authors have considered accelerating stochastic gradient methods.
 \citet{schmidt2011convergence} provide sufficient conditions on gradient noise for acceleration of proximal-gradient methods.
 D'Aspremont~(\citeyear{aspremont2008approximate}) and \citet{devolder2014first} investigate accelerated gradient methods under the assumption of approximate oracles with deterministic, bounded errors and derive rates for convergence and error accumulation in this setting.
-\citet{honorio2012biased} consider accelerated proximal-gradient methods under biased stochastic oracles and show accumulated errors prevent a high-probability convergence guarantee. 
+\citet{honorio2012biased} consider accelerated proximal-gradient methods under biased stochastic oracles and show that accumulated errors prevent a high-probability convergence guarantee. 
 In contrast, \citet{cohen2018acceleration} assume access to an unbiased oracle with additive gradient noise and propose a noise-resistant acceleration scheme.
 Very recently, \citet{chen2020understanding} analyze accelerated methods for strongly-convex functions under strong growth with additive noise. 
 
 An alternative approach to stochastic acceleration splits the convergence rate into stochastic and deterministic parts.
 Using this framework, multiple authors have shown that acceleration schemes speed-up convergence for the deterministic component and achieve nearly optimal rates in the stochastic approximation setting~\citep{ghadimi2012optimal1, ghadimi2013optimal2, hu2009accelerated}.
 For finite-sum functions, variance reduction techniques can be combined with acceleration to improve convergence on the stochastic component~\citep{allen-zhu2017katyusha, defazio2016pointSaga, allen-zhou2018katyushax, tang2018restkatyusha, shang2018asvrg, kovalev2020loopless}.
-Such methods are as fast as deterministic acceleration up to a dependence on \( n \), the number of finite-sum functions.
-\edit{Accelerated primal-dual methods have been proposed in this setting under an additional requirement for each \( f_i \) to be Lipschitz-smooth~\citep{zhang2015SPDC, lan2018incremental}.}
-Alternative approaches also leveraging finite-sum structure are based on the proximal-point algorithm and include \edit{accelerated SDCA~\citep{shalev-shwarz2014ASDCA}}, Catalyst~\citep{lin2015catalyst}, and accelerated APPA~\citep{frostig2015unregularizing}.
+Such methods have iteration complexity of \( O((n + \sqrt{n\kappa}) \log(1/\epsilon)) \), where \( n \) is the number of sub-functions and \( \kappa \) is the condition number.
+This is as fast as deterministic acceleration up the additional factor of \( \sqrt{n} \). 
+Accelerated primal-dual methods have been proposed in the same setting under an additional requirement for each \( f_i \) to be Lipschitz-smooth~\citep{zhang2015SPDC, lan2018incremental}.
+Alternative approaches also leveraging finite-sum structure are based on the proximal-point algorithm and include accelerated SDCA~\citep{shalev-shwarz2014ASDCA}, Catalyst~\citep{lin2015catalyst}, and accelerated APPA~\citep{frostig2015unregularizing}.
 
 Several works have recently considered acceleration under interpolation.
 The most similar to the investigation here is that of \citet{vaswani2019fast}, who analyze a slightly altered version of Nesterov's accelerated gradient descent under the strong growth condition. 
