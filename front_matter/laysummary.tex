@@ -10,5 +10,13 @@
 %% words in length.
 
 \chapter{Lay Summary}
-
 \todo{Write lay summary}
+
+A major trend in machine learning is the use of flexible models which can exactly fit large quantities of data. 
+For example, deep learning approaches can ``memorize'' datasets, meaning they achieve nearly perfect predictions on the samples used to fit the model. 
+In this case, we say that the model \emph{interpolates} the dataset.
+Interpolating models are particularly interesting from an optimization perspective because they can be fit very quickly using stochastic gradient methods. 
+This contrasts with general models, where stochastic gradient methods are notoriously slow. 
+In this thesis, we develop a rigorous definition of interpolation and study the speed of stochastic gradient methods for interpolating models.  
+Our approach is more general than existing analyses and covers standard model-fitting using a dataset as a special case. 
+For many model classes, we show stochastic gradient methods permit a wider range of parameters and are faster than previously known when interpolation is satisfied. 
