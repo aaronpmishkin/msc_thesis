@@ -106,18 +106,18 @@ Unlike classic interpolation, matching here refers to mutual optimality or mutua
 enforcing \( f(\wopt) = f(\wopt, \z) \) may not be useful from an optimization perspective, since \( \grad(\wopt, \z) \) could be non-zero.
 The three definitions are as follows:
 
-\begin{definition}[Interpolation: Minimizers]\label{def:interpolation-minima}
+\begin{restatable}[Interpolation: Minimizers]{definition}{interpolationMinima}\label{def:interpolation-minima}
     A function-oracle pair \( (f, \oracle{}) \) satisfies minimizer interpolation if for all \( \z \in \calZ \),
     \[ f(\w') \leq f(\w) \; \forall \w \in \R^d \implies f(\w', \z) \leq f(\w, \z) \; \forall \w \in \R^d.  \]
-\end{definition}
-\begin{definition}[Interpolation: Stationary Points]\label{def:interpolation-gradients}
+\end{restatable}
+\begin{restatable}[Interpolation: Stationary Points]{definition}{interpolationGradients}\label{def:interpolation-gradients}
     A function-oracle pair \( (f, \oracle{}) \) satisfies stationary-point interpolation if for all \( \z \in \calZ \),
     \[ \grad(\w') = 0 \implies \grad(\w', \z) = 0. \]
-\end{definition}
-\begin{definition}[Interpolation: Mixed]\label{def:interpolation-mixed}
+\end{restatable}
+\begin{restatable}[Interpolation: Mixed]{definition}{interpolationMixed}\label{def:interpolation-mixed}
     A function-oracle pair \( (f, \oracle{}) \) satisfies mixed interpolation if for all \( \z \in \calZ \),
     \[ f(\w') \leq f(\w) \; \forall \w \in \R^d \implies \grad(\w', \z) = 0. \]
-\end{definition}
+\end{restatable}
 In words, \autoref{def:interpolation-minima} states that global minimizers of the objective \( f \) must be global minimizers of the stochastic functions given by the \ac{SFO} at every iteration \( k \).
 In contrast, \autoref{def:interpolation-gradients} puts the same requirement on stationary points of \( f \), while \autoref{def:interpolation-mixed} merely demands that minimizers of \( f \) are stationary points of \( f(\cdot, \z) \) for all outcomes \( \z \).
 
@@ -174,8 +174,10 @@ This occurs, for example, when the data matrix is full-rank and \( n \leq d \)~\
 Similarly, interpolation is satisfied for linear classifiers on separable datasets using the squared-hinge loss~\citep{vaswani2019fast}. 
 In the general setting of \acp{SFO}, the following lemma establishes simple conditions for \( \rbr{f, \oracle{}} \) to satisfy minimizer interpolation.
 \begin{restatable}{lemma}{boundedBelow}~\label{lemma:bounded-below}
-    A function-oracle pair \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation (\autoref{def:interpolation-minima}) if \oracle{} is unbiased and 
-    \[ f(\w, \z ) \geq f(\wopt) \quad \forall \w \in \R^d, \: \forall \z \in \calZ. \]
+    Let \( \rbr{f, \oracle{}} \) be a function-oracle pair. 
+    If \oracle{} is unbiased and 
+    \[ f(\w, \z ) \geq f(\wopt) \quad \forall \w \in \R^d, \: \forall \z \in \calZ, \]
+    holds, then \( \rbr{f,\oracle{}} \) satisfies minimizer interpolation.
 \end{restatable}
 \noindent See \autoref{app:interpolation} for proof.\hfill \break
 
@@ -304,9 +306,9 @@ As a by-product, we obtain worst-case bounds on the strong and weak growth param
     \centering
     \begin{tabular}{c c c }\toprule
         Assumptions & Weak Growth & Strong Growth \\ \midrule
-        Ind.\ Smooth & \( \alpha \leq \frac{\Lmax}{L} \) & — \\\\
-        \makecell{\( \mu \)-\ac{PL} +\\ Ind.\ Smooth} & \( \alpha \leq \frac{\Lmax}{L} \) & \( \rho \leq \frac{\Lmax}{\mu} \) \\\\
-        Strong Growth & \( \alpha \leq 2 \rho L \) & \( \rho = \rho\) \\ \endrule
+        Ind.\ Smooth & \( \alpha \leq \frac{\Lmax}{L} \) & — \\ \addlinespace
+        \makecell{\( \mu \)-\ac{PL} +\\ Ind.\ Smooth} & \( \alpha \leq \frac{\Lmax}{L} \) & \( \rho \leq \frac{\Lmax}{\mu} \) \\ \addlinespace
+        Strong Growth & \( \alpha \leq 2 \rho L \) & \( \rho = \rho \) \\ \bottomrule
     \end{tabular}
     \caption[Relationship between minimizer interpolation and parameters of the weak and strong growth conditions.]%
             {Relationship between minimizer interpolation and parameters of the weak and strong growth conditions.

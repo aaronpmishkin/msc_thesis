@@ -10,7 +10,7 @@ Then, the following convergence results are established for \ac{SAGD}:
     \item \( O\rbr{\sqrt{\frac{\sgc L}{\mu}} \log \rbr{\inv{\epsilon}}} \) iteration complexity for strongly convex \( f \) when \( \rbr{f, \oracle{}} \) satisfies strong growth; this rate is tight with the deterministic analysis when \( \sgc = 1 \).
     \item \( O\rbr{\sqrt{\frac{\sgc L}{\epsilon}} \,} \) iteration complexity for convex \( f \) when \( \rbr{f, \oracle{}} \) satisfies strong growth; again, this rate is tight with \ac{AGD} when \( \sgc = 1 \).
 \end{enumerate}
-\edit{These convergence rates are tighter than existing work by a factor of \( \sqrt{\rho} \)~\citep[Theorems 1-2]{vaswani2019fast}, which we show is comparable to the speed-up obtained by \ac{AGD} over gradient descent in the deterministic setting.}
+These convergence rates are tighter than existing work by a factor of \( \sqrt{\rho} \)~\citep[Theorems 1-2]{vaswani2019fast}, which we show is comparable to the speed-up obtained by \ac{AGD} over gradient descent in the deterministic setting.
 The chapter ends with a brief discussion of acceleration under the weak growth condition, which is an open question.
 \newpage
 
@@ -25,7 +25,7 @@ In particular, the obvious parallels between \ac{SGD} under interpolation and de
 
 In fact, restricting the \ac{SFO} is necessary for any hope of proving an accelerated rate for \ac{SAGD}.
 Black-box accelerated methods which do not leverage structural information about \( f \) rapidly accumulate errors when used with general stochastic oracles \( \oracle{} \)~\citep{devolder2014first, schmidt2011convergence}. 
-\edit{Such error accumulation prevents acceleration, as shown by tight \( \Omega(\epsilon^{-2}) \) and \( \Omega(\epsilon^{-1}) \) lower bounds for the iteration complexity of convex and strongly-convex minimization with general \acp{SFO}, respectively~\citep{nemirovsky1983problem, agarwal2012information, raginsky2011information}.}
+Such error accumulation prevents acceleration, as shown by tight \( \Omega(\epsilon^{-2}) \) and \( \Omega(\epsilon^{-1}) \) lower bounds for the iteration complexity of convex and strongly-convex minimization with general \acp{SFO}, respectively~\citep{nemirovsky1983problem, agarwal2012information, raginsky2011information}.
 The key question is whether or not the interpolation setting is restrictive enough to exclude these lower bounds and permit acceleration;
 the goal of this chapter is to extend the estimating sequences framework~\citep{nesterov2004lectures} to show that \ac{SAGD} does in fact achieve an accelerated convergence rate when the strong growth condition holds.
 
@@ -84,7 +84,7 @@ This intuition is formalized by the notion of estimating sequences~\citep{nester
 \end{definition}
 
 If \( \phi_0 \) is chosen so that \( \phi_0(\w) \approx f(\w) \) in a neighborhood of \( \w_0 \), then \( \seq{\phi_k}_{k=0}^\infty \) matches our intuition of a sequence of improving, local approximations to \( f \).
-This is particularly true since the conditions on \( \lambda_k \) guarantee \( \lim_{k \rightarrow \infty} \phi_k \leq f \) point-wise --- ie. \( \phi \) eventually becomes a \emph{global} lower bound on \( f \).
+This is particularly true since the conditions on \( \lambda_k \) guarantee \( \lim_{k \rightarrow \infty} \phi_k \leq f \) point-wise --- i.e.\ \( \phi \) eventually becomes a \emph{global} lower bound on \( f \).
 Finally, and most importantly, if \( f(\wk) \leq \inf_x \phi_k(x) \) for all \( k \), then we obtain
 \begin{align*}
     f(\wk) \leq \phi_k(\wopt) &\leq (1 - \lambda_k) f(\wopt) + \phi_0(\wopt)\\
@@ -113,7 +113,10 @@ An important property of the update is that it preserves the canonical form
     \phi_k(\w) = \phi_k^* + \frac{\gamma_k}{2}\norm{\w - \vk}^2,
 \end{align*}
 where \( \gamma_{k+1} = \rbr{1 - \alphak}\gamma_k + \alphak \mu \), \( \vk = \inv{\gamma_{k+1}} \rbr{(1-\alphak)\vk + \alphak \mu \, y_k - \alphak \grad(\yk)}, \) and 
-\[ \phi^*_{k+1} = (1 - \alphak) \phi^*_k + \alphak\rbr{f(\yk) - \frac{\alphak}{2 \gamma_{k+1}} \norm{\grad(\yk)}^2 + \frac{(1 - \alphak)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2}\norm{\yk - \vk}^2 + \abr{\grad(\yk), \vk - \yk}}}. \]
+\begin{align*}
+    \phi^*_{k+1} &= (1 - \alphak) \phi^*_k + \alphak\bigg(f(\yk) - \frac{\alphak}{2 \gamma_{k+1}} \norm{\grad(\yk)}^2 + \frac{(1 - \alphak)\gamma_k}{\gamma_{k+1}} \big(\frac{\mu}{2}\norm{\yk - \vk}^2\\ 
+    & \hspace{20em} + \abr{\grad(\yk), \vk - \yk} \big) \bigg). 
+\end{align*}
 See~\citet[Lemma 2.2.3]{nesterov2004lectures} for proof.
 While cumbersome, the canonical form for \( \phi_k \) allows \ac{AGD} to be reformulated as alternating descent steps on \( \phi_k \) and \( f \).
 We do this now.
@@ -232,7 +235,7 @@ This tighter rate addresses the criticism of~\citet{liu2020accelerating}, who sh
 Our final result for \ac{SAGD} addresses convergence for convex functions under the strong growth condition. 
 The following theorem shows that \ac{RSAGD} obtains an accelerated \( O\rbr{\frac{\sgc L}{K^2}} \) complexity.
 Invoking the correspondence between \ac{RSAGD} and \ac{SAGD} leads an identical result for the latter algorithm as a corollary.
-This improves on prior analyses by a factor of \( \sgc \)~\citep[Theorem 2]{vaswani2019fast}. 
+This improves on prior analyses by a factor of \( \sqrt{\sgc} \)~\citep[Theorem 2]{vaswani2019fast}. 
 See~\autoref{table:agd-comparison} for additional details.
 
 \begin{restatable}{theorem}{convexAGD}~\label{thm:convex-agd}

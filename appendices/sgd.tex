@@ -94,7 +94,7 @@
     Let \( f \) be a convex, \( L \)-smooth function and \oracle{} an \( \Lmax \) individually-smooth \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation. 
     Then stochastic gradient descent with step-size \( \eta \) satisfies the following inequality: 
     \[ f(\wk) - f(\wopt) \leq \frac{1}{2\eta \, \delta} \rbr{\norm{\wk - \wopt}^2 - \Ek \sbr{\norm{\wkk - \wopt}^2}}, \]
-    where \(  \delta = \min \cbr{ 1, 1 + \wgc L \rbr{\frac{1}{\Lmax} - \eta }} \). 
+    where \(  \delta = \min \cbr{ 1, 1 + \wgc L \rbr{\frac{1}{\Lmax} - \eta }} \) and \( \wopt = \Pi_{\calX^*}(\w_0) \). 
     Furthermore, if \( \eta \leq \frac{1}{\Lmax} \), then 
     \[ f(\wk) - f(\wopt) \leq \frac{1}{2 \eta}\rbr{\norm{\wk - \wopt}^2 - \Ek\sbr{\norm{\wkk - \wopt}^2}}. \]
 \end{restatable}
@@ -188,6 +188,7 @@ Note that this bound is tight with Case 1 since \( 1 + \wgc L \rbr{\inv{\Lmax} -
         \implies \lim_{k \rightarrow \infty} f(\wk) \equas f(\wopt). \nonumber
     \end{align}
     That is, stochastic gradient descent converges to the optimal function value. 
+\iflong
     Let us extend this convergence to the sequence of iterates \( \seq{\wk} \).
     The weak growth condition implies 
     \begin{align*}
@@ -204,6 +205,7 @@ Note that this bound is tight with Case 1 since \( 1 + \wgc L \rbr{\inv{\Lmax} -
     Continuity of \( f \) and the continuous mapping theorem imply 
     \[ f(\w_\infty) \equas \lim_{k\rightarrow \infty} f(\wk) \equas f(\wopt). \]
     We conclude \( \w_\infty \in \argmin_\w f(\w) \) almost surely.
+\fi
 \end{proof}
 
 \sgcAlmostSure*
@@ -227,7 +229,8 @@ Note that this bound is tight with Case 1 since \( 1 + \wgc L \rbr{\inv{\Lmax} -
     Accordingly, the sequence of gradient norms satisfies
     \[ \lim_{\iter \rightarrow \infty} \norm{\grad(\wk)}^2 \equas 0, \]
     and we conclude that the sequence of gradients converges to a stationary point.
-   
+
+\iflong
     Let us extend this convergence to the sequence of iterates \( \seq{\wk} \).
     The strong growth condition implies 
     \begin{align*}
@@ -245,6 +248,8 @@ Note that this bound is tight with Case 1 since \( 1 + \wgc L \rbr{\inv{\Lmax} -
     The continuous mapping theorem implies  
     \[ \norm{\grad(\w_\infty)}^2  \equas \lim_{k\rightarrow \infty} \norm{\grad(\wk)}^2 \equas 0, \]
     which completes the proof.
+\fi
+
 \end{proof}
 
 \newpage

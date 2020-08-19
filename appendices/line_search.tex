@@ -20,15 +20,15 @@
         c \, \tetak &\leq \tetak\rbr{1 - \frac{\Lmax \tetak}{2}}\\
         \implies \tetak &\leq \frac{2(1-c)}{\Lmax}.
     \end{align*}
-    Recalling \( \tetak \) is the maximal step-size satisfying the Armijo condition (since the line-search is exact) leads to the lower-bound \( \etak \geq \min\cbr{ \frac{2(1-c)}{\Lmax}, \etamax}\).\\ 
+    Recalling \( \tetak \) is the maximal step-size satisfying the Armijo condition leads to the lower-bound \( \etak \geq \min\cbr{ \frac{2(1-c)}{\Lmax}, \etamax}\).\\ 
     
     \noindent Let us now upper-bound \( \etak \). 
-    The argument above established that the Armijo condition is satisfied for all \( \eta \leq \frac{2(1-c)}{\Lmax} \). 
+    The argument above established that the Armijo condition is satisfied for any step-size \( \eta \leq \frac{2(1-c)}{\Lmax} \). 
     Thus, it must be satisfied for \( \etak = \min\cbr{\tetak, \etamax} \) and we obtain 
     \begin{align*}
         f(\wkk, \zk) &\leq f(\wk, \zk) - c \cdot \etak \norm{\grad(\wk, \zk)}^2\\
         \implies \etak &\leq \frac{f(\wk, \zk) - f(\wkk, \zk)}{c \norm{\grad(\wk, \zk)}^2}.
-        \intertext{Interpolation implies \( f(\wkk, \zk) \geq f(\wopt, \zk) \) and thus}
+        \intertext{Minimizer interpolation implies \( f(\wkk, \zk) \geq f(\wopt, \zk) \) and thus}
         \etak &\leq \frac{f(\wk, \zk) - f(\wopt, \zk)}{c \norm{\grad(\wk, \zk)}^2}.
     \end{align*}
     This completes the proof.
@@ -158,7 +158,7 @@
     \end{align*}
     The line-search requires \( c \in \rbr{0,1} \).
     Noting that \( \sgc \geq 1 \) by definition, we have \( \frac{\Lmax}{\sgc L} > 0 \) as long as \( L, \Lmax > 0 \).
-    This condition holds as long as \( f \) is bounded-below and non-zero.
+    The Lipschitz constants are strictly positive when \( f \) is bounded-below and non-zero.
     We obtain the non-empty constraint set
     \[ c \in \rbr{1 - \frac{\Lmax}{\sgc L}, 1}. \]
     Substituting the maximum value for \( c \) into the upper-bound on \( \etamax \) yields a similar requirement,

@@ -61,7 +61,7 @@ This setting degenerates to a simple deterministic optimization problem if \( \g
 
 We first establish the convergence rate of \ac{SGD} for strongly-convex \( f \) when \( \rbr{f, \oracle} \) satisfies the strong growth condition. 
 Recall from \autoref{lemma:interpolation-to-sgc} that this is more general than assuming \oracle{} is \( \Lmax \) individually-smooth and \( \rbr{f, \oracle} \) satisfies minimizer interpolation. 
-Furthermore, in the case that individual smoothness and minimizer interpolation do hold, we are guaranteed \( \sgc \leq \frac{\mu}{\Lmax} \).
+Furthermore, in the case that individual smoothness and minimizer interpolation do hold, we are guaranteed \( \sgc \leq \frac{\Lmax}{\mu} \).
 This value should be kept in mind, as it informs the worst-case rate that can be obtained in the following theorem. 
 
 \begin{restatable}{theorem}{sgcConvex}~\label{thm:sgc-convex}
@@ -73,11 +73,11 @@ This value should be kept in mind, as it informs the worst-case rate that can be
 
 We compare this convergence rate to the original result given by \citet[Section 6]{schmidt2013fast} in \autoref{table:sgd-sc-comparison}.
 Our analysis allows for a larger step-size and establishes asymptotically faster convergence.
-The improvement is most significant for ill-conditioned problems, where \( \mu \ll L \) implies \( \frac{2 L}{\mu + L} \gg 1 \). 
+The improvement is most significant for ill-conditioned problems, where \( \mu \ll L \) implies \( \frac{2 L}{\mu + L} \approx 2 \). 
 Finally, this result is tight in the sense that when \( \sgc = 1 \), which holds in the deterministic setting, it recovers the best known convergence rate for gradient descent on strongly-convex functions~\citep[Theorem 3.12]{bubeck2015convex}.
 
 When \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation and \oracle{} is individually-smooth, the complexity given by \autoref{thm:sgc-convex} can be worse than that achieved under the weak-growth condition.
-To see this, consider when the worst-case values \( \sgc = \frac{\mu}{\Lmax} \) and \( \wgc = \frac{\Lmax}{L} \) are attained in the interpolation setting. 
+To see this, consider when the worst-case values \( \sgc = \frac{\Lmax}{\mu} \) and \( \wgc = \frac{\Lmax}{L} \) are attained in the interpolation setting. 
 If \( \eta = \frac{2}{\sgc \rbr{\mu + L}} = \frac{2 \mu}{\Lmax\rbr{\mu + L}} \), then \autoref{thm:sgc-convex} guarantees  
 \[ \E\sbr{\norm{\w_{K} - \wopt}^2} \leq \rbr{1 - \frac{4 \mu^2 L }{\Lmax \rbr{\mu + L}^2}}^K \norm{\w_0 - \wopt}^2. \]
 In contrast, \citet[Theorem 5]{vaswani2019fast} show 
@@ -91,7 +91,7 @@ Thus, bounding \( \Ek\sbr{\norm{\grad(\wk, \zk)}^2} \) using strong growth and t
 
 The above conclusion only holds when \( \rbr{f, \oracle} \) satisfies interpolation and \oracle{} is individually smooth. 
 The two convergence speeds cannot be directly compared when \oracle{} is more general because of the cyclic relationship between the strong/weak growth parameters. 
-Recall from \autoref{lemma:sgc-wgc-relationship} that strong growth implies weak growth with constant \( \alpha = 2 \rho L \), while weak growth implies strong growth with constant \( \rho = \alpha \frac{L}{\mu} \).
+Recall from \autoref{lemma:sgc-wgc-relationship} that strong growth implies weak growth with constant \( \alpha \leq 2 \rho L \), while weak growth implies strong growth with constant \( \rho \leq \alpha \frac{L}{\mu} \).
 As a result, no order can be established on \( \alpha \) and \( \rho \) and it is not clear which rate is superior.
 
 \subsection{Individually Smooth and Convex Oracles}~\label{sec:sgd-sgc-ind-convex}
@@ -140,10 +140,10 @@ If \( \mu < L \), then \( \frac{\mu + L}{L \Lmax} < \frac{2}{\Lmax} \) and the f
 A key feature of \autoref{thm:sgc-ind-convex} is that it requires only the full function \( f \) to be strongly-convex; the stochastic functions \( f(\cdot, \z) \) may be merely convex, as is typically the case in the finite-sum setting.
 To illustrate this, consider the linear regression problem
 \[ \min_{\w \in R^d} \sum_{i=0}^n \rbr{\abr{\w, x_i} - y_i}^2, \]
-\edit{which satisfies interpolation if \( y \in \text{span}(\cbr{x_i}_{i=0}^n) \).
+which satisfies interpolation if \( y \in \text{span}(\cbr{x_i}_{i=0}^n) \).
 The objective \( f \) is \( \mu \)-strongly-convex if \( n \geq d \) and the data matrix is full-rank, while the individual functions \( f_i(\w) = \rbr{\abr{\w, x_i} - y_i}^2 \) are \emph{not} strongly-convex unless \( d = 1 \).%
 \footnote{Consider \( w \) and \( \w' = \w + v \), where \( v \) is orthogonal to \( x_i \), to see the \( f_i \) are not strongly-convex when \( d > 1 \).}
-Learning problems of this form occur in non-parametric kernel regression, such as when using radial basis functions with a small bandwidth~\citep{hastie2009elements}.}
+Learning problems of this form occur in non-parametric kernel regression, such as when using radial basis functions with a small bandwidth~\citep{hastie2009elements}.
 However, in the unlikely case that \oracle{} is also individually-strongly-convex, we can show that \ac{SGD} will converge almost surely, as established in the following theorem.
 
 \begin{restatable}{theorem}{sgcIndSC}~\label{thm:sgc-ind-sc}
@@ -235,7 +235,7 @@ Formally, we also assume a probability space \( \rbr{\Omega,  \calF, P} \) in th
     \calF_K = \sigma \rbr{\bigcup_{\iter = 0}^{K-1} \sigma \grad(\wk, \zk)}.
 \end{align*}
 The sequences of function and gradient values are functions of \( \seq{\wk} \) and so are also adapted to \( \seq{\calF_\iter} \).
-See \citet{ccinlar2011probability} additional details on filtrations.
+See \citet{ccinlar2011probability} for additional details on filtrations.
 
 Our main tool to show convergence of sequences of random variables will be supermartingale theory~\citep{ccinlar2011probability}.
 Supermartingales are one of two classic tools used to analyze the convergence of \ac{SGD}, the other being Lyapunov functions~\citep{bertsekas2000gradient}.
@@ -256,15 +256,14 @@ This theorem is due to~\citet{neveu1975discrete} and will be the cornerstone of 
 \noindent With necessary the measure-theoretic background complete, we are now ready to study the almost-sure convergence of stochastic gradient descent.
 
 \begin{restatable}{theorem}{wgcAlmostSure}~\label{thm:wgc-almost-sure}
-    Let \( \f \) be a convex, \( L \)-smooth function with at least one finite minimizer and \oracle{} a \( \Lmax \) individually-smooth \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies the weak growth condition with parameter \( \wgc \).
-    Then stochastic gradient descent with fixed step-size \( \eta < \frac{1}{\wgc L} + \frac{1}{\Lmax} \) converges to a minimizer of \( f \) almost surely,
+    Let \( \f \) be a convex, \( L \)-smooth function with at least one finite minimizer and \oracle{} an \( \Lmax \) individually-smooth \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies the weak growth condition with parameter \( \wgc \).
+Then the sequence \( \seq{f(\wk)} \) generated by stochastic gradient descent with fixed step-size \( \eta < \frac{1}{\wgc L} + \frac{1}{\Lmax} \) converges to the optimal function value \( f(\wopt) \) almost surely,
 \end{restatable}
 
 The proof is given in \autoref{app:almost-sure-convergence} and follows a straightforward argument.
 First, we establish that the sequence of distances to an arbitrary finite minimizer \( \seq{\norm{\wk - \wopt}^2} \) satisfies the conditions of Theorem~\ref{thm:positive_supermartingales}.
 As a by-product, we obtain that the series \( \sum_{k=0}^{\infty} \rbr{f(\wk) - f(\wopt)} \) is convergent (although \( \wk \rightarrow \wopt \) does not necessarily hold almost surely) and then deduce
-\[ \lim_{k\rightarrow\infty} \wk \in \argmin_w f(\w), \] 
-almost surely using the weak growth condition.
+\[ \lim_{k\rightarrow\infty} f(\wk) \equas f(\wopt). \] 
 It is straightforward to prove an alternative version of \autoref{thm:wgc-almost-sure} which does not require individual smoothness.
 In this case, convergence is established for \( \eta < \frac{1}{\wgc L} \) using the same progress condition as in \autoref{thm:wgc-convex}, namely \autoref{eq:cwg-alternate-progress}.
 
@@ -277,8 +276,8 @@ The final result of this chapter shows almost-sure convergence to a stationary p
 The proof is presented in \autoref{app:almost-sure-convergence} and follows a similar structure to the proof of \autoref{thm:wgc-almost-sure}.
 
 \begin{restatable}{theorem}{sgcAlmostSure}~\label{thm:sgc-almost-sure}
-    Let \( \f \) be an \( L \)-smooth function and \oracle{} a SFO such that \( \rbr{f, \oracle{}} \) satisfies the strong growth condition with parameter \( \sgc \).
-    Then stochastic gradient descent with fixed step-size \(\eta < \frac{2}{\sgc L} \) converges to a stationary point of \( f \) almost surely.
+    Let \( \f \) be an \( L \)-smooth function with at least one finite minimizer \( \wopt \) and \oracle{} a SFO such that \( \rbr{f, \oracle{}} \) satisfies the strong growth condition with parameter \( \sgc \).
+    Then the sequence of gradient-norms \( \seq{\norm{\grad(\wk)}^2} \) generated by stochastic gradient descent with fixed step-size \(\eta < \frac{2}{\sgc L} \) converges to \( 0 \) almost surely.
 \end{restatable}
 
 \endinput

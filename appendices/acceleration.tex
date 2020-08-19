@@ -48,10 +48,11 @@
         Convexity of \( f \) implies \( f(\wk) \geq f(\yk) + \abr{ \grad(\yk), \wk - \yk } \). 
         This inequality holds in expectation, allowing us to obtain }
         \E[\phi_{k+1}^*] &\geq (1- \alpha_k) \E[\rbr{f(\yk) + \abr{\grad(\yk), \wk - \yk}}] + \E\bigg[\alpha_k f(\yk) - \frac{1}{2\sgc L}\norm{\grad(\yk)}^2 \bigg] \\ & \hspace{5em} + \E\sbr{\frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
+                         &= \E\sbr{(1- \alpha_k) f(\yk) + \alpha_k f(\yk)} + (1-\alpha_k) \E[\abr{\grad(\yk), \wk - \yk}] + \E\bigg[\frac{1}{2\sgc L}\norm{\grad(\yk)}^2 \bigg] \\ & \hspace{5em} + \E\sbr{\frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
         &=  \E\sbr{f(\yk) - \frac{1}{2\sgc L} \norm{\grad(\yk)}^2} + (1-\alpha_k) \E\bigg[\abr{\grad(\yk), \wk - \yk} \\ & \hspace{5em} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}\bigg] \\
         \intertext{\autoref{eq:expected-decrease} now implies}
         \E[\phi_{k+1}^*] &\geq \E\sbr{f(\wkk)} + (1-\alpha_k) \E\sbr{\abr{\grad(\yk), \wk - \yk} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}}. \\
-        \intertext{The remainder of the proof is largely unchanged from the determnistic case:}
+        \intertext{The remainder of the proof is largely unchanged from the deterministic case:}
         \E\sbr{\phi_{k+1}^*}  &=  \E[f(\wkk)] + (1-\alpha_k) \E\sbr{\frac{\alpha_k}{\gamma_k + \alpha_k \mu} \abr{\grad(\yk), \nabla\phi_k(\wk)} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
         \intertext{Noting that \( \nabla \phi_k(\wk) = \gamma_k \rbr{\wk - v_k} \) and \( v_k - \yk = \frac{\gamma_{k+1}}{\gamma_k + \alpha_k \mu}\rbr{v_k - \wk} \) gives }
         \E\sbr{\phi_{k+1}^*} &= \E[f(\wkk)] +(1-\alpha_k) \E\sbr{\frac{\alpha_k \gamma_k}{\gamma_k + \alpha_k \mu} \abr{\grad(\yk), \wk - v_k} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
@@ -71,24 +72,37 @@
 \scAGD*
 \begin{proof}
     We obtain the following inequality immediately:
-    \begin{align*}
+    \begin{align}
         \E\sbr{f(\wk)} &\leq \E[\inf_x \phi_k(x)] \tag{\autoref{lemma:estimating-sequence-bound}}\\
-        &\leq \E[\phi_k(\wopt)] \\
-        &\leq \rbr{1 - \lambda_k} f(\wopt) + \lambda_k \phi_0(\wopt) \tag{\autoref{lemma:estimating-sequence}}\\
-        \implies \E\sbr{f(\wk)} - f(\wopt) &\leq \lambda_k (\phi_0(\wopt) - f(\wopt))\\
-                                           &= \lambda_k \rbr{f(\w_0) - f(\wopt) + \frac{\mu}{2}\norm{\w_0 - \wopt}^2 }.
+        &= \E[\phi_k(\wopt)] \nonumber \\
+        &\leq \rbr{1 - \lambda_k} f(\wopt) + \lambda_k \phi_0(\wopt) \tag{\autoref{lemma:estimating-sequence}} \nonumber\\
+        \implies \E\sbr{f(\wk)} - f(\wopt) &\leq \lambda_k (\phi_0(\wopt) - f(\wopt)) \nonumber\\
+                                           &= \lambda_k \rbr{f(\w_0) - f(\wopt) + \frac{\mu}{2}\norm{\w_0 - \wopt}^2 }.\label{eq:lambda-rate}
+    \end{align}
+    The convergence rate is determined by the speed at which \( \lambda_k \) converges to 0, which we shall now derive.
+    The canonical form of \( \phi_k \) \citep[2.2.3]{nesterov2004lectures} gives the following expression for \( \gamma_k \): 
+    \begin{align*}
+        \gamma_{k} &= (1 - \alpha_{k-1}) \gamma_{k-1} + \alpha_{k-1} \mu.
+        \intertext{The choice \( \gamma_0 = \mu \) now yields }
+        \gamma_{k} &= (1 - \alpha_{k-1}) \mu + \alpha_{k-1} \mu = \mu,
     \end{align*}
-    The choice of \( \gamma_0 = \mu \) implies
-    \begin{itemize}
-        \item \(  \gamma_{k}  = (1 - \alpha_{k-1}) \gamma_{k-1} + \alpha_{k-1} \mu = \mu \);
-        \item \( \alpha_{k} = \sqrt{\frac{\gamma_{k+1}}{\sgc L}} = \sqrt{\frac{\mu}{\sgc L}} \);
-        \item \( \lambda_{k} = (1 - \alpha_{k-1}) \lambda_{k-1} = \rbr{1 - \sqrt{\frac{\mu}{\sgc L}}}^{k} \).
-    \end{itemize}
-    Altogether, we obtain
+    by induction on \( k \).
+    The definition of \ac{RSAGD} (\autoref{procedure:reformulated-agd}) gives 
+    \begin{align*}
+        \alpha_k^2 &= \frac{\gamma_{k+1}}{\rho L} = \frac{\mu}{\rho L},\\
+        \implies \alpha_k &= \sqrt{\frac{\mu}{\rho L}}. 
+    \end{align*}
+    Finally, the choice of estimating sequences in \autoref{lemma:estimating-sequence} gives \( \lambda_0 = 1 \) and
+    \begin{align*}
+        \lambda_k &= \rbr{1 - \alpha_k} \lambda_{k-1}\\ 
+                  &= \rbr{1 - \sqrt{\frac{\mu}{\rho L}}} \lambda_{k-1}.
+                  \intertext{for every \( k > 0 \). Recursing on this inequality gives}
+        \lambda_k &= \rbr{1 - \sqrt{\frac{\mu}{\rho L}}}^k \lambda_0\\
+                  &= \rbr{1 - \sqrt{\frac{\mu}{\rho L}}}^k.
+    \end{align*}
+    Substituting this expression into \autoref{eq:lambda-rate} yields the final result: 
     \[ \E\sbr{f(\wk)} - f(\wopt) \leq \rbr{1 - \sqrt{\frac{\mu}{\sgc L}}}^{k} \rbr{ f(w_0) - f(\wopt) + \frac{\mu}{2} \norm{\wopt - \w_0}^2 }. \]
 \end{proof}
-
-\newpage
 
 \section{Convergence for Convex Functions}\label{app:agd-convex}
 

@@ -14,7 +14,7 @@
     \end{align*}
     which is a necessary and sufficient condition for \( f \) to be \( \Lmax \)-smooth~\citep[Theorem 2.1.5]{nesterov2004lectures}.\\
 
-    Now, assume \oracle{} is biased, but \( \calZ \) is finite.
+    Now, assume \oracle{} is biased, meaning \( \Ek\sbr{\grad(\wk, \zk)} \neq \grad(\wk) \), but \( \calZ \) is finite.
     In this case, \( \frac{\partial}{\partial \w_j} f(\w, \zk) \leq \max_{z \in \calZ} | \frac{\partial}{\partial \w_j} (\w, \z)| \) almost surely for each dimension \( j \in d \).
     The maximum of each partial derivative over \( \calZ \) is finite by assumption and thus \( \nabla f(\w, \zk) \) is dominated by a constant vector.
     Starting again from individual smoothness,
@@ -28,6 +28,12 @@
 \end{proof}
 
 \section{Interpolation}~\label{app:interpolation}
+
+\interpolationMinima*
+\interpolationGradients*
+\interpolationMixed*
+
+\hfill \break
 
 \interpRelationships*
 \begin{proof}\hfill \break
@@ -140,12 +146,13 @@ We conclude that maximal strong growth holds with \(\rho' = \max_k \frac{\rho}{p
 \begin{proof}
     Starting from \( \Lmax \) individual-smoothness of \oracle{}, 
     \begin{align*}
-        f(v, \zk) &\leq f(\w, \zk) + \abr{\grad(\w, \zk), u - \w} + \frac{\Lmax}{2}\norm{u - \w}^2\\
+        f(u, \zk) &\leq f(\w, \zk) + \abr{\grad(\w, \zk), u - \w} + \frac{\Lmax}{2}\norm{u - \w}^2\\
         \intertext{Choosing \( u = \w - \frac{1}{\Lmax}\grad(\w, \zk) \),}
-        f(v, \zk) &\leq f(\w, \zk) - \frac{1}{\Lmax}\abr{\grad(\w, \zk), \grad(\w,\zk)} + \frac{\Lmax}{2\Lmax^2}\norm{\grad(\w,\zk)}^2\\
+        f(u, \zk) &\leq f(\w, \zk) - \frac{1}{\Lmax}\abr{\grad(\w, \zk), \grad(\w,\zk)} + \frac{\Lmax}{2\Lmax^2}\norm{\grad(\w,\zk)}^2\\
         &= f(\w, \zk) - \frac{1}{2\Lmax}\norm{\grad(\w,\zk)}^2.\\
-        \intertext{Noting that \( f(v,\zk) \geq f(\wopt) \) by interpolation and taking expectation with respect to \( \zk \) gives the following:}
+        \intertext{Noting that \( f(u,\zk) \geq f(\wopt, \zk) \) by minimizer interpolation and taking expectations with respect to \( \zk \) gives the following:}
         f(\wopt, \zk) &\leq f(\w, \zk) - \frac{1}{2\Lmax}\norm{\grad(\w,\zk)}^2\\
+        \implies \Ek\sbr{f(\wopt, \zk)} &\leq f(\w) - \frac{1}{2\Lmax}\Ek\sbr{\norm{\grad(\w,\zk)}^2}\\
         \implies f(\wopt) &\leq f(\w) - \frac{1}{2\Lmax}\Ek\sbr{\norm{\grad(\w,\zk)}^2}\\
         \implies \Ek \sbr{\norm{\grad(\w,\zk)}^2} &\leq 2 \Lmax \rbr{f(\wopt) - f(\w)}\\
                                                   &= 2 \rbr{\frac{\Lmax}{L}} L \rbr{f(\wopt) - f(\w)}.
