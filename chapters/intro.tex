@@ -66,10 +66,13 @@ That is, there exists at least one \( \wopt \in \R^d \) such that
 For functions with with multiple minimizers, we write \( \calX^* = \argmin_{w \in \R^d} f(\w) \) and denote the projection of a point onto the optimal set as \( \Pi_{\calX^*}(\w) \).
 Additionally, \( f \) is required to be differentiable and \( L \)-smooth, meaning the mapping \( \w \mapsto \grad(\w) \) is an \( L \)-Lipschitz function,
 \[ \norm{\grad(\w) - \grad(v)} \leq L \norm{\w - v} \quad \quad \forall \, \w, v \in \R^d. \]
-This is equivalent to the existence of the following quadratic upper-bound on \( f \):
+This is equivalent to the existence of the following quadratic bound on \( f \):
 \begin{align*}
-    f(v) &\leq f(w) + \abr{\grad(\w), v - \w} + \frac{L}{2}\norm{v - \w}^2 &\forall \, \w,v \in \R^d. \tag{\( L \)-Smoothness} 
-    \intertext{At times, we will further assume that \( f \) is convex or \( \mu \)-strongly-convex,}
+     \frac{L}{2}\norm{v - \w}^2 &\geq |f(v) - f(w) - \abr{\grad(\w), v - \w}| &\forall \, \w,v \in \R^d. \tag{\( L \)-Smoothness} 
+     \intertext{Often, only the upper-bound given by \( L \)-smoothness is used,}
+     f(v) &\leq f(\w) + \abr{\grad(\w), v - \w} + \frac{L}{2}\norm{v - \w}^2 &\forall \, \w,v \in \R^d,
+     \intertext{which is sometimes called one-sided Lipschitz-smoothness.
+                At times, we will further assume that \( f \) is convex or \( \mu \)-strongly-convex,}
     f(v) &\geq f(\w) + \abr{\grad(\w), v - \w} &\forall \, \w,v \in \R^d, \tag{Convexity} \\
     f(v) &\geq f(\w) + \abr{\grad(\w), v - \w} + \frac{\mu}{2}\norm{v - \w}^2 &\forall \, \w,v \in \R^d. \tag{\( \mu \)-Strong-Convexity}
 \end{align*}

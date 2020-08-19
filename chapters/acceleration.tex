@@ -109,9 +109,9 @@ Let us now fix a choice of estimating sequences following~\citet[Lemma 2.2.2]{ne
 \autoref{lemma:estimating-sequence} provides a recipe for generating local approximations of \( f \) by updating \( \phi_k \) with a global minorant of \( f \) ``centered'' at \( \yk \). 
 This minorant is quadratic when \( f \) is strongly-convex and linear when \( f \) is convex (since \( \mu = 0 \)).
 An important property of the update is that it preserves the canonical form
-\begin{align*}
-    \phi_k(\w) = \phi_k^* + \frac{\gamma_k}{2}\norm{\w - \vk}^2,
-\end{align*}
+\begin{align}
+    \phi_k(\w) = \phi_k^* + \frac{\gamma_k}{2}\norm{\w - \vk}^2,\label{eq:canonical-form}
+\end{align}
 where \( \gamma_{k+1} = \rbr{1 - \alphak}\gamma_k + \alphak \mu \), \( \vk = \inv{\gamma_{k+1}} \rbr{(1-\alphak)\vk + \alphak \mu \, y_k - \alphak \grad(\yk)}, \) and 
 \begin{align*}
     \phi^*_{k+1} &= (1 - \alphak) \phi^*_k + \alphak\bigg(f(\yk) - \frac{\alphak}{2 \gamma_{k+1}} \norm{\grad(\yk)}^2 + \frac{(1 - \alphak)\gamma_k}{\gamma_{k+1}} \big(\frac{\mu}{2}\norm{\yk - \vk}^2\\ 

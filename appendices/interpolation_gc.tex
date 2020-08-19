@@ -10,9 +10,17 @@
     \begin{align*}
         f(v, \zk) &\leq f(\w, \zk) + \abr{\grad(\w, \zk), v - \w} + \frac{\Lmax}{2} \norm{v - \w}^2\\
         \implies \Ek \sbr{f(v, \zk)} &\leq \Ek \sbr{f(\w, \zk)} + \abr{\Ek \sbr{\grad(\w, \zk)}, v - \w} + \frac{\Lmax}{2} \norm{v - \w}^2\\
-        \implies f(v) &\leq \abr{\grad(\w), v - w} + \frac{\Lmax}{2}\norm{v - \w}^2, 
+        \implies f(v) &\leq f(\w) + \abr{\grad(\w), v - w} + \frac{\Lmax}{2}\norm{v - \w}^2, 
     \end{align*}
-    which is a necessary and sufficient condition for \( f \) to be \( \Lmax \)-smooth~\citep[Theorem 2.1.5]{nesterov2004lectures}.\\
+    Smoothness also gives the lower-bound, 
+    \begin{align*}
+        f(v, \zk) &\geq f(\w, \zk) + \abr{\grad(\w, \zk), v - \w} - \frac{\Lmax}{2} \norm{v - \w}^2\\
+        \implies \Ek \sbr{f(v, \zk)} &\geq \Ek \sbr{f(\w, \zk)} + \abr{\Ek \sbr{\grad(\w, \zk)}, v - \w} + \frac{\Lmax}{2} \norm{v - \w}^2\\
+        \implies f(v) &\geq f(w) + \abr{\grad(\w), v - w} - \frac{\Lmax}{2}\norm{v - \w}^2. 
+    \end{align*}
+    We conclude that 
+    \[ \frac{\Lmax}{2}\norm{v - \w}^2 \geq |f(v) - f(w) - \abr{\grad(\w), v - \w}|, \] 
+    which, along with convexity, is a necessary and sufficient condition for \( f \) to be \( \Lmax \)-smooth~\citep[Theorem 2.1.5]{nesterov2004lectures}.\\
 
     Now, assume \oracle{} is biased, meaning \( \Ek\sbr{\grad(\wk, \zk)} \neq \grad(\wk) \), but \( \calZ \) is finite.
     In this case, \( \frac{\partial}{\partial \w_j} f(\w, \zk) \leq \max_{z \in \calZ} | \frac{\partial}{\partial \w_j} (\w, \z)| \) almost surely for each dimension \( j \in d \).
@@ -24,7 +32,12 @@
                                      &\leq \Ek \sbr{f(\w, \zk)} + \abr{\nabla \, \Ek \sbr{f(\w, \zk)}, v - \w} + \frac{\Lmax}{2} \norm{v - \w}^2,
     \end{align*}
     where the order of the gradient and expectation operators was exchanged by appealing to the dominated convergence theorem~\citep[Theorem 4.16]{ccinlar2011probability}.
-    This implies \( \Ek\sbr{f(\w, \zk)} \) to be \( \Lmax \)-smooth in \( \w \).
+    An identical derivation using the lower-bound from smoothness yields 
+    \[ \Ek \sbr{f(v, \zk)} \geq \Ek \sbr{f(\w, \zk)} + \abr{\nabla \, \Ek \sbr{f(\w, \zk)}, v - \w} - \frac{\Lmax}{2} \norm{v - \w}^2, \]
+    which implies 
+    \[ \frac{\Lmax}{2} \norm{v - \w}^2 \geq |\Ek \sbr{f(v, \zk)} - \Ek \sbr{f(\w, \zk)} - \abr{\nabla \, \Ek \sbr{f(\w, \zk)}, v - \w}, \]
+    Convexity of \( f(\cdot, \zk) \) point-wise over \( \calZ \) implies that \( \Ek \sbr{f(\cdot, \zk)} \) is also convex.
+    Thus, \( \Ek\sbr{f(\w, \zk)} \) is \( \Lmax \)-smooth in \( \w \) by Lemma 2.1.5 of \citet{nesterov2004lectures}. 
 \end{proof}
 
 \section{Interpolation}~\label{app:interpolation}
@@ -129,6 +142,7 @@ where \( p_k^* = \min \cbr{p_k(\tilde \z) : p_k(\z) > 0 } \).
 We conclude that maximal strong growth holds with \(\rho' = \max_k \frac{\rho}{p^*_{k}}\).
 \end{proof}
 
+\newpage
 
 \sgcWGCRelationship*
 \begin{proof}

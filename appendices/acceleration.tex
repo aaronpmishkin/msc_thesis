@@ -79,8 +79,8 @@
         \implies \E\sbr{f(\wk)} - f(\wopt) &\leq \lambda_k (\phi_0(\wopt) - f(\wopt)) \nonumber\\
                                            &= \lambda_k \rbr{f(\w_0) - f(\wopt) + \frac{\mu}{2}\norm{\w_0 - \wopt}^2 }.\label{eq:lambda-rate}
     \end{align}
-    The convergence rate is determined by the speed at which \( \lambda_k \) converges to 0, which we shall now derive.
-    The canonical form of \( \phi_k \) \citep[2.2.3]{nesterov2004lectures} gives the following expression for \( \gamma_k \): 
+    The convergence rate of \ac{RSAGD} is determined by the speed at which \( \lambda_k \) converges to 0, which we shall now derive.
+    The canonical form of \( \phi_k \) (\autoref{eq:canonical-form}) gives the following expression for \( \gamma_k \): 
     \begin{align*}
         \gamma_{k} &= (1 - \alpha_{k-1}) \gamma_{k-1} + \alpha_{k-1} \mu.
         \intertext{The choice \( \gamma_0 = \mu \) now yields }
@@ -109,28 +109,37 @@
 \convexAGD*
 \begin{proof}
     We obtain the following inequality immediately:
+    \begin{align}
+        \E\sbr{f(\wk)} &\leq \E[\inf_x \phi_k(x)] \tag{by Lemma~\ref{lemma:estimating-sequence-bound}} \nonumber\\
+        &\leq \E[\phi_k(\wopt)] \nonumber \\
+        &\leq \rbr{1 - \lambda_k} f(\wopt) + \lambda_k \phi_0(\wopt) \tag{by Definition~\ref{def:estimating_sequences}} \nonumber\\
+        \implies \E\sbr{f(\wk)} - f(\wopt) &\leq \lambda_k (\phi_0(\wopt) - f(\wopt)) \nonumber\\
+                                           &= \lambda_k \rbr{f(\w_0) - f(\wopt) + \sgc L \norm{\w_0 - \wopt}^2 } \label{eq:convex-lambda-rate}.
+    \end{align}
+    We can see that the convergence rate of \ac{RSAGD} is controlled by the \( \lambda_k \) sequence.
+    Let us analyze its rate of convergence to \( 0 \).
+    The canonical form of \( \phi_k \) (\autoref{eq:canonical-form}) gives the following expression for \( \gamma_k \): 
     \begin{align*}
-        \E\sbr{f(\wk)} &\leq \E[\inf_x \phi_k(x)] \tag{by Lemma~\ref{lemma:estimating-sequence-bound}}\\
-        &\leq \E[\phi_k(\wopt)] \\
-        &\leq \rbr{1 - \lambda_k} f(\wopt) + \lambda_k \phi_0(\wopt) \tag{by Definition~\ref{def:estimating_sequences}}\\
-        \implies \E\sbr{f(\wk)} - f(\wopt) &\leq \lambda_k (\phi_0(\wopt) - f(\wopt))\\
-                                           &= \lambda_k \rbr{f(\w_0) - f(\wopt) + \sgc L \norm{\w_0 - \wopt}^2 }.
+        \gamma_{k} &= (1 - \alpha_{k-1}) \gamma_{k-1} + \alpha_{k-1} \mu\\
+        \gamma_{k} &= (1 - \alpha_{k-1}) \gamma_{k-1}, 
     \end{align*}
-    Let \( \tilde L = \sgc L \). 
+    since \( \mu = 0 \).
+    The definition of \ac{RSAGD} (\autoref{procedure:reformulated-agd}) and our choice of estimating sequences (\autoref{lemma:estimating-sequence} gives 
+    \begin{align*}
+        \alpha_k^2 &= \frac{\gamma_{k+1}}{\rho L},\\
+        \lambda_k & = (1 - \alpha_k) \lambda_{k-1}. 
+    \end{align*}
     Now we must upper-bound \( \lambda_k \), given that \( \lambda_0 = 2 \tilde L \).
-    Noting \( \mu = 0 \) since \( f \) is only convex gives the following concrete expression for the different parameter sequences: 
-    \begin{itemize}
-        \item \(  \gamma_{k}  = (1 - \alpha_{k-1}) \gamma_{k-1} \);
-        \item \( \alpha_{k} = \sqrt{\gamma_{k+1} / \tilde L} \);
-        \item \( \lambda_{k} = (1 - \alpha_{k-1}) \lambda_{k-1} \).
-    \end{itemize}
-    Lemma 2.2.4 from \citet{nesterov2004lectures} now implies 
-    \[ \lambda_k \leq \frac{4 \tilde L}{\gamma_0 \rbr{k + 1}^2} = \frac{2}{\rbr{k + 1}^2}. \]
-    The convergence rate of R-SAGD is thus 
+    Let \( \tilde L = \sgc L \). 
+    Invoking Lemma 2.2.4 of \citet{nesterov2004lectures} with \( \tilde L \) implies 
+    \begin{align*}
+        \lambda_k &\leq \frac{4 \tilde L}{\gamma_0 \rbr{k + 1}^2}\\ 
+                  &= \frac{2}{\rbr{k + 1}^2}.
+    \end{align*}
+    Substituting this into \autoref{eq:convex-lambda-rate} yields the final result: 
     \[  \E\sbr{f(\wk)} - f(\wopt) \leq \frac{2}{\rbr{k+1}^2}\rbr{f(\w_0) - f(\wopt) + \sgc L \norm{\w_0 - \wopt}^2 }. \]
 \end{proof}
 
-\newpage
 
 \section{Additional Lemmas}\label{app:agd-additional-lemmas}
 

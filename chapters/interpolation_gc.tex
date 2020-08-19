@@ -62,9 +62,9 @@ In this case, we say \oracle{} satisfies \emph{individual smoothness} with param
 holds point-wise over \( \calZ \) and thus almost-surely for each \( \zk \).
 Note that the existence of an \( \Lmax \) individually-smooth, unbiased \ac{SFO} for \( f \) implies that \( f \) is \( L \)-smooth with \( L \leq \Lmax \) as an immediately corollary.
 \begin{restatable}{corollary}{indSmoothToSmooth}~\label{cor:ind-smooth-to-smooth}
-    Let \( f : \R^d \rightarrow \R \) be a differentiable function.  
+    Let \( f : \R^d \rightarrow \R \) be a convex, differentiable function.  
     If there exists an unbiased, \( \Lmax \) individually-smooth \ac{SFO} \oracle{} for \( f \), then \( f \) is \( L \)-smooth with \( L \leq \Lmax \).
-    Alternatively, if \( \oracle{} \) is biased but the support \( \calZ \) is finite and the partial derivatives \( \frac{\partial}{\partial w_j} f(\w, \z) \) are finite for each \( z \in \calZ \), then \( \Ek \sbr{f(\cdot, \zk)} \) is \( \Lmax \)-smooth for all \( k \). 
+    Alternatively, if \( \oracle{} \) is individually-convex and biased with finite support \( \calZ \) and finite partial derivatives \( \frac{\partial}{\partial w_j} f(\w, \z) \) for each \( z \in \calZ \), then \( \Ek \sbr{f(\cdot, \zk)} \) is \( \Lmax \)-smooth for all \( k \). 
 \end{restatable}
 \noindent See \autoref{app:stochastic-oracles} for proof. 
 In several cases, we will also make use of individual strong-convexity.

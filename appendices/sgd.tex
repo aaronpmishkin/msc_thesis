@@ -53,13 +53,15 @@
    \begin{align*}
        \norm{\wkk - \wopt}^2 &= \norm{\wk - \eta \grad(\wk, \zk) - \wopt}^2\\
                              &= \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \abr{\grad(\wk, \zk), \wk - \wopt} + \norm{\wk - \wopt}^2.
-                             \intertext{Recall \( f(\cdot, \zk) \) is convex, \( \Lmax \)-smooth, and \( \grad(\wopt, \zk) = 0 \) by interpolation. \autoref{lemma:co-coercivity} yields }
+                             \intertext{Recall \( f(\cdot, \zk) \) is convex, \( \Lmax \)-smooth, and \( \grad(\wopt, \zk) = 0 \) by interpolation. By \autoref{lemma:co-coercivity}, we have }
+       \norm{\grad(\wk, \zk)}^2 &\leq \Lmax \abr{\grad(\wk, \zk), \wk - \wopt}.
+        \intertext{Applying this to the above yields}
        \norm{\wkk - \wopt}^2 &\leq \eta^2 \Lmax \abr{\grad(\wk, \zk), \wk - \wopt} - 2 \eta \abr{\grad(\wk, \zk), \wk - \wopt} + \norm{\wk - \wopt}^2\\
        \norm{\wkk - \wopt}^2 &= - \eta \rbr{2 - \eta \Lmax} \abr{\grad(\wk, \zk), \wk - \wopt} + \norm{\wk - \wopt}^2.
        \intertext{Taking expectations with respect to \( \zk \): }
        \implies \Ek\sbr{\norm{\wkk - \wopt}^2} &\leq - \eta \rbr{2 - \eta \Lmax} \Ek\sbr{\abr{\grad(\wk, zk), \wk - \wopt}} + \norm{\wk - \wopt}^2\\
                                                &= - \eta \rbr{2 - \eta \Lmax} \abr{\grad(\wk), \wk - \wopt} + \norm{\wk - \wopt}^2.
-                                               \intertext{If \( \eta \leq \frac{2}{\Lmax} \), then \( 2 - \eta \Lmax \geq 0 \) and \autoref{lemma:inner-to-iterates} implies }
+                                               \intertext{If \( \eta \leq \frac{2}{\Lmax} \), then \( 2 - \eta \Lmax \geq 0 \). Combing this with \( \abr{\grad(\wk), \wk - \wopt} \geq \mu \norm{\wk - \wopt}^2 \) by \autoref{lemma:inner-to-iterates} allows us to obtain the following: }
        \Ek \sbr{\norm{\wkk - \wopt}^2} &\leq  - \mu \, \eta \rbr{2 - \eta \Lmax} \norm{\wk - \wopt}^2 + \norm{\wk - \wopt}^2\\
                                        &= \rbr{1 - \mu \, \eta \rbr{2 - \eta \Lmax}}\norm{\wk - \wopt}^2.
                              \intertext{Taking expectations and recursing on this inequality yields the final result,}
@@ -100,10 +102,13 @@
 \end{restatable}
 
 \begin{proof}
+    Let \( \wopt = \Pi_{\calX^*}(w_0) \). We have
     \begin{align*}
        \norm{\wkk - \wopt}^2 &= \norm{\wk - \etak \grad(\wk, \zk) + - \wopt}^2\\
                              &= \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \abr{\grad(\wk, \zk), \wk - \wopt} + \norm{\wk - \wopt}^2. 
-                             \intertext{The weak growth condition implies \( \grad(\wopt, \z) = 0 \) for all \( \z \in \calZ \). We may thus use \autoref{lemma:pre-coercivity} at \( \wk \) and \( \wopt \) to obtain}
+                             \intertext{The weak growth condition implies \( \grad(\wopt, \z) = 0 \) for all \( \z \in \calZ \). \autoref{lemma:pre-coercivity} at \( \wk \) and \( \wopt \) states}
+       f(\wk, \zk) - f(\wopt, \zk) &\leq  \abr{\grad(\wk, \zk), \wk - \wopt} - \frac{1}{2\Lmax} \norm{\grad(\wk, \zk)}^2.
+    \intertext{Substituting this into the above gives}
                        \norm{\wkk - \wopt}^2 &\leq \eta^2 \norm{\grad(\wk, \zk)}^2 - 2 \eta \rbr{f(\wk, \zk) - f(\wopt, \zk) + \frac{1}{2\Lmax} \norm{\grad(\wk, \zk)}^2} \\ 
                                              & \hspace{5em} + \norm{\wk - \wopt}^2\\
                          &\leq \rbr{\eta^2 - \frac{\eta}{\Lmax}} \norm{\grad(\wk, \zk)}^2 - 2 \eta \rbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2.

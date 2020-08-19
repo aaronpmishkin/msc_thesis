@@ -36,6 +36,7 @@
 
 \lsIntermediate*
 \begin{proof}
+   Let \( \wopt \in \calX^* \) be arbitrary. Then,
    \begin{align*}
        \norm{\wkk - \wopt}^2 &= \norm{\wk - \etak \grad(\wk, \zk) - \wopt}^2\\
                              &= \etak^2 \norm{\grad(\wk, \zk)}^2 - 2\etak \abr{\grad(\wk, \zk), \wk - \wopt} +  \norm{\wk - \wopt}^2.
@@ -73,7 +74,7 @@
     \begin{align*}
                              f(\wk) - f(\wopt) &\leq \half \max\cbr{\frac{\Lmax}{2(1-c)}, \frac{1}{\etamax}} \rbr{\norm{\wk - \wopt}^2 - \Ek\sbr{\norm{\wkk - \wopt}^2}}\\
   \implies \Ek\sbr{\norm{\wkk - \wopt}^2} &\leq \norm{\wk - \wopt}^2 - 2 \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax} \rbr{f(\wk) - f(\wopt)}\\
-  \intertext{Strong-convexity and \autoref{lemma:iterate-bounds} imply}
+  \intertext{Strong-convexity implies \( \f(\wk) - f(\wopt) \geq \frac{\mu}{2} \norm{\wk - \wopt}^2 \) (\autoref{lemma:iterate-bounds}). Using this inequality yields }
            \Ek\sbr{\norm{\wkk - \wopt}^2} &\leq \norm{\wk - \wopt}^2  - \mu \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax}\norm{\wk - \wopt}^2 \\
                                                &= \rbr{1 - \mu \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax}} \norm{\wk - \wopt}^2.
                                                    \intertext{Taking expectations and recursing on the inequality,}
@@ -85,7 +86,7 @@
 
 \convexLineSearch*
 \begin{proof}
-    Starting from \autoref{lemma:ls-intermediate},
+    Starting from \autoref{lemma:ls-intermediate} with \( \wopt = \Pi_{\calX^*}(w_0), \)
     \begin{align*}
         f(\wk) - f(\wopt) &\leq \half \max\cbr{\frac{\Lmax}{2(1-c)}, \frac{1}{\etamax}} \rbr{\norm{\wk - \wopt}^2 - \E_{\zk}\sbr{\norm{\wkk - \wopt}^2}}.
         \intertext{Taking expectations and summing from \( k=0 \) to \( K-1 \),}
