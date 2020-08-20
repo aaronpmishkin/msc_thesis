@@ -124,6 +124,9 @@ In contrast, \autoref{def:interpolation-gradients} puts the same requirement on 
 For general functions and \acp{SFO}, the relationship between these models of interpolation is limited to the following: minimizer interpolation and stationary-point interpolation are stronger than mixed interpolation. 
 However, all three definitions are equivalent when \( f \) and \( f(\cdot, \z) \) are invex for all \( z \in \calZ \).
 This is stated in the following lemma.
+
+\newpage
+
 \begin{restatable}{lemma}{interpRelationships}~\label{thm:interp-relationships}
     Let \( \rbr{f, \oracle{}} \) be an arbitrary function-\ac{SFO} pair. 
     Then only the following relationships hold between models of interpolation:
@@ -267,7 +270,7 @@ In fact, the converse relation holds if \( f \) is Lipschitz-smooth, as we now s
 \begin{restatable}{lemma}{sgcWGCRelationship}\label{lemma:sgc-wgc-relationship}
     Let \( \rbr{f, \oracle{}} \) be a function-oracle pair satisfying the strong growth condition with parameter \( \rho \).
     If \( f \) is \( L \)-smooth, then \( \rbr{f, \oracle{}} \) satisfies weak growth with parameter 
-    \[ \alpha \leq 2 \rho L. \]
+    \( \alpha \leq 2 \rho L. \)
 \end{restatable}     
 \noindent See \autoref{app:growth-conditions} for proof.\hfill \break
 
@@ -281,7 +284,7 @@ The reverse implications are more involved; we establish them formally in the fo
 \begin{restatable}[Interpolation and Weak Growth]{lemma}{interpToWGC}~\label{lemma:interpolation-to-wgc}
     Let \( f \) be an \( L \)-smooth function and \oracle{} an \( \Lmax \) individually-smooth \ac{SFO}.
     If \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation, then the pair also satisfies the weak growth condition with parameter
-    \[ \wgc \leq \frac{L_{\text{max}}}{L}. \]
+    \( \wgc \leq \frac{L_{\text{max}}}{L}. \)
 \end{restatable}
 \noindent See \autoref{app:growth-conditions} for proof. \hfill \break
 
@@ -293,7 +296,7 @@ The following lemma does exactly this.
 \begin{restatable}[Interpolation and Strong Growth]{lemma}{interpToSGC}~\label{lemma:interpolation-to-sgc}
     Let \( f \) be a \( L \)-smooth  \( \mu \)-\ac{PL} function and \oracle{} an \( \Lmax \) individually-smooth \ac{SFO}.
     If \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation, then the pair also satisfies the strong growth condition with parameter
-    \[ \rho \leq \frac{L_{\text{max}}}{\mu}. \]
+    \( \rho \leq \frac{L_{\text{max}}}{\mu}. \)
 \end{restatable}
 \noindent See \autoref{app:growth-conditions} for proof. \hfill \break
 
@@ -316,10 +319,11 @@ As a by-product, we obtain worst-case bounds on the strong and weak growth param
              Strong growth holds if \( f \) additionally satisfies the \ac{PL} condition, which is implied by strong-convexity.}%
     \label{table:interpolation_gc}
 \end{table}
-\edit{
+
+\section{Conclusions}~\label{sec:interp-gc-conclusions}
+
 We have now completed our goal of formalizing interpolation for general stochastic optimization problems.
 To do this, we leveraged the concept of an \ac{SFO}, which provides a mechanism for optimization algorithms to query (unbiased) stochastic function and gradient values at each iteration.
-Moreover, we also showed that a class of \acp{SFO} satisfying a natural Lipschitz-smoothness property, called individual smoothness, satisfy the weak/strong growth conditions when minimizer interpolation holds.
+Moreover, we also showed that a class of \acp{SFO} satisfying a natural Lipschitz-smoothness property, called individual smoothness, satisfy the weak/strong growth conditions when minimizer interpolation holds (Lemmas~\ref{lemma:interpolation-to-wgc} and~\ref{lemma:interpolation-to-sgc}).
 These oracles are well-behaved globally despite the inherently local natural of minimizer interpolation. 
 As we shall see in the coming chapters, such global regularity is sufficient for the convergence of constant step-size \ac{SGD}, as well as effective line-search techniques and acceleration. 
-}

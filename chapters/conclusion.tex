@@ -12,7 +12,8 @@ Such a property is satisfied for smooth supervised learning problems.
 The theoretical analysis of first-order methods focuses on \ac{SGD} and a stochastic version of Nesterov's \acl{AGD}. 
 For \ac{SGD}, we analyze the iteration complexity with a fixed step-size as well as with a stochastic Armijo line-search.
 In both cases, our results are tighter than existing convergence rates and allow for a wider range of parameters.
-The improvement in convergence speed ranges from constant factors to exponential speed-up.\footnote{See \autoref{thm:sc-line-search}, where our rate is exponentially faster than that of \citet{vaswani2019painless} when \( \bar \mu = 0 \).} 
+For convex functions, we recover the best-known convergence rates in the deterministic setting both with and without the Armijo line-search.
+%\footnote{See \autoref{thm:sc-line-search}, where our rate is exponentially faster than that of \citet{vaswani2019painless} when \( \bar \mu = 0 \).} 
 In all cases, specific care is taken to understand the impact of additional assumptions, such as smoothness or convexity of the oracle.
 
 Our study of \ac{SAGD} uses the estimating sequences framework developed by \citet{nesterov2004lectures}.

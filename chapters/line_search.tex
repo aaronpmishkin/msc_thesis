@@ -9,8 +9,19 @@ Meeting this requirement demands knowledge of the strong-convexity and smoothnes
 In practice, we are unlikely to have knowledge of these coefficients or to possess straightforward means for estimating them.
 This leaves a dilemma: over-estimate the optimal step-size and risk divergence, or use a small step-size that yields slow convergence. 
 
+This chapter tackles the problem of step-size selection by augmenting \ac{SGD} with a stochastic Armijo line-search algorithm that \emph{automatically} finds a suitable step-size at each iteration.
+Unlike meta-optimization schemes such as grid search, random search, or Bayesian optimization, line-search techniques do not require multiple, costly executions of the optimization procedure~\citep{snoek2012bayesian}.
+Accordingly, practical line-searches implementations are typically very fast in comparison to meta-optimization approaches~\citep{nocedal1999numerical}.
+Moreover, as we will show in the following sections, the convergence speed of \ac{SGD} with a stochastic line-search is tight with that of \ac{SGD} with the best fixed step-size when minimizer interpolation is satisfied. 
+
+The work in this chapter was originally conducted by the author as part of \citet{vaswani2019painless}.
+The proposal to augment \ac{SGD} with the stochastic Armijo line-search, the definition the algorithm (\autoref{procedure:armijo-ls}, \autoref{lemma:step-size-bound}, and \autoref{thm:non-convex-line-search} are reproduced from \citet{vaswani2019fast}. 
+In contrast, Theorems~\ref{thm:sc-line-search} and~\ref{thm:convex-line-search} are new, unpublished improvements over the originally published theorems. 
+
+\section{Background}~\label{sec:line-search-background}
+
 Line-search algorithms are a classic solution to the problem of step-size selection in the deterministic setting.
-The basic notion is search along the gradient direction (or, more generally, a descent direction) for a step-size that satisfies a desirable property.
+The basic notion is to search along the gradient direction (or, more generally, a descent direction) for a step-size that satisfies a desirable property.
 A common rule is the Armijo condition, 
  \begin{align}
      f(\wk - \etak v_k) &\leq f(\wk) + c \cdot \etak \abr{\grad(\wk), v_k},~\label{eq:deterministic-armijo-ls}
@@ -63,7 +74,7 @@ In particular, we establish the following results under minimizer interpolation:
 \begin{enumerate}
     \item Linear convergence for strongly-convex \( f \) and \( \Lmax \) individually-smooth and convex \oracle{}; moreover, this rate is tight with fixed step-size \ac{SGD}. 
     \item Sub-linear convergence for convex \( f \) and \( \Lmax \) individually-smooth and convex \oracle{}; again, this rate is tight with the fixed step-size case.
-    \item Sub-linear convergence to a stationary point for non-convex \( f \) when \( \rbr{f, \oracle{}} \) satisfies strong growth.
+    \item Sub-linear convergence to a stationary point for non-convex \( f \) when \( \rbr{f, \oracle{}} \) satisfies strong growth. Note that this result is reproduced from \citet{vaswani2019painless}.
 \end{enumerate}
 
 \begin{figure}[t]
@@ -79,13 +90,13 @@ In particular, we establish the following results under minimizer interpolation:
         \end{enumerate}
     \end{procedure}
     \caption[Procedural definition of stochastic gradient descent with the stochastic Armijo line-search.]%
-        {Stochastic gradient descent with the stochastic Armijo line-search.
+       {Stochastic gradient descent with the stochastic Armijo line-search, as proposed by \citet{vaswani2019painless}.
         We assume that the backtracking procedure can be evaluated exactly, meaning the maximal step-size \( \etak \) satisfying the Armijo is selected.
         Note that \oracle{} must be queried for additional function values \( f(\wkk, \zk) \) during backtracking.}%
     \label{procedure:armijo-ls}
 \end{figure}
 
-Now, let us introduce a more formal definition of \ac{SGD} with the Armijo line-search before proceeding with our analysis.
+Now, let us introduce a formal definition of \ac{SGD} with the Armijo line-search before proceeding with our analysis.
 \autoref{procedure:armijo-ls} presents the basic procedure of the algorithm.
 There are several key differences from fixed step-size \ac{SGD}, which are noted as follows:
 \begin{inparaenum}[(i)]
@@ -108,17 +119,17 @@ While \autoref{procedure:armijo-ls} uses an idealized backtracking procedure, in
     \label{fig:step-size-bound}
 \end{figure}
 
+\section{Convergence for Strongly-Convex Functions}~\label{sec:ls-sc}
+
 The first step of our analysis is to control the step-size \( \etak \) using smoothness and the line-search condition.
 Lower-bounding the step-size relies on smoothness of \( f(\cdot, \zk) \), which is why the results in this chapter require \oracle{} to be individually-smooth. 
 This fact also motivates our transition from assuming the strong/weak growth conditions to directly reasoning with individually-smooth oracles where \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation.
+The following lemma is reproduced from \citet{vaswani2019painless}; the proof in \autoref{app:line-search} is modified from the original for greater clarity. 
 \begin{restatable}{lemma}{stepSizeBound}~\label{lemma:step-size-bound}
     Let \( f \) be an \( L \)-smooth function and \oracle{} an \( \Lmax \) individually-smooth \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation. 
     Then the maximum possible step-size returned by the stochastic Armijo line-search constrained to lie in the \( (0, \etamax \, ] \) range satisfies the following inequalities:
     \[ \min\cbr{\frac{2 (1-c)}{\Lmax}, \etamax} \leq \etak \leq \frac{f(\wk, \zk) - f(\wopt, \zk)}{c \norm{\grad(\wk, \zk)}^2}. \]
 \end{restatable}
-\noindent See \autoref{app:line-search} for proof.
-
-\section{Convergence for Strongly-Convex Functions}~\label{sec:ls-sc}
 
 \autoref{lemma:step-size-bound} is the main tool needed to analyze \ac{SGD} with the Armijo line-search in the convex setting.
 Specifically, it allows us to establish the following progress condition, which will be at the core of our proofs for convex and strongly convex functions. 
@@ -266,4 +277,16 @@ Again, a correlated inner-product \( \etak \abr{\grad(\wk), \grad(\wk, \zk)} \) 
 where the inequality stems from separately bounding \( \etak \) on each positive and negative terms.
 This bound is worst-case, but separates the step-size and stochastic gradient, allowing the proof to proceed.
 As a side-effect, we require a tight upper-bound on the maximum step-size: \( \etamax < \frac{2}{\sgc L} \).
+
+\section{Conclusions}~\label{sec:line-search-conclusions}
+
+The main focus of this chapter was augmenting \ac{SGD} with an automatic mechanism for selecting \( \eta \), the step-size parameter. 
+In particular, we sought to develop a tuning-free approach that obtains comparable convergence speed to \ac{SGD} with a fixed step-size (as established in \autoref{ch:sgd}) \emph{without} restarts or a meta-optimization procedure. 
+This was achieved by combining \ac{SGD} with the stochastic Armijo line-search, as proposed by \citet{vaswani2019painless}. 
+We then developed new convergence results for strongly-convex (\autoref{thm:sc-line-search}) and convex (\autoref{thm:convex-line-search}) functions that improve over those given by \citet{vaswani2019painless} by constant factors. 
+These rates show that \ac{SGD} with the stochastic Armijo line-search obtains a converge rate for (strongly-) convex functions that is tight with fixed step-size \ac{SGD} despite requiring no knowledge of the problem constants. 
+Finally, we considered general non-convex functions and showed \ac{SGD} with the stochastic Armijo line-search converges to a stationary point if an aggressive upper-bound on the step-size is enforced (\autoref{thm:non-convex-line-search}). 
+
+
+
 

@@ -41,7 +41,8 @@ Let us use \autoref{lemma:regularized-wgc} to show that \ac{SGD} with a constant
 Approximate convergence to a region around \( \wopt \) is the best that can be obtained without an averaging scheme or decreasing step-size due to the irreducible \( \frac{\lambda}{2} \norm{\wbar}^2 + \frac{\lambda + \mu}{2} \norm{\wopt - \wbar}^2 \) term in the noise-bound.
 The following analysis assumes \( \mu \)-strong-convexity, but permits \( \mu = 0 \) in order to capture convex functions.
 In the case that \( \mu = 0 \), we are still able to obtain linear convergence because the regularized function \( F \) is \( \mu + \lambda \)-strongly-convex and \( L + \lambda \)-smooth. 
-
+Proof of the following theorem is given in \autoref{app:regularized-convex}.
+\newpage 
 
 \begin{restatable}{theorem}{sgdReguarlizedWGC}\label{thm:sgd-regularized-wgc}
     Let \( f \) be a \( \mu \)-strongly-convex (with \( \mu = 0 \) in the convex case), \( L \)-smooth function with at least one finite minimizer \( \wbar \) and \oracle{} a \ac{SFO} such that the pair \( \rbr{f, \oracle{}} \) satisfies the weak growth condition with constant \( \rho \).
@@ -49,7 +50,6 @@ In the case that \( \mu = 0 \), we are still able to obtain linear convergence b
     \[  \E\sbr{\norm{\w_K - \wopt}^2} \leq \rbr{1 - \frac{2 \eta (\mu + \lambda)(L + \lambda)}{(\mu + \lambda) + (L + \lambda)}}^K \norm{\w_0 - \wopt}^2 + \gamma\rbr{\lambda \norm{\wbar}^2 - \rbr{\lambda + \mu}\norm{\wopt - \wbar}^2}, \]
     where \( \gamma = \frac{\eta \max\cbr{\rho L, \lambda} \sbr{(\mu + \lambda) + (L + \lambda)}}{(\mu + \lambda)(L + \lambda)}. \)  
 \end{restatable}
-\noindent See \autoref{app:regularized-convex} for proof. \hfill \break
 
 \autoref{thm:sgd-regularized-wgc} shows that the size of the neighborhood to which \ac{SGD} converges is determined by the degree of regularization, which fits with the intuition from the previous section.
 We make the following observations about the effect of \( \lambda \) on region of convergence:
@@ -58,11 +58,14 @@ We make the following observations about the effect of \( \lambda \) on region o
 \item as \( \lambda \rightarrow \infty \), \( \wopt \rightarrow 0 \) and the neighborhood again collapses to \( 0 \); and 
 \item when \( f \) is convex and \( \eta \) attains is maximal value, the convergence rate of \ac{SGD} has the special case 
 \[  \E\sbr{\norm{\w_K - \wopt}^2} \leq \rbr{1 - \frac{2 \lambda^2(L + \lambda)}{\max\cbr{\rho L, \lambda} \rbr{L + 2\lambda}^2}}^K \norm{\w_0 - \wopt}^2 + \frac{\lambda}{\rbr{L + \lambda}}\rbr{\norm{\wbar}^2 - \norm{\wopt - \wbar}^2}. \]
-Crudely assuming \( \frac{\lambda}{\lambda + L} \approx 1 \) shows that the volume of the neighborhood largely depends on the convergence of \( \wopt \) to \( 0 \) as \( \lambda \) grows.
 \end{inparaenum}
+Crudely assuming \( \frac{\lambda}{\lambda + L} \approx 1 \) shows that the volume of the neighborhood largely depends on the convergence of \( \wopt \) to \( 0 \) as \( \lambda \) grows.
 
-The characterization of \ac{SGD} for \( L_2 \)-regularized problems  under interpolation in \autoref{thm:sgd-regularized-wgc} is a small but promising step towards the analysis of general structural minimization problems.
-Consider generalizing \autoref{eq:l2-reguarlized-problem} to 
+\section{Conclusions}~\label{sec:beyond-interp-conclusions}
+
+This chapter characterized the complexity of \ac{SGD} for \( L_2 \)-regularized problems under interpolation.
+\autoref{thm:sgd-regularized-wgc} is thus a small but promising step towards the analysis of general structural minimization problems.
+For example, consider generalizing \autoref{eq:l2-reguarlized-problem} to 
 \[ F(\w) = f(\w) + g(\w), \]
 where \( f \) is a \( L \)-smooth function with \ac{SFO} \oracle{} such that \( \rbr{f, \oracle{}} \) satisfies interpolation and \( g \) is a potentially non-smooth regularizer or indicator function. 
 This problem class includes \( L_1 \)-regularized minimization, as well as minimization with (convex) constraints.
