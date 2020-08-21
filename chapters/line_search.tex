@@ -11,11 +11,11 @@ This leaves a dilemma: over-estimate the optimal step-size and risk divergence, 
 
 This chapter tackles the problem of step-size selection by augmenting \ac{SGD} with a stochastic Armijo line-search algorithm that \emph{automatically} finds a suitable step-size at each iteration.
 Unlike meta-optimization schemes such as grid search, random search, or Bayesian optimization, line-search techniques do not require multiple, costly executions of the optimization procedure~\citep{snoek2012bayesian}.
-Accordingly, practical line-searches implementations are typically very fast in comparison to meta-optimization approaches~\citep{nocedal1999numerical}.
+Accordingly, practical line-search implementations are typically very fast in comparison to meta-optimization approaches~\citep{nocedal1999numerical}.
 Moreover, as we will show in the following sections, the convergence speed of \ac{SGD} with a stochastic line-search is tight with that of \ac{SGD} with the best fixed step-size when minimizer interpolation is satisfied. 
 
 The work in this chapter was originally conducted by the author as part of \citet{vaswani2019painless}.
-The proposal to augment \ac{SGD} with the stochastic Armijo line-search, the definition the algorithm (\autoref{procedure:armijo-ls}, \autoref{lemma:step-size-bound}, and \autoref{thm:non-convex-line-search} are reproduced from \citet{vaswani2019fast}. 
+The proposal to augment \ac{SGD} with the stochastic Armijo line-search, the algorithmic procedure in \autoref{procedure:armijo-ls}, \autoref{lemma:step-size-bound}, and \autoref{thm:non-convex-line-search} are reproduced from \citet{vaswani2019fast}. 
 In contrast, Theorems~\ref{thm:sc-line-search} and~\ref{thm:convex-line-search} are new, unpublished improvements over the originally published theorems. 
 
 \section{Background}~\label{sec:line-search-background}
@@ -113,7 +113,7 @@ While \autoref{procedure:armijo-ls} uses an idealized backtracking procedure, in
        {Graphical depiction of \autoref{lemma:step-size-bound}.
         The function \( f_{v_k} \) is the restriction of \( f \) to the descent direction \( v_k = -\grad(\wk) \), while \( \ell_{v_k} \) is the Armijo condition as a function of the step-size, \( \eta \).
         The dashed red line shows the upper-bound on \( f_{v_k} \) due to Lipschitz-smoothness.
-        We can see that a large range of step-size make sufficient progress (yellow region) and will be accepted by the Armijo condition; step-sizes for which the graph of \( \ell_{v_k} \) lies below \( f_{\vk} \) (red region) do not make enough progress and will be rejected. 
+        We can see that a large range of step-sizes make sufficient progress (yellow region) and will be accepted by the Armijo condition; step-sizes for which the graph of \( \ell_{v_k} \) lies below \( f_{\vk} \) (red region) do not make enough progress and will be rejected. 
         Smoothness guarantees that \( \ell_{v_k} \) is above \( f_{v_k} \) for a non-empty interval of step-sizes (green region), which will always be accepted.%
     }%
     \label{fig:step-size-bound}
@@ -148,7 +148,7 @@ Specifically, it allows us to establish the following progress condition, which 
     \item summing over iterations to obtain sub-linear convergence of the average iterate \( \bar w_K \).
 \end{inparaenum}
 Indeed, these are exactly the strategies used to prove Theorems~\ref{thm:sc-line-search} and~\ref{thm:convex-line-search}.
-We start with the strongly-convex case.
+We start with the strongly-convex case, with for the following theorem proof given in \autoref{app:sc-line-search}.
 
 \begin{restatable}{theorem}{scLineSearch}~\label{thm:sc-line-search}
     Let \( f \) be a \( \mu \)-strongly-convex, \( L \)-smooth function and \( \oracle{} \) an \( \Lmax \) individually-smooth and convex \ac{SFO} such that \( \rbr{f, \oracle{}} \) satisfies minimizer interpolation.
@@ -157,7 +157,6 @@ We start with the strongly-convex case.
         \E\sbr{\norm{\w_{K} - \wopt}^2} &\leq \rbr{1 - \mu \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax}}^K \norm{\w_0 - \wopt}^2. 
     \end{align*}
 \end{restatable}%
-\noindent See \autoref{app:sc-line-search} for proof. \hfill \break
 
 Setting \( c = \half \) and \( \etamax = \infty \) in \autoref{thm:sc-line-search} gives  
 \[ \E\sbr{\norm{\w_{K} - \wopt}^2} \leq \rbr{1 - \frac{\mu}{\Lmax}}^K \norm{\w_0 - \wopt}^2, \]
@@ -173,13 +172,11 @@ Unit step-sizes are not required for \ac{SGD}, where the stochastic Armijo line-
 Moreover, if \oracle{} is individually-smooth and \( c \in \rbr{0,1} \), then \autoref{lemma:step-size-bound} guarantees \ac{SGD} will satisfy \autoref{eq:armijo-ls} for some \( \etak > 0 \).
 As such, larger \( c \) values --- which demand greater decrease at each iteration --- arise naturally in our analysis.
 
-
-
 \autoref{table:ls-comparison} contrasts \autoref{thm:sc-line-search} with the other known result for \ac{SGD} with Armijo line-search on strongly-convex functions \citep[Theorem 1]{vaswani2019painless}. 
 In particular, note that the convergence rate presented here depends on the strong-convexity constant of the overall function, \( \mu \), instead of the expected constant \( \bar \mu = \Ek \sbr{\mu_{\zk}} \).
-This is a significant theoretical improvement for the following reason: our analysis permits all stochastic functions to be convex only, while that of \citet{vaswani2019painless} requires \( f(\cdot, \z) \) to be strongly-convex for at least one \( \z \in \calZ \).
+This is a nice theoretical improvement for the following reason: our analysis permits all stochastic functions to be convex only, while that of \citet{vaswani2019painless} requires \( f(\cdot, \z) \) to be strongly-convex for at least one \( \z \in \calZ \).
 Such a condition is unlikely to hold in practice and can lead to degenerate problems (see the discussion in \autoref{sec:sgd-sgc-ind-convex}).
-
+\autoref{thm:sc-line-search} is motivated by the work of \citet{loizou2020sps}, who previously obtained a similar improvement in the context of the stochastic Polyak step-size.
 
 \section{Convergence for Convex Functions}~\label{sec:ls-convex}
 

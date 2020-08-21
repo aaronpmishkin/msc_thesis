@@ -37,7 +37,7 @@ Very recently, adaptive variants of \ac{SGD} have been analyzed both with and wi
 This thesis analyzes a core group of first-order methods in stochastic optimization under interpolation.
 We consider constant step-size \ac{SGD}, \ac{SGD} with a stochastic Armijo line-search, and a version of Nesterov's accelerated gradient descent with stochastic gradients~\citep{nesterov2004lectures}. 
 In nearly all cases, we show that existing analyses can be tightened to yield faster convergence rates with a larger range of step-sizes. 
-In the case of acceleration, the improvement is comparable dividing by the square-root of the condition number and addresses criticisms that previous analyses yield inferior rates to those of \ac{SGD} in some circumstances~\citep{liu2020accelerating}. 
+In the case of acceleration, the improvement is comparable to dividing by the square-root of the condition number and addresses criticisms that previous analyses yield inferior rates to those of \ac{SGD} in some circumstances~\citep{liu2020accelerating}. 
 
 The thesis is organized as follows: 
 In \autoref{ch:interpolation-gc}, we formalize interpolation and the strong/weak growth conditions in the context of general stochastic oracles. 
@@ -63,7 +63,7 @@ That is, there exists at least one \( \wopt \in \R^d \) such that
 \begin{align*}
     f(w) \geq f(\wopt) \quad \quad \forall w \in \R^d. 
 \end{align*}
-For functions with with multiple minimizers, we write \( \calX^* = \argmin_{w \in \R^d} f(\w) \) and denote the projection of a point onto the optimal set as \( \Pi_{\calX^*}(\w) \).
+For functions with multiple minimizers, we write \( \calX^* = \argmin_{w \in \R^d} f(\w) \) and denote the projection of a point onto the optimal set as \( \Pi_{\calX^*}(\w) \).
 Additionally, \( f \) is required to be differentiable and \( L \)-smooth, meaning the mapping \( \w \mapsto \grad(\w) \) is an \( L \)-Lipschitz function,
 \[ \norm{\grad(\w) - \grad(v)} \leq L \norm{\w - v} \quad \quad \forall \, \w, v \in \R^d. \]
 This is equivalent to the existence of the following quadratic bound on \( f \):
@@ -147,7 +147,7 @@ An alternative approach to stochastic acceleration splits the convergence rate i
 Using this framework, multiple authors have shown that acceleration schemes speed-up convergence for the deterministic component and achieve nearly optimal rates in the stochastic approximation setting~\citep{ghadimi2012optimal1, ghadimi2013optimal2, hu2009accelerated}.
 For finite-sum functions, variance reduction techniques can be combined with acceleration to improve convergence on the stochastic component~\citep{allen-zhu2017katyusha, defazio2016pointSaga, allen-zhou2018katyushax, tang2018restkatyusha, shang2018asvrg, kovalev2020loopless}.
 Such methods have iteration complexity of \( O((n + \sqrt{n\kappa}) \log(1/\epsilon)) \), where \( n \) is the number of sub-functions and \( \kappa \) is the condition number.
-This is as fast as deterministic acceleration up the additional factor of \( \sqrt{n} \). 
+This is as fast as deterministic acceleration up to the additional factor of \( \sqrt{n} \). 
 Accelerated primal-dual methods have been proposed in the same setting under an additional requirement for each \( f_i \) to be Lipschitz-smooth~\citep{zhang2015SPDC, lan2018incremental}.
 Alternative approaches also leveraging finite-sum structure are based on the proximal-point algorithm and include accelerated SDCA~\citep{shalev-shwarz2014ASDCA}, Catalyst~\citep{lin2015catalyst}, and accelerated APPA~\citep{frostig2015unregularizing}.
 

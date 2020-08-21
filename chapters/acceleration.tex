@@ -3,7 +3,7 @@
 \chapter{Acceleration}~\label{ch:acceleration}
 
 The focus in Chapters~\ref{ch:sgd} and~\ref{ch:line-search} was on relatively simple first-order methods: \ac{SGD} with a fixed step-size and with a stochastic line-search, respectively.
-Now, we move on to Nesterov's famous \ac{AGD} algorithm~\cite{nesterov2004lectures}, which is guaranteed faster convergence in the deterministic setting. 
+Now, we move on to Nesterov's famous \ac{AGD} algorithm~\citep{nesterov2004lectures}, which is guaranteed faster convergence in the deterministic setting. 
 First, a small degree of background for accelerated methods is developed, with a particular focus on why stochastic acceleration is an interesting question for oracles satisfying interpolation.
 Then, the following convergence results are established for \ac{SAGD}:
 \begin{enumerate}
@@ -16,9 +16,9 @@ The chapter ends with a brief discussion of acceleration under the weak growth c
 
 \section{Background}~\label{sec:agd-background}
 
-Recall that Theorems~\ref{thm:sgc-convex} and~\ref{thm:wgc-convex} establish fast linear and sub-linear convergence rates for \ac{SGD} that are comparable with analyses for deterministic problems (e.g. gradient descent).
-Unfortunately, the classic work by \citet{nemirovsky1983problem} in 1983 shows that the convergence of gradient descent is not tight with lower-bounds for convex, Lipschitz-smooth functions with deterministic oracles. 
-Subsequent by developments by Nesterov~\citep{nesterov1983method, nemirovsky1985optimal, nesterov1988approach} defined a series of first-order methods (terminating with \ac{AGD}) achieving the optimal \( O(\frac{1}{K^2}) \) convergence in the setting analyzed by Nemirovsky and Yudin. 
+Recall that Theorems~\ref{thm:sgc-convex} and~\ref{thm:wgc-convex} establish fast linear and sub-linear convergence rates for \ac{SGD} that are comparable with analyses for deterministic problems (e.g.\ gradient descent).
+Unfortunately, the classic work by \citet{nemirovsky1983problem} shows that the convergence of gradient descent is not tight with lower-bounds for convex, Lipschitz-smooth functions with deterministic oracles. 
+Subsequent developments by Nesterov~\citep{nesterov1983method, nemirovsky1985optimal, nesterov1988approach} defined a series of first-order methods (terminating with \ac{AGD}) achieving the optimal \( O(\frac{1}{K^2}) \) convergence in the setting analyzed by Nemirovsky and Yudin. 
 Algorithms with this rate are called \emph{accelerated} and subsequent research has generated a large number of accelerated algorithms for deterministic problems.
 That acceleration literature firmly places gradient descent as a sub-optimal algorithm and also casts the analyses in \autoref{ch:sgd} in a new light.
 In particular, the obvious parallels between \ac{SGD} under interpolation and deterministic gradient descent hint that \ac{SAGD} may be a faster algorithm than \ac{SGD} in restricted settings. 
@@ -68,7 +68,7 @@ Let \( \seq{\wk} \) be the sequence of iterates produced by \ac{SGD}.\@
 \[ \Ek\sbr{f(\wkk)} \leq f(\wk) - \eta \rbr{1 - \frac{\sgc L \eta}{2}}\norm{\grad(\wk)}^2. \]
 Choosing \( \eta = \frac{1}{\sgc L} \) minimizes the right-hand-side, in which case \ac{SGD} can be viewed as iterative minimization of the quadratic upper-bound on \( f \) given by smoothness and strong growth. 
 This procedure decreases \( f \) at each iteration by assuming \emph{worst-case} curvature and noise at every iterate \( \wk \). 
-Inuitively, \ac{SGD} is sub-optimal exactly because it employs global worst-case bounds regardless of past knowledge --- e.g.\ the \( \seq{f(\wk, \zk)} \) and \( \seq{\grad(\wk, \zk)} \) sequences. 
+Intuitively, \ac{SGD} is sub-optimal exactly because it employs global worst-case bounds regardless of past knowledge --- e.g.\ the \( \seq{f(\wk, \zk)} \) and \( \seq{\grad(\wk, \zk)} \) sequences. 
 
 We can instead consider an algorithm which builds local approximations to \( f \) based on all past information accumulated by the procedure.
 Sufficiently accurate approximations can replace or augment the worst-case curvature assumption and allow for faster convergence. 
@@ -133,7 +133,7 @@ We do this now.
                 \item Compute 
                     \( \alpha^2_k = \frac{\gamma_{k+1}}{\sgc L } = \frac{(1-\alpha_k)\gamma_k + \alpha_k \mu}{\sgc L} \).
                 \item Extrapolate as
-                    \[ \yk = \wk - \frac{\alpha_k}{\gamma_k + \alpha_k \mu} \nabla \phi_k(\wk) \]
+                    \[ \yk = \wk - \frac{\alpha_k}{\gamma_k + \alpha_k \mu} \nabla \phi_k(\wk). \]
 
                 \item Query \oracle{} for \( \grad(\yk, \zk) \). 
                 \item Update input as\vspace{-1ex}%
@@ -176,7 +176,7 @@ Finally, note that the expectations in the lemma below are taken with respect to
 \section{Convergence for Strongly-Convex Functions}\label{sec:agd-sc}
 
 It is now straightforward to prove \ac{RSAGD} converges at an accelerated rate. 
-Earlier, we showed that \autoref{lemma:estimating-sequence-bound} and the fact that \( \seq{\lambda_k} \), and \( \seq{\phi_k} \) are estimates sequences for \( f \) together imply
+Earlier, we showed that \autoref{lemma:estimating-sequence-bound} and the fact that \( \seq{\lambda_k} \) and \( \seq{\phi_k} \) are estimating sequences for \( f \) together imply
 \[ f(\wk) - f(\wopt) \leq \lambda_k \rbr{\phi_0(\wopt) - f(\wopt)} = \lambda_k \rbr{f(\w_0) - f(\wopt) + \frac{\gamma_0}{2} \norm{\w_0 - \wopt}^2}. \]
 This is \emph{almost} an explicit convergence rate. 
 The last step of the analysis is to select an appropriate value for \( \gamma_0 \) and analyze convergence of the \( \lambda_k \) sequence, which is done in the following theorem.
@@ -189,7 +189,7 @@ The last step of the analysis is to select an appropriate value for \( \gamma_0 
 \end{restatable}
 \noindent See \autoref{app:agd-sc} for proof.\hfill \break
 
-Accelerated convergence of \ac{SAGD} is an immediate corollary of the equivalence of \ac{RSAGD} and \ac{SAGD} (\autoref{lemma:agdEquivalence}) and \autoref{thm:sc-agd}.
+Accelerated convergence of \ac{SAGD} is an immediate corollary of the equivalence of \ac{RSAGD} and \ac{SAGD} (\autoref{lemma:agdEquivalence} and \autoref{thm:sc-agd}).
 The only catch here is that \( \alpha_0 \) must be selected to correspond to \( \gamma_0 = \mu \).
 It is easy to see that choosing \( \alpha_0 = \sqrt{\frac{\mu}{\sgc L}} \) for \ac{SAGD} is identical to \( \gamma_0 = \mu \) in \ac{RSAGD} since \( \alpha_0^2 = \rbr{(1 - \alpha_0)\gamma_0 + \alpha_0 \mu} / (\sgc L) \).
 
@@ -263,7 +263,7 @@ Note that the choice of \( \alpha_0 = \sqrt{2} - 1 \) for \ac{SAGD} is identical
 
 \section{Acceleration under Weak Growth}~\label{sec:agd-weak-growth}
 
- An disappointing aspect of \autoref{thm:convex-agd} is that it uses the strong growth condition, rather than weak growth.
+ A disappointing aspect of \autoref{thm:convex-agd} is that it uses the strong growth condition, rather than weak growth.
  Recall that sufficient conditions for strong growth are minimizer interpolation, individual-smoothness, and the \ac{PL} condition (\autoref{lemma:interpolation-to-sgc}). 
  Thus, requiring strong growth in this case has the \emph{flavour} of requiring \( f \) to be strongly-convex, but only leads to sub-linear convergence.
 This is quite disappointing, but it is not obvious that the assumption can be relaxed.
