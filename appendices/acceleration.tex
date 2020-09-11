@@ -26,8 +26,8 @@
 \begin{proof}
     First we establish a few preliminaries.
     The condition \( \gamma_0 \ind \seq{\zk} \) implies the \( \seq{\gamma_k}_{k=0}^\infty \), \( \seq{\alpha_k}_{k=0}^\infty \), and \( \seq{\lambda_k}_{k=0}^\infty \) sequences evolve \emph{independently} of the stochastic processes \( \seq{\yk}_{k=0}^\infty \), \( \seq{\wk}_{k=0}^\infty \), and \( \seq{v_k}_{k=0}^\infty \).
-    This will be necessary in later in the proof.
-    Next, instantiating \autoref{lemma:sgc-decrease-condition} with \( \eta = \frac{1}{\sgc L} \) yields
+    This will be necessary later in the proof.
+    Next, invoking \autoref{lemma:sgc-decrease-condition} with \( \eta = \frac{1}{\sgc L} \) yields
     \begin{align}
         \Ek \sbr{f(\wkk)} &\leq f(\wk) - \frac{1}{2 \sgc L} \norm{\grad(\wk)}^2.\nonumber\\
             \intertext{Taking expectations with respect to \( z_0, \ldots, z_{k-1} \),}
@@ -40,7 +40,7 @@
     \[ \E\sbr{\inf_{\w} \phi_{k+1}(\w)} \geq \E\sbr{f(\wkk)}. \]
     Recall the explicit form of the minimizer \( \inf \phi_{k+1}(\w) = \phi_{k+1}^* \) is 
     \begin{align*}
-        \phi_{k+1}^* &= (1- \alpha_k) \phi^*_k + \alpha_k f(\yk) - \frac{\alpha_k^2}{2\gamma_{k+1}}\norm{\grad(\yk)}^2 + \frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}} \\
+        \phi_{k+1}^* &= (1- \alpha_k) \phi^*_k + \alpha_k f(\yk) - \frac{\alpha_k^2}{2\gamma_{k+1}}\norm{\grad(\yk)}^2 \\ & \hspace{5em} + \frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}} \\
         \intertext{Taking expectations with respect to \( \z_{0}, \ldots, \z_k \) and using \( \gamma_0 \ind \seq{\zk} \) plus linearity of expectation: }
         \E[\phi_{k+1}^*] &= (1- \alpha_k) \E[\phi^*_k] + \E\sbr{\alpha_k f(\yk) - \frac{\alpha_k^2}{2\gamma_{k+1}}\norm{\grad(\yk)}^2} \\ & \hspace{5em} + \E\sbr{\frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
                          &\geq (1- \alpha_k) \E\sbr{f(\wk)} + \E\sbr{\alpha_k f(\yk) - \frac{\alpha_k^2}{2\gamma_{k+1}}\norm{\grad(\yk)}^2} \\ & \hspace{5em} + \E\sbr{\frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}},
@@ -53,16 +53,15 @@
         \intertext{\autoref{eq:expected-decrease} now implies}
         \E[\phi_{k+1}^*] &\geq \E\sbr{f(\wkk)} + (1-\alpha_k) \E\sbr{\abr{\grad(\yk), \wk - \yk} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}}. \\
         \intertext{The remainder of the proof is largely unchanged from the deterministic case. The definition of \ac{RSAGD} gives \( \wk - \yk = \frac{\alpha_k}{\gamma_k + \alpha_k \mu} \nabla \phi(\wk) \), which we use to obtain }
-        \E\sbr{\phi_{k+1}^*}  &\geq  \E[f(\wkk)] + (1-\alpha_k) \E\sbr{\frac{\alpha_k}{\gamma_k + \alpha_k \mu} \abr{\grad(\yk), \nabla\phi_k(\wk)} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
+        \E\sbr{\phi_{k+1}^*}  &\geq  \E[f(\wkk)] + (1-\alpha_k) \E\bigg[\frac{\alpha_k}{\gamma_k + \alpha_k \mu} \abr{\grad(\yk), \nabla\phi_k(\wk)} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\Big(\frac{\mu}{2} \norm{\yk - v_k}^2 \\ & \hspace{5em} + \abr{\grad(\yk), v_k - \yk}\Big)\bigg] \\
         \intertext{Noting that \( \nabla \phi_k(\wk) = \gamma_k \rbr{\wk - v_k} \) by \autoref{eq:canonical-form} and \( v_k - \yk = \frac{\gamma_{k+1}}{\gamma_k + \alpha_k \mu}\rbr{v_k - \wk} \) gives }
-        \E\sbr{\phi_{k+1}^*} &\geq \E[f(\wkk)] +(1-\alpha_k) \E\sbr{\frac{\alpha_k \gamma_k}{\gamma_k + \alpha_k \mu} \abr{\grad(\yk), \wk - v_k} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
+        \E\sbr{\phi_{k+1}^*} &\geq \E[f(\wkk)] +(1-\alpha_k) \E\bigg[\frac{\alpha_k \gamma_k}{\gamma_k + \alpha_k \mu} \abr{\grad(\yk), \wk - v_k} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\Big(\frac{\mu}{2} \norm{\yk - v_k}^2 \\ & \hspace{5em} + \abr{\grad(\yk), v_k - \yk}\Big)\bigg] \\
         &= \E[f(\wkk)] + (1-\alpha_k) \E\bigg[\frac{\alpha_k \gamma_k}{\gamma_k + \alpha_k \mu} \abr{\grad(\yk), \wk - v_k} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\Big(\frac{\mu}{2} \norm{\yk - v_k}^2 \\
         & \hspace{5em} + \frac{\gamma_{k+1}}{\gamma_k + \alpha_k \mu} \abr{\grad(\yk), v_k - \wk}\Big)\bigg] \\
         &= \E[f(\wkk)] + \frac{\mu \alpha_k(1-\alpha_k)\gamma_k}{2 \gamma_{k+1}} \E\sbr{\norm{\yk - v_k}^2} \\
-        \intertext{Non-negativity of \( \frac{\mu \alpha_k(1-\alpha_k)\gamma_k}{2 \gamma_{k+1}} \) gives the final result,} 
-        \E\sbr{\phi_{k+1}^*} &\geq \E[f(\wkk)].
+        &\geq \E[f(\wkk)].
     \end{align*}
-    We conclude that \( \E[\inf \phi_{k}(\w)] \geq \E[f(\wk)] \) holds for all \( k \in \bbN \) by induction. 
+    since \( \frac{\mu \alpha_k(1-\alpha_k)\gamma_k}{2 \gamma_{k+1}} \geq 0 \). We conclude that \( \E[\inf \phi_{k}(\w)] \geq \E[f(\wk)] \) holds for all \( k \in \bbN \) by induction. 
 \end{proof}
 
 \newpage

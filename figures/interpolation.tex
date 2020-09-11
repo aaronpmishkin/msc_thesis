@@ -1,6 +1,6 @@
 %% Demonstration of different definitions of interpolation.
 
-\begin{tikzpicture}[scale=0.75, 
+\begin{tikzpicture}[scale=0.73, 
       declare function={
         objective(\x)=      (\x<=-1) * (2*\x*\x + 6*\x + 4)    +
         and(\x>-1, \x<=1) * (\x + 5 - pow(\x,3) - 5*\x*\x) / 4 +
@@ -25,7 +25,7 @@
     \node[label={90:Minimizer}] at (axis cs:1,-5.2) {};
     \end{axis}
 \end{tikzpicture}%
-\begin{tikzpicture}[scale=0.75,
+\begin{tikzpicture}[scale=0.73,
       declare function={
         objective(\x)=      (\x<=-1) * (2*\x*\x + 6*\x + 4)    +
         and(\x>-1, \x<=1) * (\x + 5 - pow(\x,3) - 5*\x*\x) / 4 +
@@ -54,7 +54,7 @@
     \node[label={90:Stationary-Point}] at (axis cs:0.5,-5.2) {};
     \end{axis}
 \end{tikzpicture}%
-\begin{tikzpicture}[scale=0.75,
+\begin{tikzpicture}[scale=0.73,
       declare function={
         objective(\x)=      (\x<=-1) * (2*\x*\x + 6*\x + 4)    +
         and(\x>-1, \x<=1) * (\x + 5 - pow(\x,3) - 5*\x*\x) / 4 +

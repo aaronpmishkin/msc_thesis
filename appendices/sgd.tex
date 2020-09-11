@@ -37,7 +37,7 @@
                                       \intertext{Now we use the strong growth condition to control \( \Ek \sbr{\norm{\grad(\wk, \zk)}^2} \), which yields}
        \Ek\sbr{\norm{\wkk - \wopt}^2} &\leq \eta^2 \sgc \norm{\grad(\wk)}^2 - 2 \eta \abr{\grad(\wk), \wk - \wopt} + \norm{\wk - \wopt}^2.
                                       \intertext{Coercivity of the gradient (\autoref{lemma:coercivity}) implies}
-       \Ek\sbr{\norm{\wkk - \wopt}^2} &\leq \eta^2 \sgc \norm{\grad(\wk)}^2 - 2 \eta \rbr{\frac{\mu L }{\mu + L} \norm{\wk - \wopt}^2 + \frac{1}{\mu + L}\norm{\grad(\wk)}^2} + \norm{\wk - \wopt}^2\\
+       \Ek\sbr{\norm{\wkk - \wopt}^2} &\leq \eta^2 \sgc \norm{\grad(\wk)}^2 - 2 \eta \rbr{\frac{\mu L }{\mu + L} \norm{\wk - \wopt}^2 + \frac{1}{\mu + L}\norm{\grad(\wk)}^2} \\ & \hspace{5em} + \norm{\wk - \wopt}^2\\
                                    &= \eta \rbr{\eta \sgc  - \frac{2}{\mu + L}}\norm{\grad(\wk)}^2 + \rbr{1 - \frac{2 \eta \mu L}{\mu + L}}\norm{\wk - \wopt}^2.
                                    \intertext{If \( \eta \leq \frac{2}{\sgc \rbr{\mu + L}} \) then \( \eta \sgc - \frac{2}{\mu + L} \leq 0 \) and we obtain}
        \Ek \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{1 - \frac{2 \eta \mu L}{\mu + L}}\norm{\wk - \wopt}^2.
@@ -113,7 +113,7 @@
                                              & \hspace{5em} + \norm{\wk - \wopt}^2\\
                          &\leq \rbr{\eta^2 - \frac{\eta}{\Lmax}} \norm{\grad(\wk, \zk)}^2 - 2 \eta \rbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2.
      \intertext{Taking expectations with respect to \( \zk \):}
-                      \Ek \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{\eta^2 - \frac{\eta}{\Lmax}} \Ek \sbr{\norm{\grad(\wk, \zk)}^2} - 2 \eta \Ek\sbr{f(\wk, \zk) - f(\wopt, \zk)} + \norm{\wk - \wopt}^2,\\
+                       \Ek \sbr{\norm{\wkk - \wopt}^2} &\leq \rbr{\eta^2 - \frac{\eta}{\Lmax}} \Ek \sbr{\norm{\grad(\wk, \zk)}^2} - 2 \eta \Ek\sbr{f(\wk, \zk) - f(\wopt, \zk)} \\ & \hspace{5em} + \norm{\wk - \wopt}^2,\\
                          &\leq \rbr{\eta^2 - \frac{\eta}{\Lmax}} \Ek \sbr{\norm{\grad(\wk, \zk)}^2} - 2 \eta \rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2.
                      \intertext{\textbf{Case 1}: If \( \eta \leq \frac{1}{\Lmax} \) then \( \rbr{\eta^2 - \frac{\eta}{\Lmax}}\rbr{f(\wk, \zk) - f(\wopt, \zk)} \leq 0 \) by interpolation and we obtain }
                      \Ek \sbr{\norm{\wkk - \wopt}^2} &\leq - 2 \eta\rbr{f(\wk) - f(\wopt)} + \norm{\wk - \wopt}^2\\

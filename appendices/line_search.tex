@@ -113,8 +113,8 @@
         \Delta_k &\leq \abr{\grad(\wk), \wkk - \wk} + \frac{L}{2}\norm{\wkk - \wk}^2\\
                          &= - \etak \abr{\grad(\wk), \grad(\wk, \zk)} + \frac{L \etak^2}{2}\norm{\grad(\wk, \zk)}^2.
                          \intertext{Using \autoref{eq:quadratic-expansion} on \( - \abr{\grad(\wk), \grad(\wk, \zk)} \), }
-        \implies \Delta_k &\leq \frac{\etak}{2}\rbr{\norm{\grad(\wk) - \grad(\wk, \zk)}^2 - \norm{\grad(\wk)}^2 - \norm{\grad(\wk, \zk)}^2} + \frac{L \etak^2}{2}\norm{\grad(\wk, \zk)}^2\\
-        \implies 2 \Delta_k &\leq \etak \norm{\grad(\wk) - \grad(\wk, \zk)}^2 - \etak\rbr{\norm{\grad(\wk)}^2 + \norm{\grad(\wk, \zk)}^2} + L \etak^2\norm{\grad(\wk, \zk)}^2. 
+        \implies \Delta_k &\leq \frac{\etak}{2}\rbr{\norm{\grad(\wk) - \grad(\wk, \zk)}^2 - \norm{\grad(\wk)}^2 - \norm{\grad(\wk, \zk)}^2} \\ & \hspace{5em} + \frac{L \etak^2}{2}\norm{\grad(\wk, \zk)}^2\\
+        \implies 2 \Delta_k &\leq \etak \norm{\grad(\wk) - \grad(\wk, \zk)}^2 - \etak\rbr{\norm{\grad(\wk)}^2 + \norm{\grad(\wk, \zk)}^2}  \\ & \hspace{5em} + L \etak^2\norm{\grad(\wk, \zk)}^2. 
         \intertext{Using \( \min\cbr{\frac{2(1-c)}{\Lmax}, \etamax} = \etamin \leq \etak \leq \etamax \) from \autoref{lemma:step-size-bound} and taking expectations with respect to \( \zk \):}
         2 \Delta_k &\leq \etamax \norm{\grad(\wk) - \grad(\wk, \zk)}^2 - \etamin \rbr{\norm{\grad(\wk)}^2 + \norm{\grad(\wk, \zk)}^2} \\ &\hspace{1em} + L \etamax^2\norm{\grad(\wk, \zk)}^2\\
         \implies 2 \E_{\zk}\sbr{\Delta_k} &\leq \etamax \E_{\zk}\sbr{\norm{\grad(\wk) - \grad(\wk, \zk)}^2} - \etamin \E_{\zk}\sbr{\norm{\grad(\wk)}^2 + \norm{\grad(\wk, \zk)}^2} \\ &\hspace{1em} + L \etamax^2 \E_{\zk}\sbr{\norm{\grad(\wk, \zk)}^2}\\
