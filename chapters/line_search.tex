@@ -15,7 +15,7 @@ Accordingly, practical line-search implementations are typically very fast in co
 Moreover, as we will show in the following sections, the convergence speed of \ac{SGD} with a stochastic line-search is tight with that of \ac{SGD} with the best fixed step-size when minimizer interpolation is satisfied. 
 
 The work in this chapter was originally conducted by the author as part of \citet{vaswani2019painless}.
-The proposal to augment \ac{SGD} with the stochastic Armijo line-search, the algorithmic procedure in \autoref{procedure:armijo-ls}, \autoref{lemma:step-size-bound}, and \autoref{thm:non-convex-line-search} are reproduced from \citet{vaswani2019fast}. 
+The proposal to augment \ac{SGD} with the stochastic Armijo line-search, the algorithmic procedure in \autoref{procedure:armijo-ls}, \autoref{lemma:step-size-bound}, and \autoref{thm:non-convex-line-search} are reproduced from this work. 
 In contrast, Theorems~\ref{thm:sc-line-search} and~\ref{thm:convex-line-search} are new, unpublished improvements over the originally published theorems. 
 
 \section{Background}~\label{sec:line-search-background}
@@ -24,11 +24,11 @@ Line-search algorithms are a classic solution to the problem of step-size select
 The basic notion is to search along the gradient direction (or, more generally, a descent direction) for a step-size that satisfies a desirable property.
 A common rule is the Armijo condition, 
  \begin{align}
-     f(\wk - \etak v_k) &\leq f(\wk) + c \cdot \etak \abr{\grad(\wk), v_k},~\label{eq:deterministic-armijo-ls}
+     f(\wk + \etak v_k) &\leq f(\wk) + c \cdot \etak \abr{\grad(\wk), v_k},~\label{eq:deterministic-armijo-ls}
 \end{align}
 which demands sufficient decrease in the function value when taking a step along search direction \( v_k \).
 The vector \( v_k \) is required to satisfy \( \abr{\grad(\wk), v_k} < 0 \), in which case it is called a \emph{descent direction}.
-An obvious (and locally steepest) descent direction is the negative gradient \( v_k = - \grad(\wk) \). 
+The (locally) steepest descent direction is the negative gradient \( v_k = - \grad(\wk) \)~\citep{nesterov2004lectures}. 
 In comparison, the negative stochastic gradient \( - \grad(\wk, \zk) \) direction used by \ac{SGD} is only guaranteed to be a descent direction in expectation.
 
 
@@ -58,7 +58,7 @@ Remember that the optimizer does not have access to exact function and gradient 
 Even when exact evaluations are available, as in the finite-sum setting, the cost of computing function and gradient values is much larger than the cost of querying \oracle{}. 
 An alternative to the full Armijo line-search is the following stochastic version of the Armijo condition:
 \begin{align}
-    f(\wk - \etak v_k, \zk) &\leq f(\wk, \zk) + c \cdot \etak \abr{\grad(\wk, \zk), v_k}. \label{eq:armijo-ls}
+    f(\wk + \etak v_k, \zk) &\leq f(\wk, \zk) + c \cdot \etak \abr{\grad(\wk, \zk), v_k}. \label{eq:armijo-ls}
 \end{align}
 This condition is identical to \autoref{eq:deterministic-armijo-ls}, but uses stochastic function and gradient evaluations queried from the \ac{SFO}.
 Intuitively, the stochastic Armijo condition requires sufficient decrease on \( f(\cdot, \zk) \), rather than \( f \).

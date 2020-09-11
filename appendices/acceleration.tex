@@ -46,16 +46,16 @@
                          &\geq (1- \alpha_k) \E\sbr{f(\wk)} + \E\sbr{\alpha_k f(\yk) - \frac{\alpha_k^2}{2\gamma_{k+1}}\norm{\grad(\yk)}^2} \\ & \hspace{5em} + \E\sbr{\frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}},
         \intertext{where the inequality follows from the inductive assumption. 
         Convexity of \( f \) implies \( f(\wk) \geq f(\yk) + \abr{ \grad(\yk), \wk - \yk } \). 
-        This inequality holds in expectation, allowing us to obtain }
+        Recalling \( \frac{\alpha_k^2}{\gamma_{k+1}} = \frac{1}{\sgc L} \) (see \autoref{procedure:reformulated-agd}) allows us to obtain }
         \E[\phi_{k+1}^*] &\geq (1- \alpha_k) \E[\rbr{f(\yk) + \abr{\grad(\yk), \wk - \yk}}] + \E\bigg[\alpha_k f(\yk) - \frac{1}{2\sgc L}\norm{\grad(\yk)}^2 \bigg] \\ & \hspace{5em} + \E\sbr{\frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
-                         &= \E\sbr{(1- \alpha_k) f(\yk) + \alpha_k f(\yk)} + (1-\alpha_k) \E[\abr{\grad(\yk), \wk - \yk}] + \E\bigg[\frac{1}{2\sgc L}\norm{\grad(\yk)}^2 \bigg] \\ & \hspace{5em} + \E\sbr{\frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
+                         &= \E\sbr{(1- \alpha_k) f(\yk) + \alpha_k f(\yk)} + (1-\alpha_k) \E[\abr{\grad(\yk), \wk - \yk}] - \E\bigg[\frac{1}{2\sgc L}\norm{\grad(\yk)}^2 \bigg] \\ & \hspace{5em} + \E\sbr{\frac{\alpha_k(1-\alpha_k)\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
         &=  \E\sbr{f(\yk) - \frac{1}{2\sgc L} \norm{\grad(\yk)}^2} + (1-\alpha_k) \E\bigg[\abr{\grad(\yk), \wk - \yk} \\ & \hspace{5em} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}\bigg] \\
         \intertext{\autoref{eq:expected-decrease} now implies}
         \E[\phi_{k+1}^*] &\geq \E\sbr{f(\wkk)} + (1-\alpha_k) \E\sbr{\abr{\grad(\yk), \wk - \yk} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}}. \\
-        \intertext{The remainder of the proof is largely unchanged from the deterministic case:}
-        \E\sbr{\phi_{k+1}^*}  &=  \E[f(\wkk)] + (1-\alpha_k) \E\sbr{\frac{\alpha_k}{\gamma_k + \alpha_k \mu} \abr{\grad(\yk), \nabla\phi_k(\wk)} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
-        \intertext{Noting that \( \nabla \phi_k(\wk) = \gamma_k \rbr{\wk - v_k} \) and \( v_k - \yk = \frac{\gamma_{k+1}}{\gamma_k + \alpha_k \mu}\rbr{v_k - \wk} \) gives }
-        \E\sbr{\phi_{k+1}^*} &= \E[f(\wkk)] +(1-\alpha_k) \E\sbr{\frac{\alpha_k \gamma_k}{\gamma_k + \alpha_k \mu} \abr{\grad(\yk), \wk - v_k} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
+        \intertext{The remainder of the proof is largely unchanged from the deterministic case. The definition of \ac{RSAGD} gives \( \wk - \yk = \frac{\alpha_k}{\gamma_k + \alpha_k \mu} \nabla \phi(\wk) \), which we use to obtain }
+        \E\sbr{\phi_{k+1}^*}  &\geq  \E[f(\wkk)] + (1-\alpha_k) \E\sbr{\frac{\alpha_k}{\gamma_k + \alpha_k \mu} \abr{\grad(\yk), \nabla\phi_k(\wk)} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
+        \intertext{Noting that \( \nabla \phi_k(\wk) = \gamma_k \rbr{\wk - v_k} \) by \autoref{eq:canonical-form} and \( v_k - \yk = \frac{\gamma_{k+1}}{\gamma_k + \alpha_k \mu}\rbr{v_k - \wk} \) gives }
+        \E\sbr{\phi_{k+1}^*} &\geq \E[f(\wkk)] +(1-\alpha_k) \E\sbr{\frac{\alpha_k \gamma_k}{\gamma_k + \alpha_k \mu} \abr{\grad(\yk), \wk - v_k} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\rbr{\frac{\mu}{2} \norm{\yk - v_k}^2 + \abr{\grad(\yk), v_k - \yk}}} \\
         &= \E[f(\wkk)] + (1-\alpha_k) \E\bigg[\frac{\alpha_k \gamma_k}{\gamma_k + \alpha_k \mu} \abr{\grad(\yk), \wk - v_k} + \frac{\alpha_k\gamma_k}{\gamma_{k+1}}\Big(\frac{\mu}{2} \norm{\yk - v_k}^2 \\
         & \hspace{5em} + \frac{\gamma_{k+1}}{\gamma_k + \alpha_k \mu} \abr{\grad(\yk), v_k - \wk}\Big)\bigg] \\
         &= \E[f(\wkk)] + \frac{\mu \alpha_k(1-\alpha_k)\gamma_k}{2 \gamma_{k+1}} \E\sbr{\norm{\yk - v_k}^2} \\
