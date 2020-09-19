@@ -5,15 +5,30 @@
 
 This thesis was conceived and written solely by the author, Aaron Mishkin. 
 The basis for the theoretical work was developed in collaboration with Sharan Vaswani and Frederik Kunstner over the last two years.
-The main theorems presented are original, unpublished work with the exception of \autoref{thm:non-convex-line-search}, which was published in \citet{vaswani2019painless}. A. Mishkin is a coauthor of this paper.
+The work here is original and unpublished with the exception of the stochastic Armijo line-search, which was published in \citet{vaswani2019painless}. 
+A. Mishkin is a coauthor of this paper. 
 
+The breakdown of contributions for results included from \citet{vaswani2019painless} is as follows: 
+the idea to investigate stochastic line-search techniques was proposed by S. Vaswani.
+S. Vaswani also conceived of the stochastic Armijo line-search and proved the original form of \autoref{lemma:step-size-bound}. 
+A. Mishkin and S. Vaswani later revised the lemma statement to the version stated in \autoref{ch:line-search}.
+The proof technique for \autoref{thm:non-convex-line-search} (\autoref{ch:line-search}) was developed and suggested by S. Vaswani, while the specific result was proved by A. Mishkin. 
+
+The following results from \citet{vaswani2019fast} are not included in this thesis: 
+\begin{inparaenum}[(i)]
+    \item  the theoretical results for the stochastic Armijo line-search on strongly-convex and convex functions, which are \emph{independent} of the improved theorems in \autoref{ch:line-search}, were established by S. Vaswani and modified to ensure correctness by A. Mishkin; 
+    \item the convergence results for bilinear problems, proved by Gauthier Gidel in collaboration with S. Vaswani; 
+    \item the experiments on logistic regression and matrix factorization, conducted by A. Mishkin; and 
+    \item the experiments on deep neural networks, conducted by Issam Laradji and S. Vaswani.
+\end{inparaenum}
+In addition to the above, Simon Lacoste-Julien and Mark Schmidt provided guidance and useful feedback on the writing of \citet{vaswani2019fast}.
+No text from that work is reproduced here.
+
+Many of the unpublished results in this thesis have also benefited from collaboration. 
 The extension of interpolation to general stochastic oracles in \autoref{ch:interpolation-gc} was conducted by the author alone, while the connection between interpolation and weak/strong growth was developed in collaboration with S. Vaswani, and F. Kunstner. 
 The improved convergence theorems in Chapters~\ref{ch:sgd} and~\ref{ch:acceleration} build on previous work by \citet{vaswani2019fast} and were proved solely by the author.  
-Similarly, \autoref{ch:line-search} presents new improvements of existing work by \citet{vaswani2019painless} with the exception of the previously published \autoref{thm:non-convex-line-search}, as noted above.
-The stochastic Armijo line-search and \autoref{lemma:step-size-bound} are due to \citet{vaswani2019painless}. 
-The proof technique for \autoref{thm:non-convex-line-search} was developed and suggested by S. Vaswani, while the specific result was proved by A. Mishkin. 
 
-\autoref{thm:sc-line-search}, which improves the dependency on the strong-convexity parameter from \( \bar \mu \) to \( \mu \), was suggested by S. Vaswani and F. Kunstner with reference to a similar result for the stochastic Polyak step-size by \citet{loizou2020sps}. 
+\autoref{thm:sc-line-search} in \autoref{ch:line-search}, which improves the dependency on the strong-convexity parameter from \( \bar \mu \) to \( \mu \), was suggested by S. Vaswani and F. Kunstner with reference to a result for the stochastic Polyak step-size by \citet{loizou2020sps}. 
 A. Mishkin proved the theorem alone. 
 The analysis of stochastic gradient descent for \( \ell_2 \)-regularized functions satisfying interpolation in \autoref{ch:beyond-interpolation} was inspired by a conversation with Eduard Gorbunov.
 
